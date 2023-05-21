@@ -1,0 +1,25 @@
+FROM node:14.19.3
+
+LABEL io.huxium.systnaps.image.authors="contact.ridha.bouazizi@gmail.com"
+LABEL io.huxium.systnaps.image.name="systnaps-util"
+LABEL io.huxium.systnaps.image.tag="1.0-rc"
+
+USER root
+RUN apt update
+RUN apt -y install gcc g++ make python ca-certificates fonts-liberation \
+    libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 \
+    libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 \
+    libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 \
+    libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 \
+    libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
+
+WORKDIR /home/node
+COPY --chown=node:node ./ddtm-util ./ddtm-util
+
+USER node
+WORKDIR /home/node/ddtm-util
+RUN npm install
+
+EXPOSE 3000/tcp
+CMD node /home/node/ddtm-util/ddtm.js
+

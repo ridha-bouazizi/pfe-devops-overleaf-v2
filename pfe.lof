@@ -1,0 +1,45 @@
+\babel@toc {french}{}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces La relation entre les modules du syst\IeC {\`e}me "Centaure"}}{18}{figure.1.1}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Principe de la m\IeC {\'e}thodologie Scrum}}{19}{figure.1.2}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Diagramme de cas d'utilisation g\IeC {\'e}n\IeC {\'e}ral}}{28}{figure.2.1}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Planification des sprints}}{29}{figure.2.2}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Capture Jira(1) du premier sprint R1}}{34}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Capture Jira(2) du premier sprint}}{35}{figure.3.2}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Diagramme de cas d'utilisation de premier Sprint "G\'erer les utilisateurs"}}{36}{figure.3.3}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Raffinement de cas d'utilisation "G\'erer les utilisateurs"}}{36}{figure.3.4}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Prototype de l'interface "Consulter la liste des utilisateurs"}}{41}{figure.3.5}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Prototype de l'intefarce de "Modifier un utilisateur"}}{42}{figure.3.6}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Prototype de l'intefarce de "Consulter le profil d'un utilisateur" }}{42}{figure.3.7}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Diagramme de s\'equence de cas d'utilisation "Supprimer un utilisateur"}}{43}{figure.3.8}
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Diagramme de classe de ce premier sprint}}{45}{figure.3.9}
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Diagramme de cas d'utilisation global "G\'erer les groupes"}}{47}{figure.3.10}
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Capture JIRA du deuxi\'eme sprint}}{48}{figure.3.11}
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Raffinement de cas d'utilisation "G\'erer les groupes"}}{49}{figure.3.12}
+\contentsline {figure}{\numberline {3.13}{\ignorespaces Prototype de l'interface "Consulter groupe"}}{50}{figure.3.13}
+\contentsline {figure}{\numberline {3.14}{\ignorespaces Prototype de l'interface "Ajouter groupe"}}{51}{figure.3.14}
+\contentsline {figure}{\numberline {3.15}{\ignorespaces Capture JIRA du troisi\`eme Sprint }}{53}{figure.3.15}
+\contentsline {figure}{\numberline {3.16}{\ignorespaces Diagramme g\'en\'eral du cas d'utilisation "G\'erer les r\^oles" }}{54}{figure.3.16}
+\contentsline {figure}{\numberline {3.17}{\ignorespaces Raffinement du cas d'utilisation "G\'erer les r\^oles"}}{54}{figure.3.17}
+\contentsline {figure}{\numberline {3.18}{\ignorespaces Prototype de l'intefarce "Ajouter un r\^ole"}}{56}{figure.3.18}
+\contentsline {figure}{\numberline {3.19}{\ignorespaces Prototype de l'interface "Ajouter une nouvelle fonctionnalit\'e" }}{56}{figure.3.19}
+\contentsline {figure}{\numberline {3.20}{\ignorespaces Diagramme de classe de "G\'erer les fonctionnalit\'es"}}{57}{figure.3.20}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Capture JIRA du premier Sprint }}{61}{figure.4.1}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Diagramme de cas d'utilisation global de "Choisir le mode d'authentification au syst\`eme Centaure"}}{62}{figure.4.2}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Maquette de l'interface "Choisir le mode d'authentification au syst\`eme Centaure"}}{63}{figure.4.3}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Diagramme de cas d'utilisation global de "S'authentifier"}}{64}{figure.4.4}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Prototype de l'interface "Authentification"}}{65}{figure.4.5}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Diagramme de s\'equence de "S'authentifier"}}{67}{figure.4.6}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Architecture globale}}{69}{figure.5.1}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Architecture d\'etaill\'ee de notre solution}}{70}{figure.5.2}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Architecture de Spring Data avec MongoDB}}{75}{figure.5.3}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Les \'etapes de s\'ecurit\'e}}{75}{figure.5.4}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces R\'esultat d'ex\'ecution du test unitaire "Gestion des utilisateurs"}}{78}{figure.5.5}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces R\'esultat d'ex\'ecution du test d'int\'egration "findAllUsers"}}{79}{figure.5.6}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces R\'esultat d'ex\'ecution du test d'int\'egration (1)}}{79}{figure.5.7}
+\contentsline {figure}{\numberline {5.8}{\ignorespaces R\'esultat d'ex\'ecution du test d'int\'egration (2)}}{80}{figure.5.8}
+\contentsline {figure}{\numberline {5.9}{\ignorespaces R\'esultat d'ex\'ecution du test d'int\'egration "Token"}}{80}{figure.5.9}

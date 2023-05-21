@@ -1,0 +1,116 @@
+pipeline {
+    agent none
+    environment {
+        git_http_url = "${git_http_url}"
+        ref    = "${ref}"
+    }
+    stages {
+        stage('Generate deployment manifests and push to scm.') {
+            agent any
+            steps {
+                sh '''
+                    basetag=$(basename $REF) \
+                    && ENVTAG=$(echo ${basetag#*-} | tr '[:upper:]' '[:lower:]')
+                    ytt -f prod/deployment.yml --data-value environment=$ENVTAG > /tmp/deployment-back-syst.yml
+                    cp prod/sharedConfig.yml /tmp/sharedConfig-syst.yml
+                    '''
+                sh '''
+                    rm -rf /tmp/tempDIR-syst-back && mkdir /tmp/tempDIR-syst-back
+                '''
+                dir('/tmp/tempDIR-syst-back') {
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'gitlab', url: 'https://gitlab.huxium.io/operations/systnaps/deployment-manifests.git']]])
+                    sh  ''' 
+                            basetag=$(basename $REF) \
+                            && ENVTAG=$(echo ${basetag#*-} | tr '[:upper:]' '[:lower:]')
+                            
+                            if [ -d "$ENVTAG" ]; then
+                                ### Take action if $ENVTAG exists ###
+                                echo "${ENVTAG} exists..."
+                            else
+                                ###  Control will jump here if $ENVTAG does NOT exists ###
+                                echo "${ENVTAG} does not exist, creating..."
+                                mkdir "${ENVTAG}"
+                            fi
+
+                            cat /tmp/deployment-back-syst.yml > ${ENVTAG}/deployment.yml
+                            cat /tmp/sharedConfig-syst.yml > ${ENVTAG}/sharedConfig.yml
+                        '''
+                    withCredentials([usernamePassword(credentialsId: 'gitlab', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]){
+                        sh('''
+                            git config user.name 'jenkins'
+                            git config user.email 'r.bouazizi@huxium.io'
+                            git add .
+                            STATUS=`git status --porcelain`
+                            if ( $STATUS ); then
+                                echo "No changes to push to remote";
+                            else
+                                echo "Changes made, pushing to remote" \
+                                && git commit -am "added ENVTAG" \
+                                && git config --local credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f" \
+                                && git push origin HEAD:main ;
+                            fi                        
+                        ''')
+                    }
+                }
+            }
+        }
+        stage('Deploy published image.') {
+            agent any
+            steps {
+               sh '''
+                argocd login --username admin --password $ARGOCD argocd.huxium.io --grpc-web
+                '''
+                sh '''
+                argocd repo add https://gitlab.huxium.io/operations/systnaps/deployment-manifests.git --username $GITLAB_USER --password $GITLAB_PASSWORD --insecure-skip-server-verification
+                '''
+                sh '''
+                basename=$(basename ${git_http_url}) \
+                && REPONAME=$(echo ${basename%.*} | tr '[:upper:]' '[:lower:]') \
+                && basetag=$(basename ${REF}) \
+                && ENVTAG=$(echo ${basetag#*-} | tr '[:upper:]' '[:lower:]') \
+                && argocd app create $REPONAME-$ENVTAG --repo https://gitlab.huxium.io/operations/systnaps/deployment-manifests.git --path $ENVTAG \
+                --dest-server https://kubernetes.default.svc --dest-namespace prod
+                '''
+                sh '''
+                basename=$(basename ${git_http_url}) \
+                && REPONAME=$(echo ${basename%.*} | tr '[:upper:]' '[:lower:]') \
+                && basetag=$(basename ${REF}) \
+                && ENVTAG=$(echo ${basetag#*-} | tr '[:upper:]' '[:lower:]') \
+                && argocd app sync $REPONAME-$ENVTAG
+                '''
+                dir('/tmp/tempDIR-syst-back') {
+                    sh ''' rm -rf ./* '''
+                }
+            }
+        }
+        stage('CleanUp stage.') {
+            agent any
+            steps {
+                sh ''' sleep 10 '''
+                dir('/tmp/tempDIR-syst-back') {
+                    sh ''' rm -rf ./* '''
+                }
+                
+            }
+        }
+        stage('Notify over teams.') {
+            agent any
+            steps {
+              sh '''export'''
+              office365ConnectorSend webhookUrl: 'https://edatask.webhook.office.com/webhookb2/***/IncomingWebhook/***/***',
+                  message: "Application ${env.basename} : ${env.basetag} has been [deployed].",
+                  status: 'Success'
+            }
+        }
+    }
+    post {
+        always {
+            node("master") {
+                cleanWs(cleanWhenNotBuilt: false,
+                        deleteDirs: true,
+                        disableDeferredWipeout: true,
+                        notFailBuild: true)
+            }
+        }
+    }
+}

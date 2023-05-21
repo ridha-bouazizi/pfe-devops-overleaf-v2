@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metallb
+  labels:
+    app.kubernetes.io/name: metallb
+    app.kubernetes.io/instance: metallb
+data:
+  config: |
+    address-pools:
+    - addresses:
+      - 141.95.101.192/32   ==||
+      - 141.95.104.21/32      ||
+      - 141.95.108.79/32      ||
+      - 141.95.109.22/32      ||=> Provisioned floating IPs attached to instances.
+      - 141.95.110.156/32     ||
+      - 141.95.110.146/32     ||
+      - 51.68.90.253/32     ==||
+      name: default
+      protocol: layer2

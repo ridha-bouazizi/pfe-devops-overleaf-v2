@@ -1,0 +1,55 @@
+pipeline {
+  agent any
+  environment {
+    git_http_url = "${git_http_url}"
+    ref    = "${ref}"
+  }
+  stages {
+    stage('Prepare') {
+      steps {
+          checkout scm
+      }
+    }
+    stage('SonarQube analysis') {
+      steps{
+        sh ''' basename=$(basename $GIT_URL) && REPONAME=${basename%.*} && curl --insecure --include \
+               --request POST \
+               --header "Content-Type: application/x-www-form-urlencoded" \
+               -u ********:******** \
+               -d 'project='$REPONAME'&organization=huxium&name='$REPONAME'' \
+               'https://sonar.huxium.io/api/projects/create' '''
+        script{
+          try {
+            def scannerHome = tool 'sonarScanner';
+            println scannerHome
+            withSonarQubeEnv('sonarInstallation') {
+              sh '''basename=$(basename $GIT_URL) && REPONAME=${basename%.*} \
+                        && /var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarScanner/bin/sonar-scanner \
+                            -Dsonar.projectKey=${REPONAME} \
+                                -Dsonar.sources=./ddtm-api -Dsonar.verbose=true'''
+            }
+          } catch (err) {
+                echo err.getMessage()
+          }
+        }
+      }
+    }
+    stage('Notify over teams.') {
+        agent any
+        steps {
+            office365ConnectorSend webhookUrl: 'https://edatask.webhook.office.com/webhookb2/***/IncomingWebhook/***/***',
+                message: "Code scanning ${env.basename} was completed.",
+                color: '00FF00',
+                status: 'Success'
+        }
+    }
+  }
+  post {
+    always {
+      cleanWs(cleanWhenNotBuilt: false,
+              deleteDirs: true,
+              disableDeferredWipeout: true,
+              notFailBuild: true)
+    }
+  }
+}

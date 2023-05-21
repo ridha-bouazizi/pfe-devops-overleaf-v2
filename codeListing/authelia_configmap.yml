@@ -1,0 +1,100 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authelia
+  namespace: openldap
+  labels: 
+    app.kubernetes.io/name: authelia
+    app.kubernetes.io/instance: authelia
+data:
+  configuration.yaml: |
+    ---
+    theme: light
+    default_redirection_url: https://www.huxium.io
+    default_2fa_method: totp
+    server:
+      ...
+    log:
+      ...
+    totp:
+      disable: false
+      issuer: huxium.io
+      algorithm: sha1
+      digits: 6
+      period: 30
+      skew: 1
+      secret_size: 32
+    webauthn:
+      disable: false
+      display_name: Authelia
+      attestation_conveyance_preference: indirect
+      user_verification: preferred
+      timeout: 60s
+    ntp:
+      ...
+    authentication_backend:
+      password_reset:
+        disable: false
+        custom_url: ""
+      ldap:
+        implementation: custom
+        url: ldap://openldap-service:389
+        timeout: 5s
+        start_tls: false
+        tls:
+          server_name: 
+          minimum_version: TLS1.2
+          skip_verify: true
+        base_dn: DC=huxium,DC=io
+        additional_users_dn: OU=users
+        users_filter: (&({username_attribute}={input})(objectClass=inetOrgPerson))
+        username_attribute: uid
+        display_name_attribute: cn
+        additional_groups_dn: OU=groups
+        groups_filter: (&(member={OU})(objectClass=posixGroup))
+        group_name_attribute: CN
+        permit_referrals: false
+        permit_unauthenticated_bind: false
+        user: CN=admin,DC=huxium,DC=io
+    password_policy:
+      standard:
+        ...
+      zxcvbn:
+        ...
+    session:
+      name: authelia_session
+      domain: huxium.io
+      same_site: lax
+      expiration: 1h
+      inactivity: 5m
+      remember_me_duration: 1M
+      redis:
+        host: redis-master.openldap.svc.cluster.local
+        port: 6379
+        username: default
+        maximum_active_connections: 8
+        minimum_idle_connections: 0
+    regulation: 
+      ban_time: 5m
+      find_time: 2m
+      max_retries: 3
+    storage:
+      postgres:
+        host: **.**.**.**
+        port: 32432
+        database: authelia
+        schema: public
+        username: postgres
+        timeout: 5s
+        ssl:
+          ...
+    notifier:
+      ...
+    access_control:
+      default_policy: two_factors
+    telemetry:
+      metrics:
+        ...
+    ...
+

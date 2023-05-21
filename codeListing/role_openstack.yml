@@ -1,0 +1,59 @@
+- name: Install openstack and aws cli Modules for Python
+  pip:
+    name: 
+    - python-openstackclient
+    - python-novaclient
+    - python-swiftclient
+    - awscli
+    - awscli-plugin-endpoint
+
+- name: copy workspace contents onto the server
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: workspace/openstack
+    mode: a+rwx
+
+- name: Automate source openrc.sh file to /etc/profile.d/ directory to be loaded on boot
+  become: yes
+  shell: |
+          sudo cp /home/ubuntu/workspace/openstack/openrc.sh /etc/profile.d/
+
+- name: Install awscli on master nodes only
+  become: yes
+  become_user: ubuntu
+  ansible.builtin.apt:
+    name: awscli
+    state: present
+  when: inventory_hostname in groups['masters']
+
+- name: create ~/.aws
+  shell: |
+          mkdir /home/ubuntu/.aws
+  when: inventory_hostname in groups['masters']
+  ignore_errors: true
+
+- name: Create ec2 credentials
+  become: yes
+  become_user: ubuntu
+  shell: |
+          . /home/ubuntu/workspace/openstack/openrc.sh && openstack ec2 credentials create -f json
+  when: inventory_hostname in groups['masters']
+  register: credentials
+
+- name: Create credentials file for awscli from j2 template
+  template:
+    src: credentials.j2
+    dest: /home/ubuntu/.aws/credentials
+
+- name: Get bucket list
+  shell: aws --profile default s3 ls
+  become: yes
+  become_user: ubuntu
+  when: inventory_hostname in groups['masters']
+  register: bucketlist
+
+- name: Save bucket list
+  become_user: ridha
+  become: yes
+  when: inventory_hostname in groups['masters']
+  local_action: copy content="{{ bucketlist.stdout_lines }}" dest="./bucketlist.json" mode=0777

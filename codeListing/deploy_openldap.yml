@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openldap-deployment
+  namespace: openldap
+  labels:
+    app: openldap
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: openldap
+  template:
+    metadata:
+      labels:
+        app: openldap
+    spec:
+      containers:
+        - name: openldap
+          image: core-harbor.huxium.io/library/openldap:latest
+          ports:
+            - containerPort: 389
+            - containerPort: 636
+          resources:
+            limits:
+              cpu: 200m
+              memory: 800Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          env:
+            - name: LDAP_ORGANISATION
+              valueFrom:
+                secretKeyRef:
+                  name: openldap-secrets
+                  key: organization
+            - name: LDAP_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: openldap-secrets
+                  key: domain
+            - name: LDAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: openldap-secrets
+                  key: password
+          volumeMounts:
+            - name: openldap-volume
+              mountPath: "/var/lib/ldap"
+              subPath: database
+            - name: openldap-volume
+              mountPath: "/etc/ldap/slapd.d"
+              subPath: config
+      imagePullSecrets:
+      - name: regcred
+      nodeSelector:
+        kubernetes.io/hostname: k8sworker06
+      volumes:
+        - name: openldap-volume
+          persistentVolumeClaim:
+            claimName: openldap-data-disk

@@ -1,0 +1,37 @@
+FROM jenkins/jenkins:2.387.1-lts
+LABEL io.huxium.jenkins.image.authors="contact.ridha.bouazizi@gmail.com"
+LABEL description="A custom docker image of jenkins with docker and argocd 1.4 support"
+ENV JENKINS_USER ""
+ENV JENKINS_PASS ""
+USER root
+RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+RUN apt-get update && echo "N" | apt-get install -y sudo \
+      && rm -rf /var/lib/apt/lists/*
+RUN cat /etc/sudoers
+RUN apt update && apt install -y apt-utils software-properties-common \
+      && apt install -y python3 ca-certificates  curl  gnupg  lsb-release
+RUN set -xe \
+    && apt update \
+    && apt install -y python3-pip
+RUN curl -LO https://github.com/argoproj/argo-cd/releases/download/v1.4.0/argocd-linux-amd64
+RUN mv argocd-linux-amd64 /usr/local/bin/argocd
+RUN chmod 755 /usr/local/bin/argocd
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt-get install -y gcc g++ make rsync wget
+RUN apt-get install -y nodejs
+RUN pip install --upgrade pip
+RUN wget -O- https://carvel.dev/install.sh > install.sh
+RUN bash install.sh
+RUN ytt version
+RUN apt autoremove
+USER jenkins
+RUN ssh-keygen -t rsa -b 4096 -N HUXIUM -f /var/jenkins_home/.ssh/id_rsa
+# Skip initial setup
+ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+# COPY and install the plugins
+COPY plugins.txt /usr/share/jenkins/ref/
+RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt --plugins \
+      ansible configuration-as-code
+# COPY the groovy configuration scripts
+COPY default-user.groovy /usr/share/jenkins/ref/init.groovy.d/
+COPY config-jenkins.groovy /usr/share/jenkins/ref/init.groovy.d/

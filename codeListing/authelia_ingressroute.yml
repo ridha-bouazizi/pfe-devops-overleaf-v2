@@ -1,0 +1,39 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: authelia
+  namespace: openldap
+  labels: 
+    app.kubernetes.io/name: authelia
+    app.kubernetes.io/instance: authelia
+  annotations: 
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`auth.huxium.io`) && PathPrefix(`/`)
+      priority: 10
+      middlewares:
+        - name: chain-authelia
+          namespace: openldap
+      services:
+        - kind: Service
+          name: authelia
+          port: 80
+          namespace: openldap
+          passHostHeader: true
+          strategy: RoundRobin
+          scheme: http
+          weight: 10
+          responseForwarding:
+            flushInterval: 100ms
+  tls:
+    secretName: ovh-huxium-io-tls
+    options:
+      name: authelia
+      namespace: openldap

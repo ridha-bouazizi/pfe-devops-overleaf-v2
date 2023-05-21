@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: forwardauth-authelia
+  namespace: openldap
+  labels: 
+    app.kubernetes.io/name: authelia
+    app.kubernetes.io/instance: authelia
+spec:
+  forwardAuth:
+    address: http://authelia.openldap.svc.cluster.local/api/verify?rd=https://auth.huxium.io/
+    trustForwardHeader: true
+    authResponseHeaders:
+      - Remote-User
+      - Remote-Name
+      - Remote-Email

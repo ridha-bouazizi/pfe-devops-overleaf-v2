@@ -1,0 +1,44 @@
+pipeline {
+    agent none
+    environment {
+        git_http_url = "${git_http_url}"
+        ref    = "${ref}"
+    }
+    stages {
+        stage('Template deployment manifests and push to scm.') {
+            ...
+        }
+        stage('Deploy workload.') {
+            ...
+        }
+        stage('CleanUp stage.') {
+            agent any
+            steps {
+                sh ''' sleep 10 '''
+                dir('/tmp/tempDIR-syst-back') {
+                    sh ''' rm -rf ./* '''
+                }
+                
+            }
+        }
+        stage('Notify over teams.') {
+            agent any
+            steps {
+              sh '''export'''
+              office365ConnectorSend webhookUrl: 'https://edatask.webhook.office.com/webhookb2/***/IncomingWebhook/***/***',
+                  message: "Application ${env.basename} : ${env.basetag} has been [deployed].",
+                  status: 'Success'
+            }
+        }
+    }
+    post {
+        always {
+            node("master") {
+                cleanWs(cleanWhenNotBuilt: false,
+                        deleteDirs: true,
+                        disableDeferredWipeout: true,
+                        notFailBuild: true)
+            }
+        }
+    }
+}

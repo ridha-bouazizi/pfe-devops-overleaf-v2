@@ -1,0 +1,28 @@
+FROM docker:latest
+LABEL io.huxium.dind.image.authors="contact.ridha.bouazizi@gmail.com"
+LABEL description="A docker in docker image for building and pushing images to harbor"
+ENV PRIVATE_REG_U ""
+ENV PRIVATE_REG_P ""
+RUN apk add gnupg
+RUN apk add gpg
+RUN apk add pass
+RUN apk add wget bash openssl perl perl-utils
+RUN wget -O- https://carvel.dev/install.sh > install.sh
+RUN shasum -v
+RUN bash install.sh
+RUN ytt version
+COPY ./docker-credential-pass-v0.6.4-amd64.tar.gz /usr/local/sbin/docker-credential-pass-v0.6.4-amd64.tar.gz
+RUN tar -xvf /usr/local/sbin/docker-credential-pass-v0.6.4-amd64.tar.gz -C /usr/local/sbin/
+RUN ls -ll /usr/local/sbin/
+RUN export PATH=$PATH:/usr/local/sbin/docker-credential-pass
+COPY ./gen-key-script.sh /tmp/gen-key-script.sh
+RUN . /tmp/gen-key-script.sh
+RUN pass init ridha.bouazizi1@esprit.tn
+RUN mkdir /root/.docker/
+COPY ./config.json /root/.docker/config.json
+RUN apk update && apk upgrade --available
+RUN apk add --update python3 py3-pip
+RUN python3 -m pip install --upgrade pip setuptools wheel
+COPY ./requirements.txt /tmp/requirements.txt
+RUN pip3 install -r /tmp/requirements.txt
+CMD docker login -u $PRIVATE_REG_U -p $PRIVATE_REG_P harbor.huxium.io

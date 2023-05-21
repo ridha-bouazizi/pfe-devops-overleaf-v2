@@ -1,0 +1,108 @@
+pipeline {
+    agent none
+    environment {
+        git_http_url = "${git_http_url}"
+        ref    = "${ref}"
+    }
+    stages {
+        stage('Build and publish docker image.') {
+            agent {
+                kubernetes {
+                    yaml '''
+                              apiVersion: v1
+                              kind: Pod
+                              metadata:
+                                name: docker-client
+                              spec:
+                                containers:
+                                - name: docker
+                                  image: harbor.huxium.io/library/dind:latest
+                                  command:
+                                    - cat
+                                  tty: true
+                                  env:
+                                    - name: PRIVATE_REG_U
+                                      value: "admin"
+                                    - name: PRIVATE_REG_P
+                                      valueFrom:
+                                        secretKeyRef:
+                                          name: harbor-core
+                                          key: HARBOR_ADMIN_PASSWORD
+                                  lifecycle:
+                                    postStart:
+                                      exec:
+                                        command: ["/bin/sh", "-c", "docker login -u $PRIVATE_REG_U -p $PRIVATE_REG_P harbor.huxium.io && docker image prune --force"]
+                                  resources:
+                                    limits:
+                                      cpu: 1000m
+                                      memory: 1Gi
+                                    requests:
+                                      cpu: 500m
+                                      memory: 512Mi
+                                  volumeMounts:
+                                    - name: docker-sock
+                                      mountPath: /var/run/docker.sock
+                                    - name: docker-volume
+                                      mountPath: /var/lib/docker
+                                nodeSelector:
+                                  kubernetes.io/hostname: k8smaster01
+                                volumes:
+                                  - name: docker-sock
+                                    hostPath:
+                                      path: /var/run/docker.sock
+                                  - name: docker-volume
+                                    persistentVolumeClaim:
+                                      claimName: dind-pvc
+                         '''
+                }
+            }
+            steps {
+                checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '${ref}']], extensions: [], userRemoteConfigs: [[credentialsId: 'gitlab', refspec: '${ref}', url: '${git_http_url}']]]
+                container('docker') {
+                    sh ''' basename=$(basename $git_http_url) \
+                           && REPONAME=$(echo ${basename%.*} | tr '[:upper:]' '[:lower:]') \
+                           && basetag=$(basename $ref) \
+                           && ENVTAG=$(echo ${basetag#*-} | tr '[:upper:]' '[:lower:]') \
+                           && docker build -f prod/Dockerfile -t harbor.huxium.io/systnaps/${REPONAME}:${ENVTAG} . '''
+                }
+                container('docker') {
+                    sh ''' basename=$(basename $git_http_url) \
+                           && REPONAME=$(echo ${basename%.*} | tr '[:upper:]' '[:lower:]') \
+                           && basetag=$(basename $ref) \
+                           && ENVTAG=$(echo ${basetag#*-} | tr '[:upper:]' '[:lower:]') \
+                           && docker push harbor.huxium.io/systnaps/${REPONAME}:${ENVTAG} '''
+                }
+            }
+        }
+        stage('CleanUp stage.') {
+            agent any
+            steps {
+                sh ''' sleep 10 '''
+                dir('/tmp/tempDIR-syst-back') {
+                    sh ''' rm -rf ./* '''
+                }
+                
+            }
+        }
+        stage('Notify over teams.') {
+            agent any
+            steps {
+              sh '''export'''
+              office365ConnectorSend webhookUrl: 'https://edatask.webhook.office.com/webhookb2/***/IncomingWebhook/***/***',
+                  message: "A container image was built: ${env.basename}:${env.basetag}.",
+                  color: 'FF0000',
+                  status: 'Success'
+            }
+        }
+    }
+    post {
+        always {
+            node("master") {
+                cleanWs(cleanWhenNotBuilt: false,
+                        deleteDirs: true,
+                        disableDeferredWipeout: true,
+                        notFailBuild: true)
+            }
+        }
+    }
+}

@@ -1,0 +1,51 @@
+pipeline {
+    agent none
+    environment {
+        git_http_url = "${git_http_url}"
+        ref    = "${ref}"
+    }
+    stages {
+        stage('Template deployment manifests and push to scm.') {
+            ...
+        }
+        stage('Deploy workload.') {
+            agent any
+            steps {
+                sh '''
+                    argocd login --username admin --password $ARGOCD argocd.huxium.io --grpc-web
+                '''
+                sh '''
+                    argocd repo add https://gitlab.huxium.io/operations/systnaps/deployment-manifests.git \
+                        --username $GITLAB_USER --password $GITLAB_PASSWORD --insecure-skip-server-verification
+                '''
+                sh '''
+                    basename=$(basename ${git_http_url}) \
+                    && REPONAME=$(echo ${basename%.*} | tr '[:upper:]' '[:lower:]') \
+                    && basetag=$(basename ${REF}) \
+                    && ENVTAG=$(echo ${basetag#*-} | tr '[:upper:]' '[:lower:]') \
+                    && argocd app create $REPONAME-$ENVTAG --repo https://gitlab.huxium.io/operations/systnaps/deployment-manifests.git \
+                        --path $ENVTAG --dest-server https://kubernetes.default.svc --dest-namespace $ENVTAG
+                '''
+                sh '''
+                    basename=$(basename ${git_http_url}) \
+                    && REPONAME=$(echo ${basename%.*} | tr '[:upper:]' '[:lower:]') \
+                    && basetag=$(basename ${REF}) \
+                    && ENVTAG=$(echo ${basetag#*-} | tr '[:upper:]' '[:lower:]') \
+                    && argocd app sync $REPONAME-$ENVTAG
+                '''
+                dir('/tmp/tempDIR-syst-back') {
+                    sh ''' rm -rf ./* '''
+                }
+            }
+        }
+        stage('CleanUp stage.') {
+            ...
+        }
+        stage('Notify over teams.') {
+            ...
+        }
+    }
+    post {
+        ...
+    }
+}

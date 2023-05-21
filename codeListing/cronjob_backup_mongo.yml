@@ -1,0 +1,106 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  creationTimestamp: null
+  name: mongodump-demodb
+  namespace: mongodb
+spec:
+  schedule: "0 0 4,12,20,28 * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 3
+  startingDeadlineSeconds: 60
+  suspend: false
+  jobTemplate:
+    metadata:
+    spec:
+      template:
+        metadata:
+        spec:
+          containers:
+          - command:
+            - python3
+            - /root/dumper/dumper.py
+            env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: AWS_ACCESS_KEY_ID
+                  name: aws-s3-secret-gra
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: AWS_SECRET_ACCESS_KEY
+                  name: aws-s3-secret-gra
+            - name: AWS_DEFAULT_REGION
+              valueFrom:
+                secretKeyRef:
+                  key: AWS_DEFAULT_REGION
+                  name: aws-s3-secret-gra
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mongodb-root-password
+                  name: mongodb
+            - name: MONGODB_CONFIG
+              value: /root/config/mongo-config
+            - name: DB_NAME
+              value: "demodb"
+            - name: TEAMS_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  key: TEAMS_WEBHOOK_URL
+                  name: teams-webhook-url
+            image: core-harbor.huxium.io/library/mongodb-backup-restore:latest
+            imagePullPolicy: Always
+            name: mongodump-backup
+            resources: 
+              limits:
+                cpu: 1000m
+                memory: 512Mi
+              requests:
+                cpu: 100m
+                memory: 128Mi
+            volumeMounts:
+            - name: config
+              mountPath: "/root/dumper/"
+            - name: aws
+              mountPath: "/.aws"
+            - name: mongo-config
+              mountPath: "/root/config/"
+            - name: backup
+              mountPath: "/opt/backup"
+          dnsPolicy: ClusterFirst
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          volumes:
+          - name: aws
+            configMap:
+              name: backup-cm
+              defaultMode: 420
+              items:
+              - key: credentials
+                path: credentials
+              - key: config
+                path: config
+          - name: mongo-config
+            secret:
+              secretName: mongo-config
+              defaultMode: 420
+              items:
+              - key: mongo-config
+                path: mongo-config
+          - name: config
+            configMap:
+              name: backup-cm
+              defaultMode: 420
+              items:
+              - key: dump.py
+                path: dump.py
+              - key: requirements.txt
+                path: requirements.txt
+          - name: backup
+            persistentVolumeClaim:
+              claimName: mongodb-backup

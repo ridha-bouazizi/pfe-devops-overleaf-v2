@@ -1,0 +1,48 @@
+- name: Install velero client on master nodes only
+  become: yes
+  shell: |
+          wget https://github.com/vmware-tanzu/velero/releases/download/v1.9.0/velero-v1.9.0-linux-amd64.tar.gz
+          tar -xvzf /home/ubuntu/velero-v1.9.0-linux-amd64.tar.gz
+          sudo mv /home/ubuntu/velero-v1.9.0-linux-amd64/velero /usr/local/bin/
+  when: inventory_hostname in groups['masters']
+
+- name: copy workspace contents onto the server
+  copy:
+    src: "{{ role_path }}/files/"
+    dest: workspace/velero
+    mode: a+rwx
+
+- name: Install crds
+  become: yes
+  shell: |
+          kubectl --kubeconfig /home/ubuntu/.kube/config apply -f workspace/velero/01-config/01-crds
+          kubectl --kubeconfig /home/ubuntu/.kube/config apply -f workspace/velero/01-config/02-rbac
+
+- name: Base64 encode credentials
+  become: yes
+  become_user: ubuntu
+  shell: |
+          cat /home/ubuntu/.aws/credentials | base64
+  when: inventory_hostname in groups['masters']
+  register: credentials
+
+- name: Print encoded aws credentials to console
+  ansible.builtin.debug:
+    msg: |
+          Your credentials :
+          line1 : {{ credentials.stdout_lines[0] }}
+          line2 : {{ credentials.stdout_lines[1] }}
+          line3 : {{ credentials.stdout_lines[2] }}
+
+- name: Create velero secret from a j2 template file using the encoded credentials
+  template:
+    src: files/deployment.yml.j2
+    dest: /home/ubuntu/workspace/velero/deployment.yml
+
+- name: Deploy velero client
+  become: yes
+  become_user: ubuntu
+  kubernetes.core.k8s:
+    kubeconfig: "/home/ubuntu/.kube/config"
+    state: present
+    src: "/home/ubuntu/workspace/velero/deployment.yml"

@@ -1,0 +1,70 @@
+pipeline {
+    agent none
+    environment {
+        git_http_url = "${git_http_url}"
+        ref    = "${ref}"
+    }
+    stages {
+        stage('Template deployment manifests and push to scm.') {
+            agent any
+            steps {
+                sh '''
+                    basetag=$(basename $REF) \
+                    && ENVTAG=$(echo ${basetag#*-} | tr '[:upper:]' '[:lower:]')
+                    ytt -f prod/deployment.yml --data-value environment=$ENVTAG > /tmp/deployment-back-syst.yml
+                    cp prod/sharedConfig.yml /tmp/sharedConfig-syst.yml
+                    '''
+                sh '''
+                    rm -rf /tmp/tempDIR-syst-back && mkdir /tmp/tempDIR-syst-back
+                '''
+                dir('/tmp/tempDIR-syst-back') {
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'gitlab', url: 'https://gitlab.huxium.io/operations/systnaps/deployment-manifests.git']]])
+                    sh  ''' 
+                            basetag=$(basename $REF) \
+                            && ENVTAG=$(echo ${basetag#*-} | tr '[:upper:]' '[:lower:]')
+                            
+                            if [ -d "$ENVTAG" ]; then
+                                ### Take action if $ENVTAG exists ###
+                                echo "${ENVTAG} exists..."
+                            else
+                                ###  Control will jump here if $ENVTAG does NOT exists ###
+                                echo "${ENVTAG} does not exist, creating..."
+                                mkdir "${ENVTAG}"
+                            fi
+
+                            cat /tmp/deployment-back-syst.yml > ${ENVTAG}/deployment.yml
+                            cat /tmp/sharedConfig-syst.yml > ${ENVTAG}/sharedConfig.yml
+                        '''
+                    withCredentials([usernamePassword(credentialsId: 'gitlab', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]){
+                        sh('''
+                            git config user.name 'jenkins'
+                            git config user.email 'r.bouazizi@huxium.io'
+                            git add .
+                            STATUS=`git status --porcelain`
+                            if ( $STATUS ); then
+                                echo "No changes to push to remote";
+                            else
+                                echo "Changes made, pushing to remote" \
+                                && git commit -am "added ENVTAG" \
+                                && git config --local credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f" \
+                                && git push origin HEAD:main ;
+                            fi                        
+                        ''')
+                    }
+                }
+            }
+        }
+        stage('Deploy workload.') {
+            ...
+        }
+        stage('CleanUp stage.') {
+            ...
+        }
+        stage('Notify over teams.') {
+            ...
+        }
+    }
+    post {
+        ...
+    }
+}

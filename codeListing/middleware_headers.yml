@@ -1,0 +1,16 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: headers-authelia
+  namespace: openldap
+  labels: 
+    app.kubernetes.io/name: authelia
+    app.kubernetes.io/instance: authelia
+spec:
+  headers:
+    browserXssFilter: true
+    customFrameOptionsValue: "SAMEORIGIN"
+    customResponseHeaders:
+      Cache-Control: "no-store"
+      Pragma: "no-cache"

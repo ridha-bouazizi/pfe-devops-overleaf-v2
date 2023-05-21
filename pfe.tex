@@ -1,0 +1,101 @@
+\documentclass{classes/memoire}
+\usepackage{minted}
+\setminted[]{
+    xleftmargin=.75cm,
+    xrightmargin=.75cm,
+    frame=single,
+    framesep=.25cm,
+    linenos,
+    tabsize=2,
+    fontsize=\footnotesize,
+    breaklines=true
+}
+\usepackage{listings}
+% \lstset{language=YAML}
+\lstdefinestyle{yaml}{
+     basicstyle=\color{blue}\footnotesize,
+     rulecolor=\color{black},
+     string=[s]{'}{'},
+     stringstyle=\color{blue},
+     comment=[l]{:},
+     commentstyle=\color{black},
+     fontsize=\footnotesize
+     morecomment=[l]{-},
+     breaklines=true
+ }
+ \lstdefinestyle{Dockerfile}{
+     basicstyle=\color{blue}\footnotesize,
+     rulecolor=\color{black},
+     string=[s]{'}{'},
+     stringstyle=\color{blue},
+     comment=[l]{:},
+     commentstyle=\color{black},
+     fontsize=\footnotesize
+     morecomment=[l]{-},
+     breaklines=true
+ }
+\usepackage[most]{tcolorbox}
+  % image landscape
+\usepackage{rotating}
+\usepackage{pdflscape}
+\usepackage{wrapfig}
+\usepackage{afterpage}
+\usepackage{lmodern}
+\usepackage{garamond}
+\usepackage{comment}
+\usepackage{geometry}
+% \usepackage[options]{nohyperref}
+% \PassOptionsToPackage{russian}{babel}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+% \renewcommand\lstlistoflistingscaption{List of source codes}
+\renewcommand{\mtctitle}{Table of contents}
+\begin{document}
+
+%\frontmatter
+\include{frontmatter/pagedegarde/pagedegarde}
+
+\include{frontmatter/sign}
+%\garamond
+\include{frontmatter/resume/resume}
+\include{frontmatter/dedicaces/dedicaces}
+\include{frontmatter/remerciements/remerciements}
+%\ungaramond
+%\pagestyle{empty}
+\dominitoc 
+\tableofcontents
+\listoftables 
+\listoffigures
+\hypersetup{bookmarksdepth=-1} % add this line (to disable bookmarks)
+\listoflistings
+\hypersetup{bookmarksdepth} % add this line (to enable bookmarks)
+\garamond
+\include{frontmatter/glossaire}
+\include{chapitres/introduction}
+\include{chapitres/chapitre1}
+\include{chapitres/chapitre2}
+\include{chapitres/chapitre3}
+\include{chapitres/chapitre4}
+\include{chapitres/chapitre5}
+\include{chapitres/Chapitre6}
+\include{chapitres/chapitre7}
+\include{chapitres/chapitre8}
+\include{chapitres/chapitre9}
+\include{chapitres/chapitre10}
+\include{chapitres/chapitre11}
+% \include{chapitres/chapitre12}
+\include{chapitres/conclusion}
+
+\bibliographystyle{unsrt}
+\nocite{*}
+\bibliography{bibliographie}
+
+
+
+%\include{frontmatter/Referencement}
+\include{frontmatter/pagedegarde/end}
+\end{document}

@@ -1,0 +1,45 @@
+FROM core-harbor.huxium.io/systnaps/systnaps-back-base:latest
+LABEL io.huxium.systnaps.image.authors="contact.ridha.bouazizi@gmail.com"
+LABEL io.huxium.systnaps.image.name="systnaps-back"
+LABEL io.huxium.systnaps.image.tag="1.0-rc"
+
+# ENV SYSTNAPSE_mongodb_authSource=""
+# ENV SYSTNAPSE_mongodb_base=""
+# ENV SYSTNAPSE_mongodb_password=""
+# ENV SYSTNAPSE_mongodb_server_ip=""
+# ENV SYSTNAPSE_mongodb_server_port=""
+# ENV SYSTNAPSE_mongodb_username=""
+# ENV SYSTNAPSE_psql_base=""
+# ENV SYSTNAPSE_psql_password=""
+# ENV SYSTNAPSE_psql_server_ip=""
+# ENV SYSTNAPSE_psql_server_port=""
+# ENV SYSTNAPSE_api_url=""
+# ENV SYSTNAPSE_version=""
+
+COPY --chown=codekeeper:codekeeper ./ddtm-api /var/www/
+
+USER root
+RUN apt update && apt install -y vim && apt upgrade -y 
+COPY ./custom-config/ytt/install.sh /tmp/install.sh
+RUN bash /tmp/install.sh
+
+COPY ./custom-config/composer/composer.phar /tmp/composer.phar
+COPY ./custom-config/apache/vhosts.conf /etc/apache2/sites-enabled/000-default.conf
+COPY ./custom-config/apache/vhosts.conf /etc/apache2/sites-available/000-default.conf
+COPY ./custom-config/apache/apache2.conf /etc/apache2/apache2.conf
+COPY ./custom-config/api-config/parameters.yml /var/www/app/config/parameters.yml
+COPY ./custom-config/api-config/databases.yml /var/www/app/config/databases.yml
+COPY ./custom-config/api-config/config.yml /var/www/app/config/config.yml
+COPY --chown=codekeeper:codekeeper ./custom-config/ytt /tmp
+RUN a2enmod rewrite
+RUN service apache2 restart
+
+RUN setfacl -dR -m u:www-data:rwX .
+RUN setfacl -R -m u:www-data:rwX .
+RUN chown -R www-data:www-data .
+RUN chmod -R 777 ./
+
+USER www-data
+
+EXPOSE 80/tcp
+EXPOSE 443/tcp

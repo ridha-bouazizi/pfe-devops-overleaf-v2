@@ -1,0 +1,26 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ovh-certificate
+spec:
+  
+  ## reference to the concerned domain.
+  dnsNames:
+  - "*.ridha-bouazizi.fr"
+
+  ## reference the cluster issuer declared above
+  issuerRef:
+    name: letsencrypt-ovh
+    kind: ClusterIssuer
+
+  ## the name of secret containing the tls certificate to be created
+  secretName: ovh-ridha-bouazizi-fr-tls
+
+  ## Renews the certificate 24 hours before its expiration
+  renewBefore: 24h
+
+  ## annotations to be added to the secret to allow its propagation across namespaces
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"  
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
