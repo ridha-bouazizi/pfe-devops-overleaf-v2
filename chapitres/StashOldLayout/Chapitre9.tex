@@ -5,11 +5,11 @@
 
 \minitoc
 
-\section*{Introduction}
+\subsection*{Introduction}
 CI/CD workflows are a set of automated processes that enable us to continuously build, test, and deploy software changes. These workflows help to speed up the software development process by enabling developers to quickly detect and fix issues, and to release new software versions frequently and reliably. 
 
 
-\section{Sprint backlog :}
+\subsection{Sprint backlog :}
 
 \begin{longtable}[H]{|m{1.5cm}|m{3cm}|m{1.5cm}|m{9cm}|}
 \hline
@@ -27,7 +27,9 @@ CI/CD workflows are a set of automated processes that enable us to continuously 
 \caption{7th Sprint Backlog}
 \end{longtable}
 
-\section{UML Design: Activity diagram for the CI/CD workflows } 
+\section{CI/CD Workflows}
+
+\subsection{UML Design: Activity diagram for the CI/CD workflows } 
 
 In the previous chapter, various CI/CD tools have been self-hosted in a complementary manner. Taking advantage of these tools, we are aiming to provide a reliable workflow to funnel the developed workloads through the various steps of code analysis, containerized artifact building, and deployment in various environments.  
 
@@ -41,7 +43,7 @@ The following is an activity diagram underlining the various interfaces, actors,
 \label{fig:Activity diagram for the CI/CD workflows}
 \end{figure}
 
-\section{UML Design: Sequence diagram of the CI/CD workflow }
+\subsection{UML Design: Sequence diagram of the CI/CD workflow }
 
 Next, let’s look at the sequence diagram for the CI/CD workflow: 
 \begin{figure}[H]\centering
@@ -50,9 +52,9 @@ Next, let’s look at the sequence diagram for the CI/CD workflow:
 \label{fig:sequence diagram of the CI/CD workflow}
 \end{figure}
 
-\section{CI/CD workflow steps }
+\subsection{CI/CD workflow steps }
 
-\subsection{Architecture of the software under development }
+\subsubsection{Architecture of the software under development }
 
 Among the proprietary software developed by the company, we have “SYSTNAPS” which is used for data processing by a few well known companies such as “Dassault-Systems” and others. It is mainly composed of three major parts as shown in the diagram below : 
 
@@ -64,11 +66,11 @@ Among the proprietary software developed by the company, we have “SYSTNAPS” 
 
 The backend api interacts with the frontend by providing the implemented computing functions. It also uses a utility api which uses puppeteer and various other libraries for graph rendering. Both relational and document databases are used for data storage. Some of the data is stored in document format in an S3 compatible storage backend.
 
-\subsection{Containerizing artifacts:}
+\subsubsection{Containerizing artifacts:}
 
 Container images for the application components are built inside the docker in docker instance we have previously build. It is configured to be able to authenticate with the private registry to pull the base image and push the resulting artifact. 
 
-\subsubsection{Dockerfile of the backend API container image }
+\subsubsubsection{Dockerfile of the backend API container image }
 
 For building the container image for the backend api, we first build a base image which contains most of the packages and immutable config. 
 
@@ -84,7 +86,7 @@ The resulting dockerfile for the actual container image is as follows:
 \end{listing}
  
 
-\subsubsection{Dockerfile of the frontend container image }
+\subsubsubsection{Dockerfile of the frontend container image }
 
 As with the backend part, this image is built from a base that contains all that is immutable. Building the frontend part of the application is done in two stages as follows: 
 
@@ -94,12 +96,12 @@ As with the backend part, this image is built from a base that contains all that
     \label{lst:Dind Dockerfile}
 \end{listing}
 
-\subsubsection{Dockerfile of the utility API container image} 
+\subsubsubsection{Dockerfile of the utility API container image} 
 
  
-\subsection{Code quality }
+\subsubsection{Code quality }
 
-\subsubsection{Conceptual design }
+\subsubsubsection{Conceptual design }
 
 To ensure code quality, the first step is to scan the developed code of both the frontend, backend and utility for vulnerabilities and other irregularities.  
 
@@ -112,7 +114,7 @@ A quality gate is then used to inform the cicd orchestrator of the level of stab
 \end{figure}
 
 
-\subsubsection{Implementation }
+\subsubsubsection{Implementation }
 
 As illustrated in this figure, the code scanning process is initiated by our orchestrator following each accepted merge request in the SCM. The following is the pipeline for the scan job: 
 
@@ -124,9 +126,9 @@ As illustrated in this figure, the code scanning process is initiated by our orc
 \end{listing}
  
 
-\subsection{Building artifacts: }
+\subsubsection{Building artifacts: }
 
-\subsubsection{Conceptual design :}
+\subsubsubsection{Conceptual design :}
 
 Containerizing the applications contributes to portability, consistency, and resource efficiency of the workloads to be deployed. Following each approved merge request, a build step is processed. 
 
@@ -138,7 +140,7 @@ The following diagram illustrates this process and the interaction between the k
 \label{fig:Conceptual design of building artifact }
 \end{figure}
 
-\subsubsection{Implementation :}
+\subsubsubsection{Implementation :}
 
 In similar fashion to the code scanning step, building artifacts is initiated following each approved merge request. A webhook is sent by the SCM tool to Jenkins which starts the job using the following pipeline: 
 
@@ -162,9 +164,9 @@ For each build process, the name and tag of the image are programmatically extra
 
  
 
-\subsection{Delivering artifacts }
+\subsubsection{Delivering artifacts }
 
-\subsubsection{Conceptual design:}
+\subsubsubsection{Conceptual design:}
 
 For delivering artifacts, the CI/CD orchestrator, Jenkins, is used in conjunction with argocd, our CD/CD controller. ArgoCD uses deployment manifests pushed to the SCM in order to create the workload objects. 
 
@@ -185,7 +187,7 @@ The following is a general diagram of the delivery process:
 \label{fig:Conceptual design of Delivering artifacts }
 \end{figure}
 
-\subsubsection{Implementation: }
+\subsubsubsection{Implementation: }
 
 The deployment manifests, configmaps, secrets, ingressroutes and other Kubernetes objects needed for deploying the applications are templated with each delivery using ytt. This makes the container configuration reusable and extensible.  
 
@@ -243,7 +245,7 @@ Once the deployment manifests are present in the SCM repository, Jenkins then in
     \label{lst:jenkinsfile_deploy_delivery}
 \end{listing}
 
-\section*{Conclusion}
+\subsection*{Conclusion}
 In conclusion, implementing a CI/CD workflow in Kubernetes is a complex but rewarding process that requires a combination of different tools and techniques. 
 
 Jenkins serves as the main orchestrator for the CI/CD process, with DinD agents building container images, and Gitlab as the source code management tool. 

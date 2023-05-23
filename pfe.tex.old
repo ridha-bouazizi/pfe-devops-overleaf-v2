@@ -76,10 +76,18 @@
 \garamond
 \include{frontmatter/glossaire}
 \include{chapitres/introduction}
-\include{chapitres/NewLayout/Chapter1}
-\include{chapitres/NewLayout/Chapter2}
-\include{chapitres/NewLayout/Chapter3}
-\include{chapitres/NewLayout/Chapter4}
+\include{chapitres/chapitre1}
+\include{chapitres/chapitre2}
+\include{chapitres/chapitre3}
+\include{chapitres/chapitre4}
+\include{chapitres/chapitre5}
+\include{chapitres/Chapitre6}
+\include{chapitres/chapitre7}
+\include{chapitres/chapitre8}
+\include{chapitres/chapitre9}
+\include{chapitres/chapitre10}
+\include{chapitres/chapitre11}
+% \include{chapitres/chapitre12}
 \include{chapitres/conclusion}
 
 \bibliographystyle{unsrt}

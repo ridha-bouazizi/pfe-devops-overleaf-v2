@@ -5,13 +5,13 @@
 
 \minitoc
 \newpage
-\section*{Introduction}
+\subsection*{Introduction}
 Security is of utmost importance, especially when it comes to protecting sensitive information. Authentication and authorization platforms play a critical role in ensuring that only authorized individuals have access to valuable resources. 
 
 In this chapter, we will explore the various components involved in securing access and their configuration and deployment. 
 
 
-\section{Sprint backlog :}
+\subsection{Sprint backlog :}
 
 \begin{longtable}[H]{|m{1.5cm}|m{3cm}|m{1.5cm}|m{9cm}|}
 \hline
@@ -24,8 +24,8 @@ In this chapter, we will explore the various components involved in securing acc
 \hline
 \caption{8th Sprint Backlog}
 \end{longtable}
-
-\section{Conceptual overview }
+\section{Authentication and authorization}
+\subsection{Conceptual overview }
 
 Previously, traefik has been deployed and configured to serve as an ingress controller and load balancer for our platform as a service. In this chapter we discuss how an assortment of components are used in combination with traefik to provide a secure and scalable solution for authentication and authorization. 
 
@@ -49,13 +49,13 @@ Authelia authenticates users against the OpenLDAP server and authorizes access t
 
  
 
-\section{Deployment and configuration of components }
+\subsection{Deployment and configuration of components }
 
-\subsection{openLDAP for access and user management  }
+\subsubsection{openLDAP for access and user management  }
 
 A custom openldap server is deployed for the purpose of safely and reliably accessing and managing the distributed directories that store information about users, groups, resources. 
 
-\subsubsection{Deployment: }
+\subsubsubsection{Deployment: }
 
 An ansible playbook is firstly run to perform the following steps : 
 \begin{itemize}[label={--}]
@@ -80,7 +80,7 @@ The following is a code snippet from the manifest for deploying the openLDAP ser
 \label{lst:Deploying_openLDAP}
 \end{listing} 
 
-\subsubsection{Resource overview }
+\subsubsubsection{Resource overview }
 
 The web interface below is deployed and configured to provide secure remote access to the openLDAP server entries, thus allowing management operations. This is achieved using the LDAP base name of the company. Naturally, external direct access to server is prohibited. 
 \begin{figure}[H]\centering
@@ -89,11 +89,11 @@ The web interface below is deployed and configured to provide secure remote acce
 \label{fig:f52}
 \end{figure} 
 
-\subsection{Redis for session storage }
+\subsubsection{Redis for session storage }
 
 Redis is used with the “auth-middleware” for session storage because Redis is an efficient and highly scalable in-memory data store that can handle high-traffic web applications. 
 
-\subsubsection{Deployment:} 
+\subsubsubsection{Deployment:} 
 
 When users log in, their authentication and session data are stored in a session cookie, which is used to authenticate them on subsequent requests. 
 
@@ -101,7 +101,7 @@ By using Redis as the session store for Authelia, it becomes possible to store t
 
 This is important for applications that experience heavy traffic, as it ensures that user authentication data can be retrieved and verified quickly and efficiently. 
 
-\subsubsection{Resource overview: }
+\subsubsubsection{Resource overview: }
 
 The following is an overview of the resulting ReplicaSet for Redis: 
 
@@ -125,11 +125,11 @@ Only internal access is allowed. This is achieved using the following services:
 
 
 
-\subsection{Authelia for single sign-on }
+\subsubsection{Authelia for single sign-on }
 
 Authelia is put in place to provide a single sign-on experience and fine-grained access control for applications and services running on the cluster.  
 
-\subsubsection{Deployment: }
+\subsubsubsection{Deployment: }
 
 It leverages the LDAP server to cross-check user credentials. Two backend database servers are configured. Authelia uses the HA PostgreSQL cluster to store policies and other data. It also relies on the replicated Redis cluster for user session storage. 
 
@@ -149,7 +149,7 @@ The following configuration is attached to the authelia containers using the con
     \label{lst:Authelia configuration}
 \end{listing}
 
-\subsubsection{Resource overview : }
+\subsubsubsection{Resource overview : }
 
 The following is an overview of the deployed resources: 
 \begin{figure}[H]\centering
@@ -169,15 +169,15 @@ This diagram features the following elements:
 
 Each of these workloads has volumes attached to it in order to persist data. 
 
-\section{The authentication gateway in action }
+\subsection{The authentication gateway in action }
 
-\subsection{Preliminary configuration }
+\subsubsection{Preliminary configuration }
 
 As a first step, the “Middleware CRDs” that handle the request forwarding is configured. 
 
 Naturally, communication between the ingress controller, Traefik, and the authentication server, Authelia, is exchanged internally in the cluster. 
 
-\subsubsection{The “forward-auth” middleware }
+\subsubsubsection{The “forward-auth” middleware }
 
 Forward authentication with Traefik means that incoming requests to a service are first authenticated by the authentication server, Authelia, before being forwarded to the service. 
 
@@ -201,9 +201,9 @@ The “headers” middleware is a collection of middleware components that are u
 
 These headers can include the Authorization header, session cookies, and other custom headers that contain authentication information. 
 
-\subsection{Implementation }
+\subsubsection{Implementation }
 
-\subsubsection{The authentication portal }
+\subsubsubsection{The authentication portal }
 
 A chain of the “Middleware CRDs” declared above is leveraged in the following  ingressroute to deploy the authentication portal: 
 
@@ -220,7 +220,7 @@ The following figure shows the authentication portal as seen by an external user
 \label{fig:f55}
 \end{figure}
 
-\subsubsection{How it works }
+\subsubsubsection{How it works }
 
 The architecture works as follows: 
 \begin{itemize}[label={--}]
@@ -232,7 +232,7 @@ The architecture works as follows:
 \item  For subsequent requests, Traefik checks the cookie for a valid token and forwards the request to the backend service if the token is valid. Otherwise, the user is redirected to the authentication page.  
 \end{itemize}
 
-\section*{Conclusion}
+\subsection*{Conclusion}
 
 In conclusion, deploying an authentication and authorization platform on Kubernetes using Traefik, Authelia, OpenLDAP, and Redis can provide a secure and scalable solution for managing user access to resources. 
 

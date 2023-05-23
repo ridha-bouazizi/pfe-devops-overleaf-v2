@@ -5,9 +5,8 @@
 
 \minitoc
 \newpage
-\section*{Introduction}
-
-\section{Sprint Backlog}
+\subsection*{Introduction}
+\subsection{Sprint Backlog}
 
 \begin{longtable}[H]{|m{1.5cm}|m{3cm}|m{1.5cm}|m{8cm}|}
 \hline
@@ -40,8 +39,8 @@
 % \hline
 % \caption{Table 3rd Sprint Backlog}
 % \end{longtable}
-
-\section{UML design : class diagram for cloud infrastructure }
+\section{Resource provisiong for the PaaS infrastructure}
+\subsection{UML design : class diagram for cloud infrastructure }
 The following diagram showcases the interaction between the infrastructure as code tools and the cloud provider as well as the resulting infrastructure, its components, and the relation between them. 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f13.png}
@@ -49,7 +48,7 @@ The following diagram showcases the interaction between the infrastructure as co
 \label{fig:fig13}
 \end{figure}
 
-\section{“HCP config” diagram for cloud provisioning: }
+\subsection{“HCP config” diagram for cloud provisioning: }
 The following figure illustrates the main resources declared in our terraform “HCP config”: 
 
 \begin{figure}[H]\centering
@@ -71,7 +70,7 @@ All the resources are managed by Terraform, which allows for easy provisioning, 
 
 Overall, this Terraform configuration with OVH cloud provider provides a scalable, secure, and highly available infrastructure for running applications. 
 
-\section{Component diagram of provisioned resources}
+\subsection{Component diagram of provisioned resources}
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f15.png}
@@ -81,7 +80,7 @@ Overall, this Terraform configuration with OVH cloud provider provides a scalabl
 
 The cluster resources were deployed to three regions. Namely, GRA, BHS, SBG. In each region, four instances were created. One of which will join the control plane, two will have the worker compute role and the last will have a second block device in raw format and will join the data storage backend. Various buckets from the object store will be provisioned and will serve as backup storage backends and high-speed data storage.  
 
-\section*{Conclusion}
+\subsection*{Conclusion}
 
 In conclusion, using Ansible and Terraform to provision and set up resources from OVH proved to be an efficient approach to setting up a PaaS environment on Kubernetes.  
 

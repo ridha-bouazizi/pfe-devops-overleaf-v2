@@ -43,24 +43,38 @@
 %---------------------------------------%
 %		commandes personnelles			%
 %---------------------------------------%\\
+
+\usepackage{titlesec}
+\usepackage{hyperref}
+\titleclass{\subsubsubsection}{straight}[\subsubsection]
+\newcounter{subsubsubsection}[subsubsection]
+\def\toclevel@subsubsubsection{4}
+\def\toclevel@paragraph{5}
+\def\l@subsubsubsection{\@dottedtocline{4}{107em}{4em}}
+\def\l@paragraph{\@dottedtocline{5}{10em}{5em}}
+\makeatother
+% ------------------------------------- %
+
 \onehalfspacing%espace interligne = 1,5
 % \setlength\parindent{0pt} % sets indent to zero
 \setlength{\parskip}{6pt} % changes vertical space between paragraphs
 \renewcommand\thechapter{\Roman{chapter}.}
 \renewcommand\thesection{\Roman{section}.}
 \renewcommand{\thesubsection}{\Roman{section}.\arabic{subsection}.}
-\renewcommand{\thesubsubsection}{(\alph{subsubsection})}
+\renewcommand{\thesubsubsection}{\arabic{subsection}.\alph{subsubsection}.}
+\renewcommand\thesubsubsubsection{\roman{subsubsubsection})}
 \newcommand{\chapterfont}{\fontsize{20}{24}\selectfont}
 \newcommand{\sectionfont}{\fontsize{18}{22}\selectfont}
 \newcommand{\subsectionfont}{\fontsize{16}{19}\selectfont}
 \newcommand{\subsubsectionfont}{\fontsize{14}{17}\selectfont}
+\newcommand{\subsubsubsectionfont}{\fontsize{14}{17}\selectfont}
 \newcommand{\paragraphfont}{\fontsize{12}{14}\selectfont}
 \fancypagestyle{plain}{%
     \fancyhf{}%
 	\fancyfoot[C]{\thepage}
 }
-\setcounter{tocdepth}{3} 
-\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{4} 
+\setcounter{secnumdepth}{4}
 \setcounter{minitocdepth}{3} 
 \setlength{\mtcindent}{24pt} 
 \renewcommand{\mtcfont}{\small\rm}
@@ -99,6 +113,7 @@
 \titleformat{\section}{\ungaramond\sectionfont\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}{\ungaramond\subsectionfont\bfseries}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}{\ungaramond\subsubsectionfont\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\subsubsubsection}{\ungaramond\subsubsubsectionfont\bfseries}{\thesubsubsubsection}{1em}{}
 \titleformat{\paragraph}{\ungaramond\bfseries\paragraphfont}{\theparagraph}{1em}{}
 \titleformat{\subparagraph}{\ungaramond\bfseries\paragraphfont}{\thesubparagraph}{1em}{}
 
@@ -109,9 +124,11 @@
 %---------------------------------------%
 %% Defining section, subsection and subsubsection spacing
 \usepackage{titlesec}
+\usepackage{hyperref}
 \titlespacing{\section}{7mm}{8pt}{8pt}
 \titlespacing{\subsection}{10mm}{8pt}{8pt}
 \titlespacing{\subsubsection}{13mm}{8pt}{6pt}
+\titlespacing{\subsubsubsection}{16mm}{8pt}{6pt}
 \titlespacing{\chapter}{14mm}{8pt}{6pt}
 % ***********
 \usepackage{pstcol}

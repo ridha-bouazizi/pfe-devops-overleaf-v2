@@ -5,12 +5,12 @@
 
 \minitoc
 \newpage
-\section*{Introduction}
+\subsection*{Introduction}
 In this chapter, we will explore the process of setting up the Kubernetes-based PaaS. Our PaaS will include Traefik, a powerful ingress controller that provides load balancing and routing capabilities, MetalLB, a load balancer that simplifies network configuration, and Ceph, a distributed storage system that provides scalability and high availability.
 
 We will use Ansible to automate the deployment of our PaaS environment.
 
-\section{Sprint backlog :}
+\subsection{Sprint backlog :}
 
 \begin{longtable}[H]{|m{1.5cm}|m{3cm}|m{1.5cm}|m{9cm}|}
 \hline
@@ -26,8 +26,8 @@ We will use Ansible to automate the deployment of our PaaS environment.
 \caption{5th Sprint Backlog}
 \end{longtable}
 
-
-\section{UML design: package diagram for the initial PaaS setup}
+\section{Initial PaaS setup}
+\subsection{UML design: package diagram for the initial PaaS setup}
 
 Here, the PaaS is the main package and contains all the other packages.
 
@@ -41,9 +41,9 @@ Finally, the Ceph package contains all of the necessary components for running d
 \label{fig:package diagram for the initial PaaS setup}
 \end{figure}
 
-\section{Networking services}
+\subsection{Networking services}
 
-\subsection{Overview on the networking services}
+\subsubsection{Overview on the networking services}
 
 As illustrated in the following figure, Traefik, Cert-manager, and MetalLB work together to provide a secure and scalable way to route traffic inside Kubernetes using Services and IngressRoutes.
 
@@ -89,9 +89,9 @@ The flow is as follows:
 \item Traefik handles TLS termination using the secrets previously generated a
 \end{enumerate}
 
-\subsection{Secret provisioning and propagation:}
+\subsubsection{Secret provisioning and propagation:}
 
-\subsubsection{TLS secret provisioning:}
+\subsubsubsection{TLS secret provisioning:}
 
 In order to provide secure HTTPS communications between clients and the deployed workloads, valid TLS certificates need to be provisioned from our provider tls appliances. Our tool of choice is cert-manager.
 
@@ -117,14 +117,14 @@ Leveraging the capabilities of cert-manager is summarized by the following steps
 \caption{Cert manager certificate }
 \label{lst:certificate}
 \end{listing}
-\subsubsection{Secret propagation}
+\subsubsubsection{Secret propagation}
 
 Emberstack Reflector, an open-source tool that provides a simple and efficient way to propagate Kubernetes secrets across multiple namespaces and clusters. We are using it to automatically replicate a secret from a source namespace to one or more targets, ensuring that all applications that require access to the secret can access it easily.
 
 Having deployed this tool, adding the following annotation to any secret or configmap will replicate it to every namespace:
 
 
-\subsection{Layer 7 load balancing: application level }
+\subsubsection{Layer 7 load balancing: application level }
 
 Traefik, our ingress controller of choice, functions both as a reverse proxy as well as a load balancer for the deployed workload which are then accessed through secure HTTPS. 
 
@@ -159,7 +159,7 @@ When Traefik receives an incoming request, it can use the TLS Store to look up t
 
 Traefik is used in combination with the security layer services to allow for authenticating and authorizing access. The security layer will be discussed in detail further in this report. 
 
-\subsection{Layer 4 load balancing: network level }
+\subsubsection{Layer 4 load balancing: network level }
 
 In this level, load balancing is mostly related to the network, IP addresses, network address translation ( NAT ), and packets. 
 
@@ -217,9 +217,9 @@ MetalLB is used to provide network load balancing for services running in the cl
 
 \end{enumerate}
 
-\section{Distributed storage backend}
+\subsection{Distributed storage backend}
 
-\subsection{Architectural overview on storage}
+\subsubsection{Architectural overview on storage}
 
 Distributed persistent storage is important for running stateful applications such as databases that require durable storage. In our context, the ability to store data persistently across multiple nodes in a cluster is implemented using the following architecture: 
 
@@ -231,7 +231,7 @@ Distributed persistent storage is important for running stateful applications su
 
 The figure above illustrates a highly scalable storage architecture using “Ceph”. As mentioned in the infrastructure provisioning chapter, in each region, we have created a dedicated storage instance to which a disk the raw format has been attached. The number of disks attached to each node is infinitely scalable and only dependent on the specs of the instance to which it is attached. Furthermore, the size of each disk can be scaled up by the cloud provider. That being said, the number of instances is itself theoretically infinitely scalable. And thus, both horizontal and vertical scalability is achieved. 
 
-\subsection{Ceph as a storage provider for kubernetes }
+\subsubsection{Ceph as a storage provider for kubernetes }
 
 “Ceph”, our storage provider is deployed as a resource. It includes several components, such as the Ceph monitor, manager, OSD (object storage daemon), and MDS (metadata server), that work together to provide distributed storage: 
 
@@ -257,7 +257,7 @@ Using the ingress controller, a dashboard for “ceph” is exposed and allows f
 \label{fig:Ceph Dashboard }
 \end{figure}
 
-\subsection{Deployed storage capabilities: }
+\subsubsection{Deployed storage capabilities: }
 
 The following diagram provides an overview on the storage capabilities of ceph : 
 \begin{figure}[H]\centering
@@ -266,7 +266,7 @@ The following diagram provides an overview on the storage capabilities of ceph :
 \label{fig:f30}
 \end{figure}
 
-\subsubsection{Filesystem storage mode: }
+\subsubsubsection{Filesystem storage mode: }
 
 CephFS works by creating a virtual file system on top of the RADOS object store, which allows multiple clients to access the same file system concurrently. 
 
@@ -284,7 +284,7 @@ As shown by the figure below, CephFS provides built-in redundancy and fault tole
 \label{fig:Filesystem Storage}
 \end{figure}
 
-\subsubsection{Object storage mode: }
+\subsubsubsection{Object storage mode: }
 
 It stores data as objects, rather than as files or blocks. This allows applications to store and retrieve large amounts of unstructured data in a highly available and fault-tolerant manner. 
 
@@ -307,7 +307,7 @@ This procedure is summarized by the following figure:
 \label{fig:Object Storage mode}
 \end{figure}
 
-\subsubsection{Block storage mode: }
+\subsubsubsection{Block storage mode: }
 
 Ceph Block Storage exposes a block device interface. But due to the very nature of a containerized environment, we are not using this capability. The following is a summary on the procedure to provision block devices using ceph: 
 
@@ -332,7 +332,7 @@ When the Pod is deleted, the block storage volume is automatically deleted as we
 
 This provides dynamic and on-demand provisioning of block storage volumes to the applications running on Kubernetes. 
 
-\section*{Conclusion}
+\subsection*{Conclusion}
 
 This chapter covered the setup of a PaaS environment using Kubernetes, which includes traefik as an ingress controller, cert-manager for TLS provisioning, MetalLB for layer 4 load balancing, and Ceph as a distributed storage backend. 
 

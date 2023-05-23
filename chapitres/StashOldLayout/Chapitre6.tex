@@ -5,9 +5,9 @@
 
 \minitoc
 \newpage
-\section*{Introduction}
+\subsection*{Introduction}
 
-\section{Sprint backlog :}
+\subsection{Sprint backlog :}
 
 \begin{longtable}[H]{|m{1.5cm}|m{3cm}|m{1.5cm}|m{9cm}|}
 \hline
@@ -22,8 +22,8 @@
 \hline
 \caption{4th Sprint Backlog}
 \end{longtable}
-
-\section{UML design: activity diagram for infrastructure setup}
+\section{Preliminary infrastructure setup}
+\subsection{UML design: activity diagram for infrastructure setup}
 
 This activity diagram illustrates how Ansible and Terraform can work together to provision infrastructure resources and set up a PaaS environment.
 
@@ -34,7 +34,7 @@ This activity diagram illustrates how Ansible and Terraform can work together to
 \end{figure}
 
 
-\section{UML design: sequence diagram for infrastructure setup}
+\subsection{UML design: sequence diagram for infrastructure setup}
 
 The following is a sequence diagram that shows the flow of actions or events that occur during the process of setting up the infrastructure.
 
@@ -54,9 +54,9 @@ The following is a sequence diagram that shows the flow of actions or events tha
     \item If everything is working as expected, a notification is sent via an office 360 webhook channel. The devSecOps team is notified that the infrastructure setup process is complete, and the system is ready for use.
 \end{itemize}
 
-\section{Playbook diagrams for resource setup}
+\subsection{Playbook diagrams for resource setup}
 
-\subsection{Playbook 0: Setting up individual instances}
+\subsubsection{Playbook 0: Setting up individual instances}
 
 Next, we look at the playbook for setting up and standardizing the both the ansible host and the public cloud instances.
 
@@ -66,7 +66,7 @@ Next, we look at the playbook for setting up and standardizing the both the ansi
 \label{fig:individual instances diagram}
 \end{figure}
 
-\subsection{Playbook 1: Orchestrated cluster setup}
+\subsubsection{Playbook 1: Orchestrated cluster setup}
 
 For setting up the Kubernetes cluster on the provisioned infrastructure resources, the following step were automated using an ansible playbook:
 
@@ -92,7 +92,7 @@ A summary of the previous two diagrams is depicted in the following figure :
 \label{fig:Orchestrated cluster setup}
 \end{figure}
 
-\section*{Conclusion}
+\subsection*{Conclusion}
 
 
 Overall, the playbook aims to automate the setup and configuration of the Kubernetes to prepare it to host the various PaaS services that will be seen next chapter, allowing for consistent and repeatable deployments of Kubernetes infrastructure.
