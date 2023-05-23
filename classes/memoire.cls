@@ -50,7 +50,7 @@
 \newcounter{subsubsubsection}[subsubsection]
 \def\toclevel@subsubsubsection{4}
 \def\toclevel@paragraph{5}
-\def\l@subsubsubsection{\@dottedtocline{4}{107em}{4em}}
+\def\l@subsubsubsection{\@dottedtocline{4}{10em}{4em}}
 \def\l@paragraph{\@dottedtocline{5}{10em}{5em}}
 \makeatother
 % ------------------------------------- %
