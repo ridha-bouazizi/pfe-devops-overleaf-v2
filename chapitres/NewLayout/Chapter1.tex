@@ -32,13 +32,13 @@ Systnaps was founded with the mission of helping businesses harness the power of
 
 The core services of Systnaps in the data management space include: 
 \begin{itemize}[label={--}]
-    \item Database Management: Systnaps offers services to help businesses manage their databases, ensuring their data is secure and available when needed. This includes tasks such as database administration, performance optimization, and disaster recovery. 
+    \item Database Management: Securely managing databases for businesses, including tasks such as administration, optimization, and recovery. 
 
-\item Data Integration: Systnaps offers services to help businesses integrate and manage their data across multiple systems and platforms. This includes tasks such as data migration, data warehousing, and data synchronization. 
+\item Data Integration: Assisting businesses in integrating and managing data across multiple systems and platforms, encompassing activities like migration, warehousing, and synchronization. 
 
-\item Big Data: Systnaps offers services to help businesses manage and analyze large volumes of data, often referred to as "big data". This includes tasks such as data processing, data visualization, and machine learning. 
+\item Big Data: Supporting businesses in managing and analyzing large volumes of data (often known as "big data"), involving tasks such as processing, visualization, and machine learning. 
 
-\item  Data Governance: Systnaps offers services to help businesses ensure that their data is being managed in compliance with regulatory and legal requirements. This includes tasks such as data privacy and security, data classification, and data retention. 
+\item  Data Governance: Helping businesses ensure compliance with regulatory and legal requirements in managing their data, encompassing activities such as privacy and security, classification, and retention. 
 
  \end{itemize}
 
@@ -57,55 +57,52 @@ Systnaps has worked with clients across a range of industries, including finance
 
 \subsection{Project description }
 
-Our end of studies project involves designing and implementing, on the cloud, a complete platform as a service (PaaS) solution that incorporates a range of services related to networking, storage, and automation. 
+Our end-of-studies project entails designing and implementing a comprehensive Platform as a Service (PaaS) solution on the cloud. This PaaS platform incorporates various networking, storage, and automation services.
 
-Specifically, this project involves designing and implementing a PaaS platform that includes a range of networking services, such as load balancing, ingress, and authentication/authorization, which are essential for managing traffic flow and ensuring secure access to the platform. 
+Specifically, the project focuses on designing and implementing networking services such as load balancing, ingress, and authentication/authorization. These services are crucial for managing traffic flow and ensuring secure access to the platform.
 
-The project also involves implementing a distributed and redundant storage backend that includes both object and block storage to ensure reliable and scalable storage capabilities. 
+Additionally, the project involves implementing a distributed and redundant storage backend that encompasses both object and block storage. This ensures reliable and scalable storage capabilities.
 
-In addition, the PaaS platform includes highly available and replicated database storage services to provide reliable and consistent data access for users. 
+Furthermore, highly available and replicated database storage services are integrated into the PaaS platform to ensure consistent and dependable data access for users.
 
-The project also includes implementing utility services that help store artifacts, such as a private registry, and automate CI/CD operations to streamline the deployment process. 
+The project also encompasses utility services such as a private registry for storing artifacts and automated CI/CD operations to streamline the deployment process.
 
+Lastly, the PaaS platform incorporates a robust and efficient disaster recovery strategy to quickly recover from any unplanned downtime or service interruptions.
 
-Finally, the PaaS platform includes a resilient and efficient disaster recovery strategy to ensure that the platform can quickly recover from any unplanned downtime or service interruptions. 
-
-Overall, this end of studies project demonstrates a thorough understanding of cloud computing and DevSecOps principles and the ability to design and implement a comprehensive PaaS platform that incorporates a range of essential services to support modern application development and deployment. 
+In summary, this end-of-studies project demonstrates a comprehensive understanding of cloud computing and DevSecOps principles. It showcases the ability to design and implement a comprehensive PaaS platform with essential services to support modern application development and deployment. 
 
 \subsection{Analysis of existing processes }
 
-The existing infrastructure is built on a few monolithic virtual private servers and are using Docker Compose for container orchestration. The infrastructure contains multiple Docker Compose stacks that are used for different purposes. These stacks include: 
+The current infrastructure relies on a few monolithic virtual private servers and utilizes Docker Compose for container orchestration. Within this infrastructure, there are multiple Docker Compose stacks serving different purposes, including: 
 \begin{itemize}[label={--}]
-\item Docker Compose stacks of applications in development: These stacks contain the necessary applications for software development, such as code editors, compilers, and development frameworks. 
+\item An application development stack: This stack houses essential applications for software development, such as code editors, compilers, and development frameworks. 
 
-\item A self-hosted instance of GitLab: This stack contains a self-hosted instance of GitLab, which is used for version control, continuous integration, and continuous deployment (CI/CD) of the applications. 
+\item A utility stack : includes a self-hosted enterprise instance of GitLab, which serves as a version control system and facilitates continuous integration and continuous deployment (CI/CD) processes for applications. Additionally, the stack includes a self-hosted instance of Nextcloud, a file hosting and sharing platform utilized for storing and sharing files relevant to application development. 
 
-\item A self-hosted instance of Nextcloud: This stack contains a self-hosted instance of Nextcloud, which is a file hosting and sharing platform. It is used to store and share files related to the application development. 
-
-\item A reverse proxy stack: This stack contains three different Docker images - acme-companion, docker-gen, and nginx - and is used as a reverse proxy for the application. Nginx is a web server that is used to route traffic to the application, while acme-companion and docker-gen are used to generate SSL/TLS certificates and automatically update the Nginx configuration. 
+\item A reverse proxy stack: This stack comprises three Docker images - acme-companion, docker-gen, and nginx - functioning as a reverse proxy for the application. Nginx acts as the web server, routing traffic to the application, while acme-companion and docker-gen generate SSL/TLS certificates and automatically update the Nginx configuration. 
 \end{itemize}
 
-The use of Docker Compose to manage containers provides a lightweight and scalable infrastructure for application development. However, using monolithic virtual private servers can lead to a lack of scalability and make it difficult to maintain the infrastructure. Additionally, running all the services on a single server can create a single point of failure and increase the risk of downtime. 
+While Docker Compose provides a lightweight and scalable infrastructure for application development, the reliance on monolithic virtual private servers can hinder scalability and infrastructure maintenance. Consolidating all services on a single server creates a single point of failure and increases the risk of downtime. 
 
 \subsection{Constructive criticism on existing processes} 
 
-Based on cloud computing and DevOps practices, there are several constructive criticism that can be made regarding this infrastructure with the following components: 
+Based on cloud computing and DevOps best practices, the following is some of the weak points of such an infrastructure :
 
 \begin{itemize}[label={--}]
 
-\item The use of Docker Compose for application orchestration is suitable for small-scale projects or individual development environments, but it becomes difficult to manage and maintain as the number of services and containers increases. Kubernetes provides a more scalable and efficient solution for container orchestration and management. 
+\item Docker Compose for orchestration: While suitable for small-scale projects, it becomes challenging to manage and maintain as the number of services and containers grows. Kubernetes offers a more scalable and efficient solution for container orchestration and management. 
 
-\item The lack of a distributed storage backend can lead to data loss or inconsistency in case of node failures. Kubernetes provides several built-in options for distributed storage, such as persistent volumes, stateful sets, and storage classes. 
+\item Lack of a distributed storage backend: The absence of distributed storage can lead to data loss or inconsistency during node failures. Kubernetes provides built-in options like persistent volumes, stateful sets, and storage classes for distributed storage. 
 
-\item The absence of an authorization and authentication backend can result in security vulnerabilities and unauthorized access to sensitive data. Kubernetes provides several options for authentication and authorization, such as role-based access control (RBAC), webhook token authentication, and client certificate authentication. 
+\item Absence of an authorization and authentication backend: The lack of an authorization and authentication system can result in security vulnerabilities and unauthorized access to sensitive data. Kubernetes offers several options for authentication and authorization, including role-based access control (RBAC), webhook token authentication, and client certificate authentication. 
 
-\item The lack of a disaster recovery strategy can lead to significant downtime and data loss in case of unforeseen events such as natural disasters or system failures. Kubernetes provides several options for disaster recovery, such as backup and restore mechanisms, failover and recovery strategies, and multi-zone deployments. 
+\item Missing disaster recovery strategy: Without a disaster recovery plan, there is a risk of significant downtime and data loss during unforeseen events. Kubernetes provides options for disaster recovery, such as backup and restore mechanisms, failover and recovery strategies, and multi-zone deployments. 
 
-\item The use of large and inefficient container images can result in slower deployment times, increased storage requirements, and decreased performance. DevOPS best practices help a great deal in streamlining application development and delivery, and Kubernetes provides several features such as image caching, rolling updates, and horizontal scaling, which can help optimize container image management and deployment. 
+\item Use of large and inefficient container images: Large and inefficient container images can lead to slower deployment times, increased storage requirements, and decreased performance. DevOps best practices, coupled with Kubernetes features like image caching, rolling updates, and horizontal scaling, can optimize container image management and deployment. 
 
 \end{itemize}
 
-In summary, the adoption of Kubernetes and the implementation of cloud computing and DevOps best practices can greatly improve the scalability, reliability, security, and performance of an IT ecosystem. 
+In conclusion, adopting Kubernetes and implementing cloud computing and DevOps best practices can significantly enhance the scalability, reliability, security, and performance of the IT ecosystem. 
 
 \subsection{Problem statement }
 
@@ -200,9 +197,7 @@ Based on the previous comparative study, it is apparent that the approach most s
 
 \subsubsection{Agile devSecOPS }
 
-When evaluating devSecOPS as a practice and Agile as a delivery approach, it is important to note that they are not mutually exclusive. In spite of the evident differences between DevSecOPS and the Agile methodology, their overall goal of increasing speed and delivering quality software is similar in nature and together they produce great products and improve the software development. 
-
-The following figure showcases an overview of the process and the key DevSecOPS roles. 
+When evaluating devSecOPS as a practice and Agile as a delivery approach, it is important to note that they are not mutually exclusive. In spite of the evident differences between DevSecOPS and the Agile methodology, their overall goal of increasing speed and delivering quality software is similar in nature and together they produce great products and improve the software development.
 
 \begin{figure}[!ht]\centering
 \includegraphics[width=0.8\textwidth,angle=00]{assets/f1.png}
@@ -210,7 +205,7 @@ The following figure showcases an overview of the process and the key DevSecOPS 
 \label{fig:processOverview}
 \end{figure}
 
-
+The following figure showcases an overview of the process and the key DevSecOPS roles. 
 \paragraph{DevSecOPS Evangelist:} 
 Usually the DevSecOPS team leader, he focuses on promoting the DevSecOPS advantages, identifying and quantifying companies’ benefits deriving from a higher agility. 
 
@@ -226,19 +221,11 @@ DevSecOPS developers are not responsible only for the transformation of new requ
 \paragraph{Security Engineer: }
 The DevSecOPS approach implements security by design.
 
-
-\subsection*{Conclusion}
-
-In this chapter, we started by introducing the project's background, highlighting the need for the project, and discussing the current state of the art. This was followed by a detailed description of the problem statement, which identifies the specific issue that the project aims to address. The ideation phase provided us with specific, measurable, achievable, relevant, and time-bound (SMART) objectives to ensure that they are attainable and can be evaluated. 
-
-Overall, we gathered a rough understanding of the project's context, which is essential to understand the project's purpose, scope, and expected outcomes. It sets the foundation for the rest of the project and provides a clear roadmap for achieving the project's objectives.
-
-\newpage
-
-\subsection*{Introduction}
-In this chapter, our analysis is aimed at identifying the key actors in our design, the functional and non-functional needs our system is to provide for. We will then move on to an overview of the sprint bursts we have realized. Finally, we will provide a dissection of the ecosystem in the form of various UML diagrams. 
+\newpage 
 
 \subsection{Capturing requirements}
+Our analysis is aimed at identifying the key actors in our design, the functional and non-functional needs our system is to provide for.
+
 \subsubsection{Identifying key actors}
 In this context, an actor is a user or any other system that interacts with the subject by exchanging signals and data.
 
@@ -288,6 +275,7 @@ Formulating an understanding on functional requirements is a primordial phase in
 \hline
  {\textbf{Epic ID}} & {\textbf{EPIC}} & {\textbf{Story ID}} & {\textbf{Story}} & {\textbf{Prior-ity}} \\
  \hline
+\endhead
 0 & \raggedright Certified devSecOps training &	0.1 &	Managing and running custom VMs. & \\
 \cline{3-5}
 &   & 0.2 &	Managing docker containers.	& \\
@@ -318,10 +306,12 @@ Formulating an understanding on functional requirements is a primordial phase in
 &   & 6.3 & Setting up CD controller.	 & \\
   \hline
 7 & \raggedright Preparation of automated CICD workflows. &	7.2 &	Structuring SCM backend	 & \\
+
 \cline{3-5}
 &   & 7.2 &	 \raggedright Using GitOPS and devOPS tools to automate CI/CD pipelines.	 & \\
-   \hline
-   
+\hline
+\pagebreak
+\hline
 8 & \raggedright Deployment of authentication / authorization backend 	& 8.1 & \raggedright Self-managing distributed database storage backends (redis, mongoDB, postgresql).	 & \\
 \cline{3-5}
 &   & 8.2 &	\raggedright Deployment and configuration of authentication and authorization services.	 & \\
@@ -404,6 +394,8 @@ Putting in place a disaster recovery strategy that leverages distributed storage
 
 \caption{ Sprint planning}
 \end{longtable}
+
+\newpage
 
 \subsection{Technological choices }
 % \paragraph{Development tools }
@@ -531,17 +523,21 @@ Shell was used to interface with the linux operating system. For conversing with
 
 To template various configuration files that are dependent on the deployment environment, we used YTT for YAML/JSON. Jinja2 was the main templating tool for ansible playbooks. 
 
+\newpage
+
 \subsection{Architectural specifications}
 
 \subsubsection{Physical architecture}
 
-The following figure is an overview of the infrastructure resource setup:
+The following figure is an overview of the infrastructure resource setup. It is to be discussed in further detail in the following chapters:
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f7.jpg}
 \caption{Physical architecture}
 \label{fig:f7}
 \end{figure}
+
+\newpage
 
 \subsubsection{PaaS deployment architecture} 
 Next we layout the organization of the subsystems, software classes, and layers that make the complete logical system of our PaaS infrastructure :
@@ -552,9 +548,11 @@ Next we layout the organization of the subsystems, software classes, and layers 
 \label{fig:f8}
 \end{figure}
 
+\newpage
+
 \subsection{Workspace description}
 
-To implement the project, the company has provided us with the necessary hardware equipment, certified preliminary training as well as the desired cloud resources.
+To implement the project, the company has provided us with the necessary hardware equipment, certified preliminary training as well as the desired cloud resources. This allowed us to engage in real-world projects, collaborate with experienced professionals, and expand our skills.
 
 \section*{Conclusion}
 In conclusion, requirement analysis is a crucial step in any project, especially when it comes to cloud computing and DevOps.  

@@ -7,7 +7,7 @@
 
 \section{Sprint backlog :}
 
-\begin{longtable}[H]{|m{1.5cm}|m{3cm}|m{1.5cm}|m{8cm}|}
+\begin{longtable}[ht]{|m{1.5cm}|m{3cm}|m{1.5cm}|m{8cm}|}
 \hline
 {\textbf{EpicID}} & {\textbf{Epic}} & {\textbf{StoryID}} & {\textbf{Story}} \\
 \hline
@@ -19,9 +19,37 @@
 \cline{3-4}
 & & 2.2 & Backup of existing data on current infrastructure in S3 containers.\\
 \hline
+3  & Information gathering.	 &  3.1	 &  Research provider specific (OVH) constraints and making choices regarding orchestration, virtualized networking, load balancing and distributed storage\\
+\hline
+4  & \raggedright Provisioning resources using IaC playbooks and HCP config files.  &  4.1	 & Preparing provider specific(ovh) terraform config. \\
+\cline{3-4}
+& & 4.2 & Preparing ansible playbook to initiate provisioning. \\
+\cline{3-4}
+& & 4.3	& Setting up IaC host machine.  \\
+\cline{3-4}
+& & 4.4	& Cloud provider account and project creation.  \\
+\hline
+5  & Setup and configuration of provisioned resources using ansible playbooks.	 &  5.1	 &  Creating role-based assignments specific to each resource for resource setup. \\
+\hline
+6  & PaaS setup: Setting up the service groups for networking and storage	 &  6.1	 &  Setting up the ingress controller (traefik).\\
+\cline{3-4}
+& & 6.2 & Setting up the network level load balancer (metalLB). \\
+\cline{3-4}
+& & 6.3	& Setting up the load balancer. \\
+\cline{3-4}
+\hline
+7  & Setting up a GitOPS compliant CI/CD workflow for the applications in development.  &  7.1	 & Setting up the CI/CD orchestrator.\\
+\cline{3-4}
+& & 7.2 & SCM restructuring and code adaptation. \\
+\cline{3-4}
+& & 7.3	& Preparing container images for the different workloads in development.  \\
+\cline{3-4}
+& & 7.4	& Developing GitOPS oriented pipelines for the build, scan, and deliver phases in the various environments.  \\
+\cline{3-4}
+\hline
 \caption{1st sprint Backlog}
 \end{longtable}
-
+\newpage
 \section{Overview and maintenance of the existing resources}
 \subsection{Maintenance operations}
 
@@ -34,20 +62,13 @@ The following figure is the deployment diagram of the resulting docker-compose s
 \label{fig:f9}
 \end{figure}
 
-The stack includes the following services: 
-\begin{enumerate}
-\item Nginx reverse proxy: An HTTP server that acts as a reverse proxy for the other services in the stack. It is responsible for routing traffic to the correct service based on the URL and handling HTTPS encryption. It recognizes labels configured in the containers to route traffic and provide tls termination. 
-\item TLS generator: A service that generates and renews TLS certificates using Let's Encrypt. It works with Nginx to provide HTTPS encryption for the other services in the stack. 
-\item Let's Encrypt: A certificate authority that provides free TLS certificates. 
-\item Portainer: A web-based management interface for Docker containers and services. 
-\item Nextcloud: A cloud-based file sharing and collaboration platform. 
-\item GitLab: A web-based Git repository manager, CI/CD pipeline tool, and issue tracker. 
-\item Jenkins: An open source automation server that can be used to automate software build, test, and deployment processes. 
-\end{enumerate}
+The stack comprises Nginx reverse proxy for traffic routing and HTTPS encryption, a TLS generator for certificate management, Portainer for Docker container management, Nextcloud for cloud-based file sharing, GitLab for version control, and Jenkins for automation of CI/CD processes.
 
-Each service is defined in a separate Docker container and is configured using environment variables, volumes, and ports. The Nginx and TLS generator services depend on each other, and the Nextcloud, GitLab, and Jenkins services depend on the TLS generator for HTTPS encryption. 
+Each service is defined in a separate Docker container and is configured using environment variables, volumes, and ports.
 
 This Docker Compose stack provides a scalable and easy-to-manage infrastructure for hosting multiple cloud-based services, all secured using HTTPS encryption and Let's Encrypt TLS certificates. 
+
+\newpage
 
 \subsection{Application overview and SCM structuring}
 
@@ -69,20 +90,21 @@ The stack includes the following services:
 \end{enumerate}
 
 The backend API, frontend, MongoDB and PostgreSQL are connected using the "app-network" network. All services are also connected to the "proxy" network where Nginx resides, enabling the reverse proxy detect labels and route traffic to the appropriate service based on the URL.
+
 \newpage
+
 \section{Cloud design of the PaaS infrastructure}
 \subsection{Package diagram of cloud resources :}
 
-The cluster resources are basically cloud instances with different specifications tailored to their use cases. Three major groups of resources are distinguished in the following diagram: Control plane instances, Compute instances and storage assets which are object store buckets and compute instances to which raw block stores are attached. 
+The cluster resources are cloud instances with different specifications tailored to their use cases. Three major groups of resources are distinguished in the following diagram: Control plane instances, Compute instances and storage assets which are object store buckets and compute instances to which raw block stores are attached.
 
 \begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f11.jpg}
+\includegraphics[width=0.74\textwidth,angle=00]{assets/f11.jpg}
 \caption{Package diagram of cloud resources }
 \label{fig:Package diagram of cloud resources }
 \end{figure}
 
 \subsection{Comparative study on container orchestrators: }
-
 Container Orchestration Engines such as “Kubernetes”, “Apache Mesos” and “docker swarm” are platforms for managing containers and automating the deployment, scaling, and operations of containers across a cluster of nodes. This is achieved by pooling the discrete cloud resources into a single PaaS on which workloads can be deployed. 
 
 \begin{longtable}[H]{|m{3.5cm}|m{3.5cm}|m{3.5cm}|m{3.5cm}|}
@@ -107,7 +129,6 @@ Configuration & Declarative  & Declarative & Imperative \\
 Kubernetes is our container orchestration tool of choice in this project. It is known for its highly advanced orchestration capabilities, built-in load balancing, rolling updates, and self-healing. It has a declarative configuration model and a highly extensible architecture. However, it does have a steeper learning curve compared to Docker Swarm.  
 
 Our goal is to tackle the task of establishing a fully sustainable PaaS by utilizing its flexibility via custom resource definitions. 
-
 
 \subsection{Package diagram for the PaaS logical components:}
 
@@ -143,7 +164,7 @@ The following figure illustrates the main resources declared in our terraform �
 \label{fig:fig14}
 \end{figure}
 \newpage
-The diagram shows a Terraform configuration for deploying resources on OVH cloud provider. The configuration consists of four main components: provider, network, compute, and storage. 
+The previous diagram shows a Terraform configuration for deploying resources on OVH cloud provider. The configuration consists of four main components: provider, network, compute, and storage. 
 
 \begin{itemize}[label={--}]
 \item The provider component specifies the OVH cloud provider and the authentication credentials to access the account. 
@@ -165,22 +186,12 @@ Overall, this Terraform configuration with OVH cloud provider provides a scalabl
 \end{figure}
 
 The cluster resources were deployed to three regions. Namely, GRA, BHS, SBG. In each region, four instances were created. One of which will join the control plane, two will have the worker compute role and the last will have a second block device in raw format and will join the data storage backend. Various buckets from the object store will be provisioned and will serve as backup storage backends and high-speed data storage.
+
 \section{Preliminary infrastructure setup}
-\subsection{UML design: activity diagram for infrastructure setup}
-
-This activity diagram illustrates how Ansible and Terraform can work together to provision infrastructure resources and set up a PaaS environment.
-
-\begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f20.png}
-\caption{Activity diagram for infrastructure setup}
-\label{fig:activity diagram for infrastructure setup}
-\end{figure}
-
 
 \subsection{UML design: sequence diagram for infrastructure setup}
 
 The following is a sequence diagram that shows the flow of actions or events that occur during the process of setting up the infrastructure.
-
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f16.png}
@@ -188,66 +199,49 @@ The following is a sequence diagram that shows the flow of actions or events tha
 \label{fig:Sequence diagram for infrastructure setup}
 \end{figure}
 
-\begin{itemize}[label={--}]
-    \item The user initiates the infrastructure setup process by running starting an ansible playbook.
-    \item The first ansible playbook sets up the host machine to run terraform. It invokes Terraform, which then communicates with the OVH API to provision the required resources.
-    \item OVH API receives the request and creates the necessary resources such as virtual machines, block storage volumes, and network interfaces.
-    \item Terraform receives the response from the OVH API and applies any necessary configurations to the provisioned resources.
-    \item Ansible then takes over and configures the provisioned resources by installing the required packages, setting up the network configurations, and configuring the software applications.
-    \item If everything is working as expected, a notification is sent via an office 360 webhook channel. The devSecOps team is notified that the infrastructure setup process is complete, and the system is ready for use.
-\end{itemize}
 
-\subsection{Playbook diagrams for resource setup}
+The infrastructure setup process begins with the user initiating an Ansible playbook. The playbook performs several tasks: firstly, it sets up the host machine for Terraform, which then communicates with the OVH API to provision the necessary resources such as virtual machines, block storage volumes, and network interfaces.
 
-\subsubsection{Playbook 0: Setting up individual instances}
+Terraform applies any required configurations to these resources. Subsequently, Ansible takes over by configuring the provisioned resources, including package installations, network configurations, and software application setups.
 
-Next, we look at the playbook for setting up and standardizing the both the ansible host and the public cloud instances.
+Finally, if everything functions as expected, a notification is sent via an Office 360 webhook channel to notify the devSecOps team that the infrastructure setup process is complete and the system is ready for use.
 
-\begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f17.png}
-\caption{individual instances diagram}
-\label{fig:individual instances diagram}
-\end{figure}
+\subsection{Resource provisioning and infrastructure setup}
 
-\subsubsection{Playbook 1: Orchestrated cluster setup}
-
-For setting up the Kubernetes cluster on the provisioned infrastructure resources, the following step were automated using an ansible playbook:
-
-\begin{itemize}[label={--}]
-    \item The playbook first sets up the necessary prerequisites on each node, such as disabling swap, disabling firewall, installing necessary packages, etc.
-    \item Next, it initializes the first node from the control plane as a master and joins the others as secondary masters. This involves setting up the necessary configuration files, certificates, and keys for the Kubernetes control plane.
-    \item After the master node is initialized, the playbook joins the worker nodes. This involves passing the appropriate configuration information, such as the API server address and token, to the worker nodes.
-    \item Once all nodes are part of the cluster, the playbook sets up networking using the CNI plugin Calico. This involves deploying the necessary network configuration files and pods to allow communication between nodes.
-    \item Finally, the playbook sets up any necessary add-ons or customizations to the cluster, such as untainting master nodes, formatting block volumes to raw, adding custom scripts to switch between namespaces and contexts easily.
-\end{itemize}
-
-\begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f18.png}
-\caption{Orchestrated cluster Diagram}
-\label{fig:fig18}
-\end{figure}
-
-A summary of the previous two diagrams is depicted in the following figure :
+The following is a composite diagram for provisioning and setting up the infrastructure. It shows the interaction between the infrastructure as code tools ansible and terraform. 
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f19.png}
 \caption{Orchestrated cluster setup}
 \label{fig:Orchestrated cluster setup}
 \end{figure}
-\section{Initial setup of the backen services }
+
+The ansible playbook begins by setting up prerequisites on each node, including tasks like disabling swap, firewall, and installing required packages.
+
+It then initializes the first node as a master and joins the others as secondary masters, configuring necessary files, certificates, and keys for the Kubernetes control plane.
+
+Afterward, the playbook proceeds to join the worker nodes by providing them with the appropriate configuration information. 
+
+Once all nodes are part of the cluster, networking is established using the Calico CNI plugin, deploying the required network configuration files and pods for inter-node communication. 
+
+Finally, the playbook handles any additional cluster customizations, such as untainting nodes, formatting block volumes, and adding scripts for seamless namespace and context switching.
+\newpage
+\section{Initial setup of the backend services }
 \subsection{UML design: package diagram for the initial PaaS services setup}
 
-Here, the PaaS is the main package and contains all the other packages.
+Within the PaaS package, there are three sub-packages: the Kubernetes control plane for orchestration, the layer 4 and 7 load balancers for efficient traffic distribution, cloud appliances like Authelia for secure access control.
 
-Within the PaaS package, there are three sub-packages: the Kubernetes control plane, Traefik/MetalLB, and Ceph. The control plane package contains all of the components necessary for running Kubernetes (e.g., etcd, kube-proxy, etc.), while the Traefik/MetalLB package contains the Traefik and MetalLB components used for ingress and load balancing, respectively.
-
-Finally, the Ceph package contains all of the necessary components for running distributed storage using Ceph.
+Additionally, it includes the distributed storage backend for reliable and scalable storage capabilities.
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f21.png}
 \caption{ Package diagram for the initial PaaS setup }
 \label{fig:package diagram for the initial PaaS setup}
 \end{figure}
+
+Together, these sub-packages enhance the functionality of the PaaS platform, enabling efficient container management, load balancing, secure access, and robust storage solutions.
+
+\newpage
 
 \subsection{Networking services}
 
@@ -256,46 +250,41 @@ Finally, the Ceph package contains all of the necessary components for running d
 As illustrated in the following figure, Traefik, Cert-manager, and MetalLB work together to provide a secure and scalable way to route traffic inside Kubernetes using Services and IngressRoutes.
 
 \begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f22.png}
+\includegraphics[width=0.85\textwidth,angle=00]{assets/f22.png}
 \caption{ Networking services}
 \label{fig:Networking services}
 \end{figure}
 
-Taking into consideration the following setup :
-\begin{enumerate}
-\item Application workloads are exposed through services of different types:
-    \begin{itemize}[label={--}]
-        \item ClusterIP: access from within the cluster access.
-        \item LoadBalancer: access from outside the cluster using the external ip allocated through the loadbalancer.
-        \item NodePort: access from outside the cluster using the ip of the node on which the application container is running.
-    \end{itemize}
+Application workloads are exposed through various types of services, such as ClusterIP, LoadBalancer, and NodePort, for different access scenarios.
 
-\item Cert-manager is configured as a cluster issuer and uses a "DNS challenge" to provision TLS certificates specific to every subdomain or domain.
+Cert-manager acts as a cluster issuer, provisioning TLS certificates through a DNS challenge. It listens to certificate resources, generates valid TLS certificates stored in secrets, and periodically renews them while Emberstack reflector propagates secrets and configmaps across namespaces.
 
-\item Cert-manager listens to every declared "certificate" resource in order to process it and generate a valid "TLS certificate" that is then stored in a secret.
+Traffic enters through MetalLB or Traefik for load balancing. Traefik routes traffic to Kubernetes Services linked to configured ingressroutes based on the domain name.
 
-\item Cert-manager is configured to renew the generated certificates periodically.
+Requests are directed to the appropriate Pods, processed, and responses are sent back via Traefik. TLS termination is mostly handled by Traefik using the generated secrets.
 
-\item Emberstack reflector is used to propagate secrets and configmaps across namespaces.
+\newpage
 
-The flow is as follows:
+\subsubsection{Layer 4 load balancing: network level }
 
-\item Traffic enters from the Internet and is directed either to MetalLB for network level load balancing, or to the Traefik ingress controller for application level load balancing.
+In this level, load balancing is mostly related to the network, IP addresses, network address translation ( NAT ), and packets. 
 
-\item Traefik Proxy receives the traffic and routes it to the appropriate Kubernetes Service that is linked to a previously configured ingressroute, based on the domain name in the request.
+\begin{enumerate}[label = (\alph*)]
 
-\item The Service forwards the traffic to the appropriate Kubernetes Pod.
+\item Using the built in Kubernetes capability, NodePort services : The NodePort Service exposes a deployment or a set of pods by mapping a specific port on each node in the cluster to the port of the service. 
+This allows external clients to access the service by connecting to any of the nodes in the cluster.
 
-\item IngressRoutes are defined for workload, and Traefik uses these IngressRoutes to direct traffic to the appropriate Service.
+\item Using metalLB for load balancing : LoadBalancer services 
+MetalLB is used to provide network load balancing for services running in the cluster. This is a sample service of the "LoadBalancer" type: 
 
-\item Traefik is configured to use the TLS certificates generated by Cert-manager to terminate SSL/TLS traffic.
+\begin{figure}[H]\centering
+\includegraphics[width=1.0\textwidth,angle=00]{assets/f23.png}
+\caption{LoadBalancer service }
+\label{fig:LoadBalancer}
+\end{figure}
 
-\item Traffic is routed to the correct Kubernetes Pods based on the domain name in the request.
-
-\item The Kubernetes Pods process the requests and respond to the Traefik Proxy.
-
-\item Traefik handles TLS termination using the secrets previously generated a
 \end{enumerate}
+
 
 \subsubsection{Secret provisioning and propagation:}
 
@@ -307,30 +296,9 @@ Cert-manager provides us with a powerful and flexible way to manage TLS certific
 
 By automating certificate management, cert-manager helps improve the security and reliability of our Kubernetes services, while reducing the operational burden of manual certificate provisioning and management.
 
-Leveraging the capabilities of cert-manager is summarized by the following steps:
-
-\begin{enumerate}
-    \item  Having setup the stock cert-manager deployment, we first create the "ClusterIssuer" Kubernetes resource. Here we showcase a sample manifest:
-        \begin{listing}[H]
-        \inputminted{Yaml}{codeListing/cert_manager_cluster_issuer.yml}
-        \caption{Cert manager cluster issuer}
-        \label{lst:the-code}
-        \end{listing}
-    The cluster issuer manifest contains the credentials cert-manager uses to authenticate with our domain registrar (OVH). It needs these credentials to perform a DNS-01 challenge mechanism to validate domain ownership and issue TLS certificates.
-    \item Next, for every domain or subdomain a "Certificate" resource is created. This certificate resource is then processed by cert-manager and results in a secret containing a TLS certificate. The following is a certificate declaration for wildcard subdomain:
-
-\end{enumerate}
-\begin{listing}[H]
-\inputminted{Yaml}{codeListing/cert_manager_certificate.yml}
-\caption{Cert manager certificate }
-\label{lst:certificate}
-\end{listing}
 \subsubsubsection{Secret propagation}
 
-Emberstack Reflector, an open-source tool that provides a simple and efficient way to propagate Kubernetes secrets across multiple namespaces and clusters. We are using it to automatically replicate a secret from a source namespace to one or more targets, ensuring that all applications that require access to the secret can access it easily.
-
-Having deployed this tool, adding the following annotation to any secret or configmap will replicate it to every namespace:
-
+Emberstack Reflector, an open-source tool that provides a simple and efficient way to propagate Kubernetes secrets and configmaps across multiple namespaces and clusters. We are using it to automatically replicate a secret from a source namespace to one or more targets, ensuring that all applications that require access to the secret can access it easily.
 
 \subsubsection{Layer 7 load balancing: application level }
 
@@ -366,64 +334,6 @@ Notice that traefik has multiple entrypoints configured depending on the protoco
 When Traefik receives an incoming request, it can use the TLS Store to look up the appropriate certificate for the requested domain and use it to encrypt and decrypt traffic. 
 
 Traefik is used in combination with the security layer services to allow for authenticating and authorizing access. The security layer will be discussed in detail further in this report. 
-
-\subsubsection{Layer 4 load balancing: network level }
-
-In this level, load balancing is mostly related to the network, IP addresses, network address translation ( NAT ), and packets. 
-
-\begin{enumerate}[label = (\alph*)]
-
-\item Using the built in Kubernetes capability : NodePort services 
-The NodePort Service exposes a deployment or a set of pods by mapping a specific port on each node in the cluster to the port of the service. 
-This allows external clients to access the service by connecting to any of the nodes in the cluster. 
-Here's how NodePort Services work: 
-    \begin{enumerate}[label = (\arabic*)]
-    \item A NodePort Service is defined as a Kubernetes object with the           "type: NodePort" field in the YAML manifest. 
-    \item When a NodePort Service is created, Kubernetes assigns a high port number (in the range 30000-32767) to the service. 
-    \item Kubernetes then maps the assigned port to the port of the service, which can be any valid port number. 
-    \item The NodePort Service is then exposed on all nodes in the cluster, allowing external clients to access the service by connecting to any of the nodes on the assigned port. 
-    \item Traffic received on the assigned port is forwarded to the service's target port, which is the port on which the service is listening. 
-    \item Kubernetes ensures that the traffic is load balanced across all pods that are part of the service. 
-    \end{enumerate}
-
-\item Using metalLB for load balancing : LoadBalancer services 
-MetalLB is used to provide network load balancing for services running in the cluster. Here's how MetalLB works in our Kubernetes cluster: 
-
-    \begin{itemize}[label={--}]
-        \item MetalLB is deployed in the cluster using the following manifests: 
-            \begin{enumerate}[label = (\arabic*)]
-            \item "metalLB\_configmap.yml": a configmap resource containing the ip address pool that metalLB is allowed to use to allocate to loadbalancer-type services. As a sample, here is the code snippet for this configmap, the rest will be added in the index section of this document : 
-
-            \begin{listing}
-            \inputminted{Yaml}{codeListing/metalLB_configmap.yml}
-            \caption{Cert manager certificate }
-            \label{lst:metalLB}
-            \end{listing}
-
-            \item "metalLB\_rbac.yml": a method of providing fine-grained access control in Kubernetes. RBAC is a security mechanism that restricts access to resources and operations based on the roles assigned to users or service accounts in the cluster. 
-            \item "metalLB\_service\_account.yml": an identity that is used by a pod or a set of pods to access the Kubernetes API server and other resources in the cluster. 
-            \item "metalLB\_controller.yml": a deployment that watches for changes to load balancer services in the cluster and dynamically assigns IP addresses to those services as needed. 
-            \item "metalLB\_speaker.yml": a daemonset that spawns a pod in every node in the cluster it is responsible for announcing the allocated IP addresses for load balancer services. 
-            \item "metalLB\_pod\_security\_policy.yml": It allows the definition of a set of security policies that pods must comply with to be scheduled and run on nodes in the cluster. In the context of MetalLB, this PSP is used to enforce security measures for the MetalLB components, including the MetalLB controller and the MetalLB speaker. 
-            \end{enumerate}
-
-        \item Exposing a workload using the deployed metalLB loadbalancer is as follows: 
-            \begin{enumerate}[label = (\arabic*)]
-                \item After creating the application deployment, we create a Kubernetes Service that exposes this workload using the "type" field of the Service to "LoadBalancer". 
-                \item Once the Service is created, MetalLB will allocate an IP address from the configured pool of addresses and assign it to the Service. 
-                \item We then use this IP address to access your workload from outside the cluster. 
-            \end{enumerate}
-        \item This is a sample service of the "LoadBalancer" type: 
-        
-        \begin{figure}[H]\centering
-        \includegraphics[width=1.0\textwidth,angle=00]{assets/f23.png}
-        \caption{LoadBalancer service }
-        \label{fig:LoadBalancer}
-        \end{figure}
-        
-    \end{itemize}
-
-\end{enumerate}
 
 \subsection{Distributed storage backend}
 
