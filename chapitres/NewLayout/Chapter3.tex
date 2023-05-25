@@ -140,20 +140,23 @@ With declarative configuration management and ArgoCD's web-based interface, moni
 
 \subsection{CI/CD orchestrator }
 
-Jenkins, our CI/CD orchestrator of choice, provides a wide range of features and plugins that can be used to automate various stages of the software development process, including building, testing, and deploying applications. The following is the activity diagram for deploying it. 
+Jenkins, our CI/CD orchestrator of choice, provides a wide range of features and plugins that can be used to automate various stages of the software development process, including building, testing, and deploying applications.
 
- 
-\subsubsection{UML Design: Activity diagram for deploying the CI/CD orchestrator components : }
+The following is the activity diagram for deploying it. 
 
 \begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f44.png}
+\includegraphics[width=0.6\textwidth,angle=00]{assets/f44.png}
 \caption{Activity diagram for deploying the CI/CD orchestrator components}
 \label{fig:Activity diagram for deploying the CI/CD orchestrator components}
 \end{figure}
  
 \subsubsection{The personalized jenkins container image: }
 
-As a CI/CD orchestrator, Jenkins acts as a central hub that integrates with various tools and systems involved in the software development pipeline. The container image for this deployment is prepackaged with the initial configuration of the various cloud providers we are using, the server tokens and access credentials. Thus, the container image is ready to go as soon as it is deployed. The resulting Dockefile is as follows : 
+As a CI/CD orchestrator, Jenkins acts as a central hub that integrates with various tools and systems involved in the software development pipeline. The container image for this deployment is prepackaged with the initial configuration of the various cloud providers we are using, the server tokens and access credentials. Thus, the container image is ready to go as soon as it is deployed.
+
+\newpage
+
+The resulting Dockefile is as follows : 
 
 \begin{listing}[H]
     \inputminted{Dockerfile}{codeListing/jenkins_Dockerfile}
@@ -163,7 +166,9 @@ As a CI/CD orchestrator, Jenkins acts as a central hub that integrates with vari
 
 \subsubsection{The Docker in Docker container image: }
 
-For building container images for the application under development, a technique that allows running Docker commands within a Docker container is used. To enable DinD, a Docker image is created with Docker installed inside it. Furthermore, authentication to the private registry is streamlined into the container execution. The following is the resulting Dockerfile: 
+For building container images for the application under development, a technique that allows running Docker commands within a Docker container is used. To enable DinD, a Docker image is created with Docker installed inside it. Furthermore, authentication to the private registry is streamlined into the container execution.
+
+The following is the resulting Dockerfile: 
 
 \begin{listing}[H]
     \inputminted{Dockerfile}{codeListing/dind-Dockerfile}
@@ -171,14 +176,13 @@ For building container images for the application under development, a technique
     \label{lst:Dind Dockerfile}
 \end{listing}
 
+\newpage
 
 \section{CI/CD Workflows}
 
 \subsection{UML Design: Activity diagram for the CI/CD workflows } 
 
-In the previous chapter, various CI/CD tools have been self-hosted in a complementary manner. Taking advantage of these tools, we are aiming to provide a reliable workflow to funnel the developed workloads through the various steps of code analysis, containerized artifact building, and deployment in various environments.  
-
- 
+Through this chapter, various CI/CD tools have been self-hosted in a complementary manner. Taking advantage of these services, we are aiming to provide a reliable workflow to funnel the developed workloads through the various steps of code analysis, containerized artifact building, and deployment in different environments.
 
 The following is an activity diagram underlining the various interfaces, actors, and actions of these processes: 
 
@@ -189,10 +193,11 @@ The following is an activity diagram underlining the various interfaces, actors,
 \end{figure}
 
 \subsection{UML Design: Sequence diagram of the CI/CD workflow }
-
-Next, let’s look at the sequence diagram for the CI/CD workflow: 
+Next, let’s look at the sequence diagram for the CI/CD workflow. It provides a visual representation of how code is built, tested, and deployed, highlighting the order and dependencies of each step.
 \begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f46.png}
+\begin{sideways}
+\includegraphics[height=1.0\textwidth,angle=00]{assets/f46.png}
+\end{sideways}
 \caption{ Sequence diagram of the CI/CD workflow}
 \label{fig:sequence diagram of the CI/CD workflow}
 \end{figure}
@@ -215,65 +220,43 @@ The backend api interacts with the frontend by providing the implemented computi
 
 Container images for the application components are built inside the docker in docker instance we have previously build. It is configured to be able to authenticate with the private registry to pull the base image and push the resulting artifact. 
 
-\subsubsubsection{Dockerfile of the backend API container image }
+\subsubsubsection{The backend API container image }
 
 For building the container image for the backend api, we first build a base image which contains most of the packages and immutable config. 
 
-The resulting dockerfile for the actual container image is as follows: 
+Using the base image, we then build the final artifact which is pluggable using secrets and configmaps on one side. On the other side, the artifact is cutomizable on the fly by leveraging templating techniques that rely on both ytt and jinja2. Ytt templating relies on environment variables that are declared with the actual pod. In the absence of such variables, a default schema containing a dictionary of data is bootstrapped.
+The resulting dockerfile for the actual container image has been added for reference in the annex. 
 
-\begin{listing}[H]
-    \inputminted[firstline=1,lastline=30]{Dockerfile}{codeListing/syst_backend_Dockerfile}
-\end{listing}
-\begin{listing}[H]
-     \inputminted[firstline=31]{Dockerfile}{codeListing/syst_backend_Dockerfile}
-    \caption{Backend API Dockerfile}
-    \label{lst:API Dockerfile}
-\end{listing}
- 
+\subsubsubsection{The frontend container image }
 
-\subsubsubsection{Dockerfile of the frontend container image }
+As with the backend part, this image is built from a base that contains all that is immutable. The final frontend part of the application follows a multi-stage build process. The first stage collects environmet variables and compiles the TypeScript code, bundles the assets, and generates the final production-ready output files.
 
-As with the backend part, this image is built from a base that contains all that is immutable. Building the frontend part of the application is done in two stages as follows: 
+In the second stage, it uses the nginx base image. It copies the compiled code from the previous build stage into the runtime environment, exposes the necessary ports and restarts the nginx service.
 
- \begin{listing}[H]
-    \inputminted{Dockerfile}{codeListing/syst_frontend_Dockerfile}
-    \caption{Frontend Dockerfile}
-    \label{lst:Dind Dockerfile}
-\end{listing}
+Configuration files for the nginx server are later templated using jinja2 in an init container.
 
-\subsubsubsection{Dockerfile of the utility API container image} 
+\newpage
 
- 
-\subsubsection{Code quality }
-
-\subsubsubsection{Conceptual design }
+\subsubsection{CI: Code quality }
 
 To ensure code quality, the first step is to scan the developed code of both the frontend, backend and utility for vulnerabilities and other irregularities.  
 
 A quality gate is then used to inform the cicd orchestrator of the level of stability. The following diagram showcases the involved processes of this stage: 
 
 \begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f47.png}
+\includegraphics[width=1.0\textwidth,angle=00]{assets/f48.png}
 \caption{ Conceptual design of Code quality }
 \label{fig:conceptual design of Code quality }
 \end{figure}
 
+As illustrated in this figure, the code scanning process is initiated by our orchestrator following each accepted merge request in the SCM.
 
-\subsubsubsection{Implementation }
+During this stage, a SonarQube analysis is performed on the code. The pipeline makes a POST request to create a SonarQube project and then executes the SonarQube scanner to analyze the code quality and generate relevant metrics. The SonarQube server URL, authentication credentials, and project details are provided in the POST request.
 
-As illustrated in this figure, the code scanning process is initiated by our orchestrator following each accepted merge request in the SCM. The following is the pipeline for the scan job: 
-
- 
-\begin{listing}[H]
-    \inputminted{Dockerfile}{codeListing/Jenkinsfile_scan}
-    \caption{ Jenkins file scan}
-    \label{lst:jenkinsfile_scan}
-\end{listing}
+The pipeline also includes a post-build step that ensures the workspace is cleaned up after the pipeline execution, removing any residual files and directories.
  
 
-\subsubsection{Building artifacts: }
-
-\subsubsubsection{Conceptual design :}
+\subsubsection{CI: Building artifacts}
 
 Containerizing the applications contributes to portability, consistency, and resource efficiency of the workloads to be deployed. Following each approved merge request, a build step is processed. 
 
@@ -285,33 +268,13 @@ The following diagram illustrates this process and the interaction between the k
 \label{fig:Conceptual design of building artifact }
 \end{figure}
 
-\subsubsubsection{Implementation :}
-
 In similar fashion to the code scanning step, building artifacts is initiated following each approved merge request. A webhook is sent by the SCM tool to Jenkins which starts the job using the following pipeline: 
-
-\begin{listing}[H]
-    \inputminted[firstline=1,lastline=40]{Dockerfile}{codeListing/Jenkinsfile_build}
-\end{listing}
-
-\begin{listing}[H]
-    \inputminted[firstline=41,lastline=75]{Dockerfile}{codeListing/Jenkinsfile_build}
-\end{listing}
-
-\begin{listing}[H]
-    \inputminted[firstline=76]{Dockerfile}{codeListing/Jenkinsfile_build}
-    \caption{Jenkins build}
-    \label{lst:jenkinsfile_build}
-\end{listing}
 
 The build and publish steps are processed in a DinD agent spun inside the Kubernetes cluster. The agent is provided with the necessary credentials to authenticate with the private registry as well as a persistent volume in which it stores the cache data of image layers. 
 
 For each build process, the name and tag of the image are programmatically extracted both from the respective repository name in the SCM and the release tag. 
 
- 
-
-\subsubsection{Delivering artifacts }
-
-\subsubsubsection{Conceptual design:}
+\subsubsection{CD: Delivering artifacts }
 
 For delivering artifacts, the CI/CD orchestrator, Jenkins, is used in conjunction with argocd, our CD/CD controller. ArgoCD uses deployment manifests pushed to the SCM in order to create the workload objects. 
 
@@ -322,8 +285,6 @@ The product delivery process is initiated in any of these cases depending on the
 \item A newer container image with the same tag is pushed to \item the private registry. 
 \end{itemize}
 
-An update to the manifests is pushed to the SCM. 
-
 The following is a general diagram of the delivery process: 
 
 \begin{figure}[H]\centering
@@ -332,60 +293,4 @@ The following is a general diagram of the delivery process:
 \label{fig:Conceptual design of Delivering artifacts }
 \end{figure}
 
-\subsubsubsection{Implementation: }
-
-The deployment manifests, configmaps, secrets, ingressroutes and other Kubernetes objects needed for deploying the applications are templated with each delivery using ytt. This makes the container configuration reusable and extensible.  
-
-
-\paragraph{Overview: }
-
-The following is an overview of the declarative Jenkinsfile used : 
-
- 
-\begin{listing}[H]
-    \inputminted[firstline=1,lastline=30]{Dockerfile}{codeListing/Jenkinsfile_deploy_overview}
-\end{listing}
- 
-\begin{listing}[H]
-    \inputminted[firstline=31]{Dockerfile}{codeListing/Jenkinsfile_deploy_overview}
-    \caption{jenkins deploy overview}
-    \label{lst:jenkinsfile_deploy_overview}
-\end{listing}
-
-\paragraph{Templating manifests: }
-
-Using ytt from Carvel, we are able to create Kubernetes manifests in the YAML format using a specific variable schema. As shown in the stage below, reusable templates are first pulled from the SCM, templated using ytt, and then pushed to an SCM repository in a secure manner: 
-
- \begin{listing}[H]
-    \inputminted[firstline=1,lastline=15]{Dockerfile}{codeListing/Jenkinsfile_deploy_templating}
-\end{listing}
-
- \begin{listing}[H]
-    \inputminted[firstline=16,lastline=49]{Dockerfile}{codeListing/Jenkinsfile_deploy_templating}
-\end{listing}
-
- \begin{listing}[H]
-    \inputminted[firstline=50]{Dockerfile}{codeListing/Jenkinsfile_deploy_templating}
-    \caption{Jenkins deploy templating}
-    \label{lst:jenkinsfile_deploy_templating}
-\end{listing}
-
-
- 
-\paragraph{Delivering workloads: }
-
-Once the deployment manifests are present in the SCM repository, Jenkins then informs argocd to begin the delivery process. The following is the declarative stage used: 
-
-\begin{listing}[H]
-    \inputminted[firstline=1,lastline=10]{Dockerfile}{codeListing/Jenkinsfile_deploy_delivery}
-\end{listing}
-
-\begin{listing}[H]
-    \inputminted[firstline=11,lastline=45]{Dockerfile}{codeListing/Jenkinsfile_deploy_delivery}
-\end{listing}
-
-\begin{listing}[H]
-    \inputminted[firstline=46]{Dockerfile}{codeListing/Jenkinsfile_deploy_delivery}
-    \caption{Jenkins deploy delivery}
-    \label{lst:jenkinsfile_deploy_delivery}
-\end{listing}
+The deployment manifests, configmaps, secrets, ingressroutes and other Kubernetes objects needed for deploying the applications are templated with each delivery using ytt. This makes the container configuration reusable and extensible.
