@@ -29,6 +29,8 @@ In this chapter, we will cover disaster recovery planning, backup and recovery s
 \caption{9th Sprint Backlog}
 \end{longtable}
 
+\newpage
+
 \section{UML design: composite structure diagram of the disaster recovery strategy }
 
 The following diagram describes the Disaster Recovery Strategy: 
@@ -47,44 +49,15 @@ Overall, this composite structure diagram shows how Velero and Kubernetes cronjo
 
 As shown above in the composite structure diagram, velero is a powerful tool that enables us to backup and restore entire Kubernetes namespaces. 
 
- \subsection{Provider specific configurations }
+\subsection{Provider specific configurations }
 
-Provisioning the object store containers that are destined to contain and serve backup data is dependent on the cloud provider. For the purpose of our strategy, we have written the following ansible role: 
+Provisioning the object store containers that are destined to contain and serve backup data is dependent on the cloud provider.
 
-\begin{listing}[H]
-    \inputminted[firstline=1,lastline=34]{Yaml}{codeListing/role_openstack.yml}
-\end{listing}
-
-\begin{listing}[H]
-    \inputminted[firstline=35]{Yaml}{codeListing/role_openstack.yml}
-    \caption{Role Openstack}
-    \label{lst:role openstack}
-\end{listing}
-This is an Ansible role that installs OpenStack and AWS CLI modules for Python, and sets up credentials for the AWS CLI. 
-
- 
-
-Deployment and configuration of the agent 
-
-To facilitate backup and restore operations, this is the Ansible role responsible for installing the Velero client on Kubernetes master nodes and configuring it with AWS credentials: 
-
-\begin{listing}[H]
-\inputminted[firstline=1,lastline=41]{Yaml}{codeListing/role_velero.yml}
-\end{listing}
-
-\begin{listing}[H]
-\inputminted[firstline=42]{Yaml}{codeListing/role_velero.yml}
-\caption{Role velero}
-\label{lst:role velero}
-\end{listing}
-
-Here's a breakdown of the role tasks: 
+For the purpose of our strategy, we have written an ansible playbook that contains several roles:
 \begin{itemize}[label={--}]
-\item The role starts by downloading and installing Velero client binary on the master nodes, then copying workspace contents to the server. Afterward, it installs Custom Resource Definitions (CRDs) for Velero and sets up Role-Based Access Control (RBAC) on the Kubernetes cluster. 
-\item  The next step is to Base64 encode AWS credentials from the local “.aws/credentials” file, which will be used to create a Kubernetes secret for Velero. The encoded credentials are printed to the console for debugging purposes. 
-\item Finally, the role creates a Velero secret from a Jinja2 template file using the encoded credentials and deploys the Velero client to the Kubernetes cluster. 
+\item 1st role : installs the necessary Python packages, sets up OpenStack and AWS CLI configurations, and interacts with AWS services to manage credentials and retrieve bucket lists.
+\item 2nd role : installs and configures the Velero client on master nodes, applies CRDs and RBAC configurations, encodes AWS credentials, and deploys the Velero client to the Kubernetes cluster.
 \end{itemize}
- 
 
 \subsection{Implementing backup and restore operations }
 
