@@ -1,10 +1,24 @@
 \graphicspath{{./assets/}}
 \setcounter{mtc}{1}
-\chapter{Generalized context of the project }
-\fancyhead[R]{\ungaramond\small\textbf{Chapter I. Generalized context of the project}}
+\chapter{The generalized context of the project }
+\fancyhead[R]{\ungaramond\small\textbf{Chapter I. The generalized context of the project}}
 \minitoc
+
 \newpage
+
+\section{Introduction}
+The project's generalized context is vital, as it defines the scope, purpose, and objectives. In the context of an end-of-study project in cloud computing and DevSecOps, understanding the project's goals and expected outcomes is crucial.
+
+Cloud computing enables users to access computing resources over the internet, while DevSecOps integrates security into the software development and operations process.
+
+In the final phase, we analyze key actors, identify functional and non-functional needs, and present an overview of completed sprint bursts. Additionally, we provide a detailed ecosystem dissection using various UML diagrams.
+
+This chapter offers a comprehensive understanding of the project's context, including problem statement, objectives, scope, and requirement analysis, with the aim of clarifying the project's purpose and expected outcomes.
+
+\newpage
+
 \section{The project's background}
+
 \subsection{Overview on the host organization  }
 
 \subsubsection{Company Background }
@@ -270,7 +284,6 @@ Formulating an understanding on functional requirements is a primordial phase in
 \newpage
 \subsection{Product backlog }
 
-\subsubsection{Backlog history }
 \begin{longtable}[H]{|m{1cm}|m{3cm}|m{1cm}|m{7cm}|m{1.2cm}|}
 \hline
  {\textbf{Epic ID}} & {\textbf{EPIC}} & {\textbf{Story ID}} & {\textbf{Story}} & {\textbf{Prior-ity}} \\
@@ -327,75 +340,6 @@ Formulating an understanding on functional requirements is a primordial phase in
 \caption{ Backlog History Table }
 \end{longtable}
 % \raggedright for space issue
-
-
-\newpage
-\subsubsection{Sprint planning }
-The project lasted seven months and a half starting on March 1st 2022. Overall, ten sprints have been followed with the typical duration of 3 weeks for each. 
-
-
-\begin{longtable}[H]{|m{2cm}|m{10cm}|m{2cm}|}
-\hline
- {\textbf{Sprint ID}} & {\textbf{Sprint Details }} & {\textbf{Duration }} \\ \hline 
-0 
-&
-The first period was spent following a company sponsored devSecOps training. The following elements have been covered: 
-Creating vm images using packer, spinning up virtual machines using vagrant,  
-Using docker, docker compose plugin and docker container orchestration in swarm, 
-An overview on CI/CD pipelines using Jenkins. 
-&
-4 weeks  \\
-\hline
-1 
-&
-The following three weeks were dedicated to exploring the existing infrastructure. Performing some maintenance and planning for migration. 
-&
-3 weeks  \\ \hline
-2 
-&
-Next, we have started the information gathering phase in which we have formed an initial overview of the desired goals we would like to reach. 
-&
-2 weeks \\ \hline
-3 
-&
-The use of IaC allowed us to provision the main cloud resources dedicated to hosting the PaaS infrastructure. 
-&
-2 weeks \\ \hline
-4 
-&
-An initial setup of the provisioned resources was then automated and performed. 
-&
-3 weeks \\ \hline
-5 
-&
-Putting in place the basic PaaS services, namely a distributed storage backend, a layer 2 load balancer, a cloud-native layer 4 ingress controller to route requests serving also as a reverse proxy and an application load balancer. 
-&
-3 weeks \\ \hline
-6 
-&
-Mounting the backing CI/CD services which are mostly personalized to company needs. 
-&
-3 weeks \\ \hline
-7 
-&
-Levering the CI/CD ecosystem to put in place pipelines to automate product testing, code quality checks, and delivery. 
-&
-4 weeks \\ \hline
-8 
-&
-Securing access to company assets using an Authentication/Authorization middleware. 
-&
-3 weeks \\ \hline
-9 
-&
-Putting in place a disaster recovery strategy that leverages distributed storage and S3 compliant object storage. 
-&
-3 weeks \\ \hline
-
-\caption{ Sprint planning}
-\end{longtable}
-
-\newpage
 
 \subsection{Technological choices }
 % \paragraph{Development tools }
@@ -555,12 +499,8 @@ Next we layout the organization of the subsystems, software classes, and layers 
 To implement the project, the company has provided us with the necessary hardware equipment, certified preliminary training as well as the desired cloud resources. This allowed us to engage in real-world projects, collaborate with experienced professionals, and expand our skills.
 
 \section*{Conclusion}
-In conclusion, requirement analysis is a crucial step in any project, especially when it comes to cloud computing and DevOps.  
+In conclusion, requirement analysis plays a crucial role in any project, particularly in cloud computing and DevOps. By identifying and understanding the project's requirements, we have established a solid foundation for a successful implementation phase.
 
-By identifying and understanding the requirements of the project, we have created a solid foundation that ensures the success of the implementation phase. 
+The requirement analysis process involved defining project goals, outlining user personas, and specifying technical, business, infrastructure, and application requirements. These requirements are vital in tailoring the PaaS environment to meet the organization's specific needs.
 
-The requirement analysis process has involved identifying the project goals, defining the user personas, and outlining the technical requirements of the project. It has also involved determining the specific business requirements, infrastructure requirements, and application requirements. 
-
-All of these requirements are critical to ensuring that the PaaS environment is tailored to meet the specific needs of the organization. 
-
-By conducting a thorough requirement analysis, ensured that the project is well-defined, properly scoped, and that the stakeholders' expectations are appropriately managed. It provides a solid framework for making informed decisions about the design and implementation of the PaaS environment, as well as determining the tools and technologies that will be used.
+Through a thorough requirement analysis, we ensured a well-defined and properly scoped project while managing stakeholders' expectations. This analysis provides a robust framework for informed decisions regarding the design and implementation of the PaaS environment, as well as the selection of appropriate tools and technologies.
