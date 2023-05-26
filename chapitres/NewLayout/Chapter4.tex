@@ -53,39 +53,37 @@ As shown above in the composite structure diagram, velero is a powerful tool tha
 
 Provisioning the object store containers that are destined to contain and serve backup data is dependent on the cloud provider.
 
-For the purpose of our strategy, we have written an ansible playbook that contains several roles:
-\begin{itemize}[label={--}]
-\item 1st role : installs the necessary Python packages, sets up OpenStack and AWS CLI configurations, and interacts with AWS services to manage credentials and retrieve bucket lists.
-\item 2nd role : installs and configures the Velero client on master nodes, applies CRDs and RBAC configurations, encodes AWS credentials, and deploys the Velero client to the Kubernetes cluster.
-\end{itemize}
+To align with our strategy, we have developed an ansible playbook encompassing multiple roles. The first role focuses on installing essential Python packages, configuring OpenStack and AWS CLI settings, and facilitating interactions with the S3 api to handle credentials and access bucket lists.
 
-\subsection{Implementing backup and restore operations }
-
-The backup and restore operations of the various Kubernetes objects are initiated by the operator either manually or using an ansible playbook tailored specifically for our PaaS. 
+The second role concentrates on installing and configuring the Velero client on master nodes, implementing CRDs and RBAC configurations, encoding AWS credentials, and deploying the Velero client to the Kubernetes cluster. This playbook serves our strategic objectives efficiently.
 
  \begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f57.png}
+\includegraphics[width=0.95\textwidth,angle=00]{assets/f57.png}
 \caption{Architecture of kubernetes objects Backup }
 \label{fig:f57}
 \end{figure}
 
-As illustrated in the architecture above, the deployed Velero controller communicates with the Kubernetes API server to identify resources that need to be backed up or restored. In case of a backup operation, it stores backup data in an object store. This data is then retrieved to be restored. 
+The backup and restore operations of the various Kubernetes objects are initiated by the operator either manually or using an ansible playbook tailored specifically for our PaaS. 
 
- 
+As illustrated in the architecture above, the deployed Velero controller communicates with the Kubernetes API server to identify resources that need to be backed up or restored. In case of a backup operation, it stores backup data in an object store. This data is then retrieved to be restored. 
 
 \section{Disaster recovery for the Database servers }
 
-Only backing up persisted Kubernetes objects is unfortunately insufficient. In Kubernetes, backing up volumes that contain a database's data is not recommended because it can lead to inconsistent data being backed up. When a backup of a volume is created while the database is still running and actively writing to the volume, the backup might include an inconsistent view of the data. This is because the backup process is not transactionally consistent with the database, meaning that the backup might capture changes that were in progress but not yet completed. 
+Only backing up persisted Kubernetes objects is unfortunately insufficient. In Kubernetes, backing up volumes that contain a database's data is not recommended because it can lead to inconsistent data being backed up.
 
-To avoid this issue, it is recommended to dump the database data first. 
+When a backup of a volume is created while the database is still running and actively writing to the volume, the backup might include an inconsistent view of the data. This is because the backup process is not transactionally consistent with the database, meaning that the backup might capture changes that were in progress but not yet completed. To avoid this issue, it is recommended to dump the database data first. 
 
  \subsection{Programmatically backing up and restoring database data }
-
+\subsubsection{Automating database backups}
 In order to eliminate the need for user intervention, we have developed a few python programs that are charged to efficiently perform backup and restore operations. 
 
-\subsubsection{Backup agent for the replicated MongoDB cluster data: }
+The following class diagram illustrates a Python-based backup agent that is designed to ensure the secure and efficient backup of replicated MongoDB cluster data.
 
-The following class diagram illustrates a Python script that creates a backup of a MongoDB database and uploads it to cloud storage or a local directory: 
+With its robust functionality and reliability, this agent simplifies the process of creating backups and ensures the integrity of data.
+
+Developed specifically for MongoDB clusters, this backup agent provides a seamless and streamlined solution for safeguarding valuable data assets.
+
+The program collects MongoDB configuration parameters, such as the database host, port, username, and password, from environment variables or configuration files. 
 
  \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f58.png}
@@ -93,13 +91,11 @@ The following class diagram illustrates a Python script that creates a backup of
 \label{fig:f58}
 \end{figure}
 
-The script collects MongoDB configuration parameters, such as the database host, port, username, and password, from the environment variables or configuration files. 
-
-The script defines several classes, each of which has methods that perform specific functions: 
+The program defines several classes, each of which has methods that perform specific functions: 
 
 \begin{itemize}[label={--}]
 \item “NiceLogger”: A logging utility that logs messages with timestamps. 
-\item “BackupCleaner”: A class that contains a method to clean up old backups from the backup persistent volume. 
+\item “BackupCleaner”: A class that contains a method to clean up old backups from the persistent volume native to the PaaS environment. 
 \item  “CompressBackup”: A class that contains a method to compress the backup  data. 
 \item  “S3Uploader”: A class that contains a method to upload the compressed backup to AWS S3 cloud storage. 
 \item “MinioUploader”: A class that contains a method to upload the compressed backup to MinIO cloud storage. 
@@ -108,25 +104,13 @@ The script defines several classes, each of which has methods that perform speci
 \item “MongoDumper”: A class that contains a method to create a MongoDB dump, compress it, and upload it to cloud storage. 
 \end{itemize}
  
+In a similar fashion to backing up the MongoDB cluster data, we have developed a backup agent for PostgreSQL. PostgreSQL and MongoDB have different data storage architectures.  
 
-\subsubsection{Backup agent for the HA PostgreSQL cluster data: }
+When backing up PostgreSQL, it's important to back up both the data and the schema because the schema defines the structure of the tables and the relationships between them. Without the schema, it would be difficult to restore the database to its original state.
 
-In a similar fashion to backing up the MongoDB cluster data, we have developed a backup agent for PostgreSQL. The following is the class diagram : 
+\subsubsection{Streamlining database data restores}
 
-\begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f59.png}
-\caption{Backup agent for PostgreSQL}
-\label{fig:f59}
-\end{figure}
-
-
-PostgreSQL and MongoDB have different data storage architectures.  
-
-When backing up PostgreSQL, it's important to back up both the data and the schema because the schema defines the structure of the tables and the relationships between them. Without the schema, it would be difficult to restore the database to its original state. 
-
-\subsubsection{Restorer agent for the replicated MongoDB cluster data: }
-
-This Python program is designed to restore a MongoDB database from the S3 Minio or AWS backups. 
+An intuitive way of implementing database restore operations is reversing the backup process. Data is first fetched from remote object stores, decrypted, decompressed and then reinjected the cluster of database servers. The following class diagram show the architecture of the restore agent in the case of mongodb.
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f60.png}
@@ -134,65 +118,11 @@ This Python program is designed to restore a MongoDB database from the S3 Minio 
 \label{fig:f60}
 \end{figure}
 
-\subsubsection{Restorer agent for the HA PostgreSQL cluster data: }
-
-The following is the class diagram for the python program responsible for restoring both data and PostgreSQL schemas: 
-
-\begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f61.png}
-\caption{Restorer agent for the HA PostgreSQL }
-\label{fig:f61}
-\end{figure}
-
 \subsection{ Scheduling backup and restore jobs }
 
-For each database cluster we have built a container image to which we then inject the python program responsible for backing up or restoring data. This is then used to configure a Kubernetes “CronJob” that runs periodically. The following is an example of the “CronJob” for backing up MongoDB: 
+For each database cluster we have built a container image to which we then inject the python program responsible for backing up or restoring data. This is then used to configure a Kubernetes “CronJob” that runs periodically.
 
-% \newpage
-% \begin{multicols}{2}
-% \begin{listing}
-% \begin{multicols}{2}{}
-    % \inputminted[firstline=1,lastline=40]{Yaml}{codeListing/cronjob_backup_mongo.yml}
-    % \columnbreak 
-    % \inputminted[firstline=41,lastline=80]{Yaml}{codeListing/cronjob_backup_mongo.yml}
-    % \newpage
-    % \inputminted[firstline=61,lastline=80]{Yaml}{codeListing/cronjob_backup_mongo.yml}
-    % \columnbreak
-    % \inputminted[firstline=81,lastline=100]{Yaml}{codeListing/cronjob_backup_mongo.yml}
-% \end{multicols}
-    % \caption{cronjob backup mongo}
-    % \label{lst:cronjob backup mongo}
-% \end{listing}
-% \newpage
-% \begin{listing}[H]
-% \begin{multicols}{2}
-% \inputminted[firstline=61,lastline=80]{Yaml}{codeListing/cronjob_backup_mongo.yml}
-% \inputminted[firstline=81,lastline=100]{Yaml}{codeListing/cronjob_backup_mongo.yml}
-% \end{multicols}
-%     \caption{cronjob backup mongo}
-%     \label{lst:cronjob backup mongo}
-% \end{listing}
-% \end{multicols}
-% \newpage
-
-
-\begin{listing}
-\inputminted[firstline=1,lastline=50]{Yaml}{codeListing/cronjob_backup_mongo.yml}
-\end{listing}
-
-\begin{listing}
-\inputminted[firstline=51,lastline=100]{Yaml}{codeListing/cronjob_backup_mongo.yml}
-\end{listing}
-
-\begin{listing}
-\inputminted[firstline=71]{Yaml}{codeListing/cronjob_backup_mongo.yml}
- \caption{cronjob backup mongo}
-    \label{lst:cronjob backup mongo}
-\end{listing}
-
-In this case, the CronJob is named "mongodump-demodb" and is defined in the "mongodb" namespace. 
-
-These are some of the specifications: 
+These are some of the specifications we are adding to the cronjob object declaration: 
 \begin{itemize}[label={--}]
 \item “schedule: ‘0 0 4,12,20,28 * *’ ”: This defines the time and frequency at which the job will run, using a cron expression. In this case, the job will run at midnight, every 8 days of each month. 
 \item  “concurrencyPolicy: Forbid”: This specifies how to handle overlapping job executions. With the "Forbid" option, if a job is already running at the time a new one is scheduled to start, the new job will not be run. 
@@ -201,6 +131,8 @@ These are some of the specifications:
 Other than the environment variables to configure the backup program and the volume mounts to inject config files, we have attached a Persistent Volume from our distributed storage cluster to be able to backup data locally. 
 
 Each of the python programs we have developed can back up and restore the entirety of the cluster data in one go. It only amounts to Setting the “DB\_NAME” environment variable to “NULL”. 
+
+\newpage
 
 \section*{Conclusion}
 Disaster recovery is a critical aspect of any PaaS environment that hosts mission-critical applications and services. The ability to recover from disasters quickly and efficiently can make the difference between a minor service disruption and a significant business failure. 
