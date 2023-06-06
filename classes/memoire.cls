@@ -43,7 +43,8 @@
 %---------------------------------------%
 %		commandes personnelles			%
 %---------------------------------------%\\
-
+\usepackage{tocloft}
+\setlength{\cftfignumwidth}{3em}
 \usepackage{titlesec}
 \usepackage{hyperref}
 \titleclass{\subsubsubsection}{straight}[\subsubsection]
@@ -56,8 +57,9 @@
 % ------------------------------------- %
 
 \onehalfspacing%espace interligne = 1,5
-% \setlength\parindent{0pt} % sets indent to zero
+% \setlength\parindent{6pt} % sets indent to zero
 \setlength{\parskip}{6pt} % changes vertical space between paragraphs
+% \setlength{\parindent}{10mm}
 \renewcommand\thechapter{\Roman{chapter}.}
 \renewcommand\thesection{\Roman{section}.}
 \renewcommand{\thesubsection}{\Roman{section}.\arabic{subsection}.}
@@ -70,12 +72,17 @@
 \newcommand{\subsubsubsectionfont}{\fontsize{14}{17}\selectfont}
 \newcommand{\paragraphfont}{\fontsize{12}{14}\selectfont}
 \fancypagestyle{plain}{%
-    \fancyhf{}%
-	\fancyfoot[C]{\thepage}
+    \fancyhf{}
+    \renewcommand{\footrulewidth}{0.3pt}
+    \renewcommand{\headrulewidth}{0pt}
+    \fancyfoot[L]{\ungaramond\small\textbf{Ridha Bouazizi}}
+    \fancyfoot[C]{}
+    \fancyfoot[R]{\ungaramond\small\textbf{Page \thepage\ sur\ \pageref{LastPage}}}
 }
-\setcounter{tocdepth}{4} 
+
+\setcounter{tocdepth}{2} 
 \setcounter{secnumdepth}{4}
-\setcounter{minitocdepth}{3} 
+\setcounter{minitocdepth}{2} 
 \setlength{\mtcindent}{24pt} 
 \renewcommand{\mtcfont}{\small\rm}
 \renewcommand{\mtcSfont}{\small\bf}
@@ -130,12 +137,13 @@
 \titlespacing{\subsubsection}{13mm}{8pt}{6pt}
 \titlespacing{\subsubsubsection}{16mm}{8pt}{6pt}
 \titlespacing{\chapter}{14mm}{8pt}{6pt}
+\titlespacing{\paragraph}{15mm}{8pt}{4pt}
 % ***********
 \usepackage{pstcol}
 \makeatletter
 \def\thickhrulefill{\leavevmode \leaders \hrule height 1ex \hfill \kern \z@}
 \def\@makechapterhead#1{
-    \vspace*{10\p@}
+    % \vspace*{10\p@}
     {\parindent \z@ \centering \reset@font
         \thickhrulefill\quad 
         \scshape\bfseries\textit{\@chapapp{}  \thechapter}  
@@ -149,9 +157,11 @@
         \par
         \vspace*{10\p@}%
         % \hrule
-        \vskip 20\p@
+        % \vskip 20\p@
         
     }
+    \parindent \z@  \reset@font
+            \thickhrulefill
 }
 \def\@makeschapterhead#1{\hbox{%
     \huge\hbox{\textbf{#1}}%
@@ -237,3 +247,17 @@
 \usepackage{rotating}
 % \usepackage{multicol}
 % \setlength\columnsep{3ex}
+
+% \usepackage{tocloft}
+% \setlength{\cftfignumwidth}{3em}
+% \usepackage{appendix}
+%  \renewcommand{\appendixtocname}{Table des annexes} % indique le nom de la table des annexes dans la toc
+%     \renewcommand{\appendixpagename}{Annexes} % Nom du titre de la page des annexes
+% \usepackage{etoolbox}
+% \AtBeginEnvironment{appendices}{section}}
+\usepackage{indentfirst}
+% \setlength{\parindent}{2cm}
+\usepackage{setspace}
+% \setstretch{1.6}
+
+\setlength{\parindent}{12mm}

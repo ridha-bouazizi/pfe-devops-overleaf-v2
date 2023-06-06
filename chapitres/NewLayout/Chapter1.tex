@@ -2,49 +2,34 @@
 \setcounter{mtc}{1}
 \chapter{The generalized context of the project }
 \fancyhead[R]{\ungaramond\small\textbf{Chapter I. The generalized context of the project}}
-\minitoc
+%\minitoc
 
-\newpage
+% \newpage
 
-\section{Introduction}
-The project's generalized context is vital, as it defines the scope, purpose, and objectives. In the context of an end-of-study project in cloud computing and DevSecOps, understanding the project's goals and expected outcomes is crucial.
+\section*{Introduction}
 
-Cloud computing enables users to access computing resources over the internet, while DevSecOps integrates security into the software development and operations process.
-
-In the final phase, we analyze key actors, identify functional and non-functional needs, and present an overview of completed sprint bursts. Additionally, we provide a detailed ecosystem dissection using various UML diagrams.
-
-This chapter offers a comprehensive understanding of the project's context, including problem statement, objectives, scope, and requirement analysis, with the aim of clarifying the project's purpose and expected outcomes.
-
-\newpage
+\hspace{7mm}Understanding the project's goals and expected outcomes is crucial. This chapter offers a comprehensive understanding of the project's context, including problem statement, objectives, scope, and requirement analysis, with the aim of clarifying the project's purpose and expected outcomes.
 
 \section{The project's background}
-
+\hspace{7mm}In the following section we focus on providing and overview on the host organization and its fields of activities. 
 \subsection{Overview on the host organization  }
 
-\subsubsection{Company Background }
-Systnaps is a technology company based in Paris, France that specializes in providing innovative software solutions to businesses across various industries. It prides itself with the expertise in areas such as data analytics, artificial intelligence, machine learning, and cloud computing. The following figure illustrates the company logo: 
+\hspace{7mm}Systnaps is a technology company based in Paris, France that specializes in providing innovative software solutions to businesses across various industries. It prides itself with the expertise in areas such as data analytics, artificial intelligence, machine learning, and cloud computing. The following figure illustrates the company logo: 
 
 \begin{figure}[!ht]\centering
 \includegraphics[width=0.5\textwidth,angle=00]{assets/fa.png}
 \caption{Systnaps Logo}
 \end{figure}
 
-Huxium, an affiliate of Systnaps is a technology company that specializes in providing customized software solutions to businesses across various industries. 
+\hspace{7mm}Huxium, an affiliate of Systnaps is a technology company that specializes in providing customized software solutions to businesses across various industries. 
 
 
 \begin{figure}[!ht]\centering
 \includegraphics[width=0.5\textwidth,angle=00]{assets/fb.png}
 \caption{Huxium Logo}
-\end{figure}
-
-
- \subsubsection{Mission and Vision }
-
-Systnaps was founded with the mission of helping businesses harness the power of technology to improve their operations, enhance customer experiences, and drive growth. They offer a range of services to meet the diverse needs of their clients, including custom software development, application maintenance and IT consulting. 
-
-\subsubsection{Core Services or Products }
-
-The core services of Systnaps in the data management space include: 
+\end{figure} 
+\newpage
+\hspace{7mm}The core services of Systnaps in the data management space include: 
 \begin{itemize}[label={--}]
     \item Database Management: Securely managing databases for businesses, including tasks such as administration, optimization, and recovery. 
 
@@ -55,39 +40,10 @@ The core services of Systnaps in the data management space include:
 \item  Data Governance: Helping businesses ensure compliance with regulatory and legal requirements in managing their data, encompassing activities such as privacy and security, classification, and retention. 
 
  \end{itemize}
-
-\subsubsection{Market Position and notable clients }
-
-While they do not have a significant global presence, they have established themselves as a reputable player in the French IT market. 
-
-Systnaps has worked with clients across a range of industries, including finance, healthcare, and media. The following figure showcases some of the current clients: 
-
-
-\begin{figure}[!ht]\centering
-\includegraphics[width=0.8\textwidth,angle=00]{assets/fc.png}
-\caption{Company clients}
-\end{figure}
-
-
-\subsection{Project description }
-
-Our end-of-studies project entails designing and implementing a comprehensive Platform as a Service (PaaS) solution on the cloud. This PaaS platform incorporates various networking, storage, and automation services.
-
-Specifically, the project focuses on designing and implementing networking services such as load balancing, ingress, and authentication/authorization. These services are crucial for managing traffic flow and ensuring secure access to the platform.
-
-Additionally, the project involves implementing a distributed and redundant storage backend that encompasses both object and block storage. This ensures reliable and scalable storage capabilities.
-
-Furthermore, highly available and replicated database storage services are integrated into the PaaS platform to ensure consistent and dependable data access for users.
-
-The project also encompasses utility services such as a private registry for storing artifacts and automated CI/CD operations to streamline the deployment process.
-
-Lastly, the PaaS platform incorporates a robust and efficient disaster recovery strategy to quickly recover from any unplanned downtime or service interruptions.
-
-In summary, this end-of-studies project demonstrates a comprehensive understanding of cloud computing and DevSecOps principles. It showcases the ability to design and implement a comprehensive PaaS platform with essential services to support modern application development and deployment. 
-
+ 
 \subsection{Analysis of existing processes }
 
-The current infrastructure relies on a few monolithic virtual private servers and utilizes Docker Compose for container orchestration. Within this infrastructure, there are multiple Docker Compose stacks serving different purposes, including: 
+\hspace{7mm}The current infrastructure relies on a few monolithic virtual private servers and utilizes Docker Compose for container orchestration. Within this infrastructure, there are multiple Docker Compose stacks serving different purposes, including: 
 \begin{itemize}[label={--}]
 \item An application development stack: This stack houses essential applications for software development, such as code editors, compilers, and development frameworks. 
 
@@ -96,11 +52,11 @@ The current infrastructure relies on a few monolithic virtual private servers an
 \item A reverse proxy stack: This stack comprises three Docker images - acme-companion, docker-gen, and nginx - functioning as a reverse proxy for the application. Nginx acts as the web server, routing traffic to the application, while acme-companion and docker-gen generate SSL/TLS certificates and automatically update the Nginx configuration. 
 \end{itemize}
 
-While Docker Compose provides a lightweight and scalable infrastructure for application development, the reliance on monolithic virtual private servers can hinder scalability and infrastructure maintenance. Consolidating all services on a single server creates a single point of failure and increases the risk of downtime. 
+\hspace{7mm}While Docker Compose provides a lightweight and scalable infrastructure for application development, the reliance on monolithic virtual private servers can hinder scalability and infrastructure maintenance. Consolidating all services on a single server creates a single point of failure and increases the risk of downtime. 
 
 \subsection{Constructive criticism on existing processes} 
 
-Based on cloud computing and DevOps best practices, the following is some of the weak points of such an infrastructure :
+\hspace{7mm}Based on cloud computing and DevSecOps best practices, the following is some of the weak points of such an infrastructure :
 
 \begin{itemize}[label={--}]
 
@@ -112,29 +68,27 @@ Based on cloud computing and DevOps best practices, the following is some of the
 
 \item Missing disaster recovery strategy: Without a disaster recovery plan, there is a risk of significant downtime and data loss during unforeseen events. Kubernetes provides options for disaster recovery, such as backup and restore mechanisms, failover and recovery strategies, and multi-zone deployments. 
 
-\item Use of large and inefficient container images: Large and inefficient container images can lead to slower deployment times, increased storage requirements, and decreased performance. DevOps best practices, coupled with Kubernetes features like image caching, rolling updates, and horizontal scaling, can optimize container image management and deployment. 
+\item Use of large and inefficient container images: Large and inefficient container images can lead to slower deployment times, increased storage requirements, and decreased performance. DevSecOps best practices, coupled with Kubernetes features like image caching, rolling updates, and horizontal scaling, can optimize container image management and deployment. 
 
 \end{itemize}
 
-In conclusion, adopting Kubernetes and implementing cloud computing and DevOps best practices can significantly enhance the scalability, reliability, security, and performance of the IT ecosystem. 
-
+\hspace{7mm}In conclusion, adopting Kubernetes and implementing cloud computing and DevSecOps best practices can significantly enhance the scalability, reliability, security, and performance of the IT ecosystem. 
+\newpage
 \subsection{Problem statement }
 
-In today's fast-paced business environment, the company is looking to leverage cloud computing and DevSecOps practices to gain a competitive edge.  
+\hspace{7mm}In today's fast-paced business environment, the company recognizes the importance of leveraging cloud computing and DevSecOps practices to gain a competitive edge. 
 
-However, building and managing a PaaS platform that provides reliable and scalable infrastructure services is a complex and challenging task. The lack of a well-designed and integrated PaaS platform can lead to increased costs, inefficient resource utilization, and security vulnerabilities. 
+\hspace{7mm}However, building and managing a reliable and scalable PaaS platform for infrastructure services is a complex task. Without a well-designed and integrated PaaS platform, there is a risk of increased costs, inefficient resource utilization, and security vulnerabilities.
 
-The objective of this project is to design, build and implement a PaaS platform that provides a complete set of infrastructure services, including networking, storage, database, and utility services, along with a resilient and efficient disaster recovery strategy. The platform will also incorporate DevSecOps practices to ensure security and compliance with industry standards. 
+\hspace{7mm}The objective of this project is to design, build, and implement a comprehensive PaaS platform that offers a wide range of infrastructure services, such as networking, storage, database, and utility services. Additionally, a resilient and efficient disaster recovery strategy will be incorporated, along with adherence to DevSecOps practices for enhanced security and compliance with industry standards.
 
-The main challenge of this project is to ensure the scalability, availability, and security of the PaaS platform while providing a simple and intuitive user experience for developers. This requires a deep understanding of cloud computing and DevSecOps practices, along with expertise in networking, storage, database, and utility services. 
+\hspace{7mm}The main challenge of this project lies in ensuring the scalability, availability, and security of the PaaS platform, while providing a simple and intuitive user experience for developers. This requires a deep understanding of cloud computing, DevSecOps practices, and expertise in networking, storage, database, and utility services.
 
-The successful implementation of this project will enable the company to accelerate their digital transformation journey, reduce operational costs, and improve their overall business agility. 
-
- 
+\hspace{7mm}The successful implementation of this project will enable the company to accelerate their digital transformation journey, reduce operational costs, and improve overall business agility. By harnessing the power of cloud computing and DevSecOps, the company will be better equipped to meet the evolving demands of the market and stay ahead of the competition.
 
 \subsection{Ideation and proposed solutions} 
 
-The company has decided to explore the possibility of moving to a cloud-based infrastructure to increase scalability, availability, and security. After analyzing various options, we have decided to propose a self-managed PaaS platform based on Kubernetes that contains the following components: 
+\hspace{7mm}The company has decided to explore the possibility of moving to a cloud-based infrastructure to increase scalability, availability, and security. After analyzing various options, we have decided to propose a self-managed PaaS platform based on Kubernetes that contains the following components: 
 
 \begin{itemize}[label={--}]
 
@@ -144,62 +98,104 @@ The company has decided to explore the possibility of moving to a cloud-based in
 
 \item Highly available and replicated database storage services: The platform will use both MongoDB and PostgreSQL as highly available and replicated database storage services for both the relational and document models. This will provide the necessary data persistence and redundancy required for a PaaS platform. 
 
-\item DevSecOPS utility services: The platform will use several utility services to help store artifacts, automate CI/CD operations, and improve code quality. These services include Jenkins as the CI/CD orchestrator, ArgoCD as the CD controller, SonarQube for code scanning, Harbor as a private registry, and Jenkins pipelines to automate building applications, scanning, and delivery. 
+\item DevSecOps utility services: The platform will use several utility services to help store artifacts, automate CI/CD operations, and improve code quality. These services include Jenkins as the CI/CD orchestrator, ArgoCD as the CD controller, SonarQube for code scanning, Harbor as a private registry, and Jenkins pipelines to automate building applications, scanning, and delivery. 
 
 \item Disaster recovery strategy: The platform will have a resilient and efficient disaster recovery strategy that uses Velero to back up Kubernetes related objects and proprietary Python programs to backup database data. This will ensure that the platform is highly available, even in the event of a disaster. 
 
 \end{itemize}
-
-Overall, the proposed solution will provide a highly available, scalable, and secure PaaS platform that can meet the company's needs for application development and deployment. The platform will also have a robust disaster recovery strategy, which will ensure business continuity in the event of an outage.  
-
-
-\newpage  % if no new page table will not be in the good place
+ 
 \section{Project planning}
+
+\hspace{7mm}The following section will be dedicated our choice of Agile method. We will then look at the functional and non-functional requirements related to this project.
+
 \subsection{Project management }
 \subsubsection{Comparative research }
 
+\hspace{7mm}Let us first inspect the characteristics of different agile methods in order to decide on the most useful to follow :
+
+% \begin{table}[h!]
+% \center
+% \begin{tabular}[b]{|m{3.25cm}|m{4cm}|m{4cm}|m{4cm}|}
+% \hline
+% \rowcolor{white}
+%  & Waterfall (V model) 
+%  & Agile SCRUM   & Agile DevSecOps  \\
+% \hline
+%  Lifecycle  
+% & Linear software development approach 
+% & Incremental and iterative sprint cycles. 
+% & Uses automation techniques to enable continuous deployment of change. \\
+% \hline
+%  Automation level  
+% & Low 
+% & Varied 
+% & High 
+%  \\
+% \hline
+%  Delivery of value 
+% & Slow (Scale : months) 
+% & Rapid (daily/weekly) 
+% & Continuous  \\
+% \hline
+%  Responsiveness to business needs 
+% & Extremely limited 
+% & Responsive 
+% & Highly responsive   \\
+% \hline
+%  Collaboration 
+% & Low: teams operate in functional silos 
+% & Improved: short dev cycles 
+% & High: cross-functional teams are involved from project start. \\
+% \hline
+% Quality 
+% & Low: issues are only identified after tests 
+% & Improved: issues are identified after every sprint 
+% & High: Unit testing and code quality checks are performed during development. \\
+% \hline
+%  Risk 
+% & Increases as project development progresses 
+% & Decreases as project development progresses 
+% & Decreases as project development progresses \\
+% \hline
+% \end{tabular}
+% \caption{ comparative study}
+% \textcolor{white}{I} \label{tab:tab-m}
+% \end{table}
+
 \begin{table}[h!]
 \center
-\begin{tabular}[b]{|m{3cm}|m{4cm}|m{4cm}|m{4cm}|}
+\begin{tabular}[b]{|m{4cm}|m{5cm}|m{5cm}|}
 \hline
 \rowcolor{white}
- & Waterfall (V model) 
- & Agile   & DevOPS  \\
+ &  Agile SCRUM   & Agile DevSecOps  \\
 \hline
  Lifecycle  
-& Linear software development approach 
 & Incremental and iterative sprint cycles. 
 & Uses automation techniques to enable continuous deployment of change. \\
 \hline
  Automation level  
-& Low 
-& Varied 
+&  Varied 
 & High 
  \\
 \hline
  Delivery of value 
-& Slow (Scale : months) 
-& Rapid (daily/weekly) 
+&  Rapid (daily/weekly) 
 & Continuous  \\
 \hline
  Responsiveness to business needs 
-& Extremely limited 
-& Responsive 
+&  Responsive 
 & Highly responsive   \\
 \hline
  Collaboration 
-& Low: teams operate in functional silos 
 & Improved: short dev cycles 
 & High: cross-functional teams are involved from project start. \\
 \hline
 Quality 
-& Low: issues are only identified after tests 
 & Improved: issues are identified after every sprint 
 & High: Unit testing and code quality checks are performed during development. \\
 \hline
  Risk 
-& Increases as project development progresses 
-& Decreases as project development progresses 
+&  Decreases as project development progresses 
 & Decreases as project development progresses \\
 \hline
 \end{tabular}
@@ -207,75 +203,77 @@ Quality
 \textcolor{white}{I} \label{tab:tab-m}
 \end{table}
 
-Based on the previous comparative study, it is apparent that the approach most suited to our use case is one that helps improve collaboration, reduce context-switching, introduce automation, and enable observability and monitoring. 
+\hspace{7mm}Based on the previous comparative study, it is apparent that the approach most suited to our use case is one that helps improve collaboration, reduce context-switching, introduce automation, and enable observability and monitoring.
 
-\subsubsection{Agile devSecOPS }
+\subsubsection{Agile DevSecOps }
 
-When evaluating devSecOPS as a practice and Agile as a delivery approach, it is important to note that they are not mutually exclusive. In spite of the evident differences between DevSecOPS and the Agile methodology, their overall goal of increasing speed and delivering quality software is similar in nature and together they produce great products and improve the software development.
+\hspace{7mm}When evaluating DevSecOps as a practice and Agile as a delivery approach, it is important to note that they are not mutually exclusive. In spite of the evident differences between DevSecOps and the Agile methodology, their overall goal of increasing speed and delivering quality software is similar in nature and together they produce great products and improve the software development.
 
 \begin{figure}[!ht]\centering
-\includegraphics[width=0.8\textwidth,angle=00]{assets/f1.png}
+\includegraphics[width=0.4\textwidth,angle=00]{assets/f1.png}
 \caption{Process overview}
 \label{fig:processOverview}
 \end{figure}
 
-The following figure showcases an overview of the process and the key DevSecOPS roles. 
-\paragraph{DevSecOPS Evangelist:} 
-Usually the DevSecOPS team leader, he focuses on promoting the DevSecOPS advantages, identifying and quantifying companies’ benefits deriving from a higher agility. 
+\hspace{7mm}The following figure showcases an overview of the process and the key DevSecOps roles. 
 
 \paragraph{Release Manager:} 
-The product stability manager which is basically the product owner. He cares about the product’s management and coordination. 
+\hspace{7mm}The product stability manager which is basically the product owner. He cares about the product’s management and coordination. 
 
 \paragraph{Automation Architect: }
-Provides a complete automation role involving the DevSecOPS and Cloud solutions. He is an integration specialist that ensures the high availability of the pre-production and production systems. 
+\hspace{7mm}Provides a complete automation role involving the DevSecOps and Cloud solutions. He is an integration specialist that ensures the high availability of the pre-production and production systems. 
 
 \paragraph{Software Developer/Tester:}
-DevSecOPS developers are not responsible only for the transformation of new requirements into code, they also have to deal with testing, distribution and continuous monitoring processes.
+\hspace{7mm}DevSecOps developers are not responsible only for the transformation of new requirements into code, they also have to deal with testing, distribution and continuous monitoring processes.
 
 \paragraph{Security Engineer: }
-The DevSecOPS approach implements security by design.
+\hspace{7mm}The DevSecOps approach implements security by design.
 
 \newpage 
 
 \subsection{Capturing requirements}
-Our analysis is aimed at identifying the key actors in our design, the functional and non-functional needs our system is to provide for.
+
+\hspace{7mm}Our analysis is aimed at identifying the key actors in our design, the functional and non-functional needs our system is to provide for.
 
 \subsubsection{Identifying key actors}
-In this context, an actor is a user or any other system that interacts with the subject by exchanging signals and data.
+
+\hspace{7mm}In this context, an actor is a user or any other system that interacts with the subject by exchanging signals and data.
 
 \paragraph{Cloud architecture related actors:}
-In order to have a devSecOPS compliant approach, it needs to be built on top of a containerized, highly available cloud infrastructure:
+\hspace{7mm}In order to have a DevSecOps compliant approach, it needs to be built on top of a containerized, highly available cloud infrastructure:
 \begin{itemize}[label={--}]
 \item Cloud architect: He is responsible for designing and implementing cloud computing solutions.
 \item IaC tools: Although being a piece of software, it is necessary in order to automate provisioning and configuration of resources.
 \item Cloud provider: Usually a third-party entity that allows for elastically allocating resources.
-\item DevSecOPS team: A devSecOPS engineer is the consumer in this case, he uses the provisioned resources to build an ecosystem that is compliant with organizational needs.
+\item DevSecOps team: A DevSecOps engineer is the consumer in this case, he uses the provisioned resources to build an ecosystem that is compliant with organizational needs.
 \end{itemize}
 
 \paragraph{CI/CD related actors:}
-The cloud resources hold the value of a tool that is then leveraged to assist the development process:
+\hspace{7mm}The cloud resources hold the value of a tool that is then leveraged to assist the development process:
 \begin{itemize}[label={--}]
-\item DevSecOPS team: uses the provisioned resources and follows an agile devSecOPS approach to build an ecosystem that is compliant with organizational needs.
-\item Developer: A consumer of the devSecOPS ecosystem as well as the CI/CD workflow.
+\item DevSecOps team: uses the provisioned resources and follows an agile DevSecOps approach to build an ecosystem that is compliant with organizational needs.
+\item Developer: A consumer of the DevSecOps ecosystem as well as the CI/CD workflow.
 \item Company client: He is the end user and provides the specifications on software development.
 \end{itemize}
-
+\newpage
 \subsubsection{Functional requirements}
 
-Formulating an understanding on functional requirements is a primordial phase in the implementation of the subject.
+\hspace{7mm}Formulating an understanding on functional requirements is a primordial phase in the implementation of the subject.
 
 \begin{itemize}[label={--}]
-\item A cloud-based infrastructure capable of hosting the devSecOPS ecosystem in terms of compute resources, storage and networking.
+\item A cloud-based infrastructure capable of hosting the DevSecOps ecosystem in terms of compute resources, storage and networking.
 \item A continuous integration platform : The desired goal is to provide a CI workflow that channels the development effort in order to continuously ensure code quality.
 \item A CD workflow: provide an automated and continuous delivery and deployment process.
 \end{itemize}
 
 \subsubsection{Non-functional requirements}
 
+\hspace{7mm}In this section, we shift our focus from the specific functionalities of the system discussed earlier to the non-functional requirements that encompass factors such as :
+
 \begin{itemize}[label={--}]
 \item High availability and resilience: Typically satisfied by distributed backend resources, orchestration and load balancing of workloads. 
 \item Performance and scalability: Usually dependent on the cloud provider as well as the used technologies.
-\item Security: An inbuilt quality that cloud and DevSecOPS offer by design.
+\item Security: An inbuilt quality that cloud and DevSecOps offer by design.
 \item Observability: A highly achievable need due the pluggability of containerized environments.
 \item Usability: A somewhat hard to achieve requirement due to the rarity of a technologically adept workforce. 
 \item Relatively low cost : the need to prioritize self-hosting and adopting opensource alternatives.
@@ -284,58 +282,60 @@ Formulating an understanding on functional requirements is a primordial phase in
 \newpage
 \subsection{Product backlog }
 
-\begin{longtable}[H]{|m{1cm}|m{3cm}|m{1cm}|m{7cm}|m{1.2cm}|}
+\begin{longtable}[H]{|m{1cm}|m{3.25cm}|m{1cm}|m{7cm}|m{1.2cm}|}
 \hline
  {\textbf{Epic ID}} & {\textbf{EPIC}} & {\textbf{Story ID}} & {\textbf{Story}} & {\textbf{Prior-ity}} \\
- \hline
 \endhead
-0 & \raggedright Certified devSecOps training &	0.1 &	Managing and running custom VMs. & \\
-\cline{3-5}
-&   & 0.2 &	Managing docker containers.	& \\
-\cline{3-5}
-&   & 0.3 &	CI/CD pipelines. & \\
 \hline
-1 & Maintenance and cleanup. &	1.1	& Exploring existing infrastructure and resources. & \\
+\multirow{3}{1cm}{0} & \multirow{3}{3.25cm}{\raggedright Certified DevSecOps training} &	0.1 &	Managing and running custom VMs. & 100\\
 \cline{3-5}
-&   &	1.2 & Performing maintenance on enterprise assets. & \\
+&   & 0.2 &	Managing docker containers.	& 100\\
+\cline{3-5}
+&   & 0.3 &	CI/CD pipelines. & 100\\
+\hline
+\multirow{2}{1cm}{1} & \multirow{2}{3.25cm}{Maintenance and cleanup} &	1.1	& Exploring existing infrastructure and resources. & 100\\
+\cline{3-5}
+&   &	1.2 & Performing maintenance on enterprise assets. & 100\\
 
 \hline
-2 & Cloud design &	2.1 &	Information gathering phase. & \\
+2 & Cloud design &	2.1 &	Information gathering phase. & 100\\
 \hline
-3 & Resource provisioning &	3.1 &	Provisioning resources using IaC playbooks. & \\
+3 & Resource provisioning &	3.1 &	Provisioning resources using IaC playbooks. & 100\\
 \hline
-4 & Infrastructure setup. &	4.1 &	Infrastructure setup using IaC playbooks. & \\
+4 & Infrastructure setup. &	4.1 &	Infrastructure setup using IaC playbooks. & 100\\
 \hline
-5 & \raggedright Initial PaaS setup. &	5.1 &	Setting up ingress controller and TLS certificate provisioner.	 & \\
+\multirow{3}{1cm}{5} & \multirow{3}{3.25cm}{\raggedright Initial PaaS setup.} &	5.1 &	Setting up ingress controller and TLS certificate provisioner.	 & 100\\
 \cline{3-5}
-&   & 5.2 &	Setting distributed storage backend.	 & \\
+&   & 5.2 &	Setting distributed storage backend.	 & 100\\
 \cline{3-5}
-&   & 5.3 &	Setting up network load balancer.	 & \\
+&   & 5.3 &	Setting up network load balancer.	 & 100\\
   \hline
-6 & Deployment of CI/CD platform &	6.1 &	Setting up personalized CI/CD orchestrator.	 & \\
+\multirow{3}{1cm}{6} & \multirow{3}{3.25cm}{Deployment of CI/CD platform} &	6.1 &	Setting up personalized CI/CD orchestrator.	 & 100\\
 \cline{3-5}
-&   & 6.2 &	Setting up quality gate (CI).	 & \\
+&   & 6.2 &	Setting up quality gate (CI).	 & 100\\
 \cline{3-5}
-&   & 6.3 & Setting up CD controller.	 & \\
+&   & 6.3 & Setting up CD controller.	 & 100\\
   \hline
-7 & \raggedright Preparation of automated CICD workflows. &	7.2 &	Structuring SCM backend	 & \\
+\multirow{2}{1cm}{7} & \multirow{2}{3.25cm}{\raggedright Preparation of automated CICD workflows.} &	7.1 &	Structuring SCM backend	 & 100\\
 
 \cline{3-5}
-&   & 7.2 &	 \raggedright Using GitOPS and devOPS tools to automate CI/CD pipelines.	 & \\
+&   & 7.2 &	 \raggedright Using GitOPS and DevSecOps tools to automate CI/CD pipelines.	 & 100\\
 \hline
-\pagebreak
-\hline
-8 & \raggedright Deployment of authentication / authorization backend 	& 8.1 & \raggedright Self-managing distributed database storage backends (redis, mongoDB, postgresql).	 & \\
+
+
+\multirow{3}{1cm}{8} & \multirow{3}{3.25cm}{\raggedright Deployment of authentication / authorization backend} 	& 8.1 & \raggedright Self-managing distributed database storage backends (redis, mongoDB, postgresql).	 & 100\\
 \cline{3-5}
-&   & 8.2 &	\raggedright Deployment and configuration of authentication and authorization services.	 & \\
+&   & 8.2 &	\raggedright Deployment and configuration of authentication and authorization services.	 & 100\\
 \cline{3-5}
-&   & 8.3 &	\raggedright Configuring forward auth middlewares for secure access.	 & \\
+&   & 8.3 &	\raggedright Configuring forward auth middlewares for secure access.	 & 100\\
    \hline
-9 & \raggedright Implement a resilient disaster recovery strategy. & 9.1 &\raggedright  Provisioning cloud storage resources.		 & \\
+   \pagebreak
+   \hline
+\multirow{3}{1cm}{9} & \multirow{3}{3.25cm}{\raggedright Implement a resilient disaster recovery strategy.} & 9.1 &\raggedright  Provisioning cloud storage resources.		 & 100\\
 \cline{3-5}
-&   & 9.2 & \raggedright Preparing and applying backup strategy for application specific data.	 & \\
+&   & 9.2 & \raggedright Preparing and applying backup strategy for application specific data.	 & 100\\
 \cline{3-5}
-&   & 9.3 &	\raggedright Preparing and applying backup strategy for PaaS specific workloads.	 & \\
+&   & 9.3 &	\raggedright Preparing and applying backup strategy for PaaS specific workloads.	 & 100\\
  \hline
 \caption{ Backlog History Table }
 \end{longtable}
@@ -343,7 +343,7 @@ Formulating an understanding on functional requirements is a primordial phase in
 
 \subsection{Technological choices }
 % \paragraph{Development tools }
-In this section, we layout the cloud provider choice,
+\hspace{7mm}This section highlights the strategic decisions made regarding the technological stack and tools to be employed in the development and deployment processes. It encompasses considerations such as programming languages, frameworks, infrastructure, and automation tools, which significantly impact the efficiency and effectiveness of the DevOps practices utilized in the project.
 \subsubsection{Cloud provider choice: } 
 
 \paragraph{OVH\cite{OVHcloud}: }
@@ -352,98 +352,97 @@ A decisive factor concerning the cloud provider choice is related to company’s
 
 \paragraph{Openstack\cite{OpenStack}: }
 
-OVH uses openstack as its backing cloud computing infrastructure. Thus, conversing with components as neutron, nova, glance, swift is a must. 
+\hspace{7mm}OVH uses openstack as its backing cloud computing infrastructure. Thus, conversing with components as neutron, nova, glance, swift is a must. 
 
 \subsubsection{Infrastructure as code tools }
 
 \paragraph{Terraform\cite{Terraform}: }
 
-An industry standard for conversing with cloud providers in order to provision and configure resources. 
+\hspace{7mm}An industry standard for conversing with cloud providers in order to provision and configure resources. 
 
 \paragraph{Ansible\cite{Ansible}: }
 
-We have opted for ansible because it’s faster than its alternatives namely chef, and easier to use.  
+\hspace{7mm}We have opted for ansible because it’s faster and easier to use than its alternatives namely chef.  
 
 \subsubsection{Containerization and orchestration techniques: }
 
 \paragraph{Container orchestrator: Kubernetes v1.21\cite{Kubernetes} }
 
-An open source container orchestration tool that automates the deployment, scaling, and managing containerized applications. 
+\hspace{7mm}An open source container orchestration tool that automates the deployment, scaling, and managing containerized applications. 
 
 \paragraph{Container runtime : containerd }
 
-A daemon for linux that manages the complete container lifecycle. 
+\hspace{7mm}A daemon for linux that manages the complete container lifecycle. 
 
 \paragraph{Container platform : docker-ce v20.10 }
 
-The container management tool that uses containerd to manage container lifecycles and their underlying abstractions such as volumes and networking.  
+\hspace{7mm}The container management tool that uses containerd to manage container lifecycles and their underlying abstractions such as volumes and networking.  
 
 \paragraph{Container networking: Calico }
 
-A cloud-native plugin deployment in Kubernetes that uses the CNI API to provide a networking and security solution in the cluster. 
+\hspace{7mm}A cloud-native plugin deployment in Kubernetes that uses the CNI API to provide a networking and security solution in the cluster. 
 
 \paragraph{Container platform : docker-ce v20.10 }
 
-The container management tool that uses containerd to manage container lifecycles and their underlying abstractions such as volumes and networking. 
+\hspace{7mm}The container management tool that uses containerd to manage container lifecycles and their underlying abstractions such as volumes and networking. 
 
 \paragraph{Container networking: Calico }
 
-A cloud-native plugin deployment in Kubernetes that uses the CNI API to provide a networking and security solution in the cluster. 
-
+\hspace{7mm}A cloud-native plugin deployment in Kubernetes that uses the CNI API to provide a networking and security solution in the cluster. 
 
 \subsubsection{Self-hosted PaaS services }
 
 \paragraph{Distributed storage backend: Ceph\cite{Ceph} }
 
-A highly reliable, open source, distributed storage platform offering bloc , filesystem and object storage volumes to be leveraged by the orchestrator. 
+\hspace{7mm}A highly reliable, open source, distributed storage platform offering bloc , filesystem and object storage volumes to be leveraged by the orchestrator. 
 
 \paragraph{Ingress Controller: Traefik ingress controller }
 
-An open-source edge router serving as an ingress controller, a reverse proxy and a load balancer. 
+\hspace{7mm}An open-source edge router serving as an ingress controller, a reverse proxy and a load balancer. 
 
 \paragraph{Layer 2 load balancer: MetalLB}
 
-This opensource load balancer provides support for bare metal Kubernetes clusters using standard protocols. 
+\hspace{7mm}This opensource load balancer provides support for bare metal Kubernetes clusters using standard protocols. 
 
 \paragraph{Private registry: harbor }
 
-An open-source private registry serving as a backend to sore artifacts in a secure manner. 
+\hspace{7mm}An open-source private registry serving as a backend to sore artifacts in a secure manner. 
 
 \paragraph{Database storage (document): Redis, MongoDB }
 
-Database storage in document format is provided by a replicated mongoDB cluster. An in memory redis cluster allows for session storage. 
+\hspace{7mm}Database storage in document format is provided by a replicated mongoDB cluster. An in memory redis cluster allows for session storage. 
 
 \paragraph{Database storage (SQL): PostgreSQL }
 
-A PostgreSQL cluster in HA mode coupled with a PGpool middleware to distribute load and control replication. 
+\hspace{7mm}A PostgreSQL cluster in HA mode coupled with a PGpool middleware to distribute load and control replication. 
 
 \paragraph{Authentication middleware: Authelia }
 
-An open-source portal serving as an authentication and authorization server. It leverages the “forward auth” capability of the ingress controller to regulate access. 
+\hspace{7mm}An open-source portal serving as an authentication and authorization server. It leverages the “forward auth” capability of the ingress controller to regulate access. 
 
 \paragraph{User management: OpenLDAP }
 
-An open-source implementation of the Lightweight Directory Access Protocol that is used to manage organizational user credentials and details. 
+\hspace{7mm}An open-source implementation of the Lightweight Directory Access Protocol that is used to manage organizational user credentials and details. 
 
 \paragraph{SCM tool: Gitlab }
 
-An enterprise solution for source code management and versioning. 
+\hspace{7mm}An enterprise solution for source code management and versioning. 
 
 \paragraph{CI/CD orchestration: Jenkins }
 
-An open-source automation server which enables build, test, and deployment processes. 
+\hspace{7mm}An open-source automation server which enables build, test, and deployment processes. 
 
 \paragraph{Quality gate: SonarQube }
 
-An open-source platform that allows for continuous inspection of code quality. 
+\hspace{7mm}An open-source platform that allows for continuous inspection of code quality. 
 
 \paragraph{CD controller: ArgoCD, ArgoRollouts }
 
-An open-source declarative, GitOPS continuous delivery tool for Kubernetes. 
+\hspace{7mm}An open-source declarative, GitOPS continuous delivery tool for Kubernetes. 
 
 \paragraph{Disaster recovery: Velero }
 
-An open-source tool to safely backup and restore, perform disaster recovery, and migrate Kubernetes cluster resources and persistent volumes. 
+\hspace{7mm}An open-source tool to safely backup and restore, perform disaster recovery, and migrate Kubernetes cluster resources and persistent volumes. 
 
 \paragraph{Config formats: YAML, TOML, HCP config, JSON }
 
@@ -451,29 +450,33 @@ An open-source tool to safely backup and restore, perform disaster recovery, and
 
 \paragraph{Development IDE: VS Code }
 
-A pluggable, lightweight opensource IDE. 
+\hspace{7mm}A pluggable, lightweight opensource IDE. 
 
 \paragraph{SSH platform: Termius }
 
-A platform that offers port forwarding and secure file transfer over ssh. 
+\hspace{7mm}A platform that offers port forwarding and secure file transfer over ssh. 
 
 \subsubsection{Development languages }
 
 \paragraph{Scripting: python\cite{Python}, shell, groovy\cite{Groovy} }
 
-Shell was used to interface with the linux operating system. For conversing with APIs, an assortment of python scripts were developed to automate various tasks, namely, database backups. Jenkins pipelines and configurations were written in groovy. 
+\hspace{7mm}Shell was used to interface with the linux operating system. For conversing with APIs, an assortment of python scripts were developed to automate various tasks, namely, database backups. Jenkins pipelines and configurations were written in groovy. 
 
 \paragraph{Templating: YTT\cite{YTT}, jinja2\cite{Jinja2} }
 
-To template various configuration files that are dependent on the deployment environment, we used YTT for YAML/JSON. Jinja2 was the main templating tool for ansible playbooks. 
+\hspace{7mm}To template various configuration files that are dependent on the deployment environment, we used YTT for YAML/JSON. Jinja2 was the main templating tool for ansible playbooks. 
 
 \newpage
 
 \subsection{Architectural specifications}
 
+\hspace{7mm}This section presents the architectural specifications that form the foundation of the system's design, encompassing both the physical and logical architecture.
+
+\hspace{7mm}It outlines the structural elements, deployment models, communication protocols, and data flow patterns that define how the system is organized and operates.
+
 \subsubsection{Physical architecture}
 
-The following figure is an overview of the infrastructure resource setup. It is to be discussed in further detail in the following chapters:
+\hspace{7mm}The following figure is an overview of the infrastructure resource setup. It is to be discussed in further detail in the following chapters:
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f7.jpg}
@@ -484,7 +487,7 @@ The following figure is an overview of the infrastructure resource setup. It is 
 \newpage
 
 \subsubsection{PaaS deployment architecture} 
-Next we layout the organization of the subsystems, software classes, and layers that make the complete logical system of our PaaS infrastructure :
+\hspace{7mm}Next we layout the organization of the subsystems, software classes, and layers that make the complete logical system of our PaaS infrastructure :
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f8.jpg}
@@ -496,11 +499,11 @@ Next we layout the organization of the subsystems, software classes, and layers 
 
 \subsection{Workspace description}
 
-To implement the project, the company has provided us with the necessary hardware equipment, certified preliminary training as well as the desired cloud resources. This allowed us to engage in real-world projects, collaborate with experienced professionals, and expand our skills.
+\hspace{7mm}To implement the project, the company has provided us with the necessary hardware equipment, certified preliminary training as well as the desired cloud resources. This allowed us to engage in real-world projects, collaborate with experienced professionals, and expand our skills.
 
 \section*{Conclusion}
-In conclusion, requirement analysis plays a crucial role in any project, particularly in cloud computing and DevOps. By identifying and understanding the project's requirements, we have established a solid foundation for a successful implementation phase.
+\hspace{7mm}In conclusion, requirement analysis plays a crucial role in any project, particularly in cloud computing and DevSecOps. By identifying and understanding the project's requirements, we have established a solid foundation for a successful implementation phase.
 
-The requirement analysis process involved defining project goals, outlining user personas, and specifying technical, business, infrastructure, and application requirements. These requirements are vital in tailoring the PaaS environment to meet the organization's specific needs.
+\hspace{7mm}The requirement analysis process involved defining project goals, outlining user personas, and specifying technical, business, infrastructure, and application requirements. These requirements are vital in tailoring the PaaS environment to meet the organization's specific needs.
 
-Through a thorough requirement analysis, we ensured a well-defined and properly scoped project while managing stakeholders' expectations. This analysis provides a robust framework for informed decisions regarding the design and implementation of the PaaS environment, as well as the selection of appropriate tools and technologies.
+\hspace{7mm}Through a thorough requirement analysis, we ensured a well-defined and properly scoped project while managing stakeholders' expectations. This analysis provides a robust framework for informed decisions regarding the design and implementation of the PaaS environment, as well as the selection of appropriate tools and technologies.

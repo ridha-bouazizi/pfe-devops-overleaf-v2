@@ -3,8 +3,8 @@
 \chapter{3rd Sprint: Disaster recovery }
 \fancyhead[R]{\ungaramond\small\textbf{Chapter IV.   3rd Sprint :Disaster recovery }}
 
-\minitoc
-\newpage
+% \minitoc
+% \newpage
 \section*{Introduction}
 Disaster recovery is a critical aspect of any IT infrastructure, and Kubernetes environments are no exception. Kubernetes provides a resilient and scalable platform for deploying and managing containerized applications, but it is still vulnerable to various types of disasters such as hardware failures, data center outages, network outages, and human error. 
 
@@ -15,11 +15,11 @@ In this chapter, we will cover disaster recovery planning, backup and recovery s
 
 \section{Sprint backlog :}
 
-\begin{longtable}[H]{|m{1.5cm}|m{3cm}|m{1.5cm}|m{9cm}|}
+\begin{longtable}[H]{|m{1.5cm}|m{4cm}|m{1.5cm}|m{8cm}|}
 \hline
 {\textbf{Epic ID}} & {\textbf{Epic}} & {\textbf{Story ID}} & {\textbf{Story}}\\
 \hline
-1  & Implement a resilient disaster recovery strategy.  &  1.1	 & Provisioning cloud storage resources. \\
+\multirow{3}{1.5cm}{1} & \multirow{2}{4cm}{Implement a resilient disaster recovery strategy.}  &  1.1	 & Provisioning cloud storage resources. \\
 \cline{3-4}
 & & 1.2 & Preparing and applying a backup strategy for application specific data.  \\
 \cline{3-4}
@@ -139,4 +139,5 @@ For Kubernetes-based PaaS environments, disaster recovery planning should includ
 
 Similarly, for MongoDB and PostgreSQL database servers, disaster recovery planning should involve robust backup and restoration processes, as well as monitoring and testing procedures to identify and address potential points of failure.  
 
-Ultimately, disaster recovery planning is an ongoing process that requires continuous monitoring and refinement. 
+Ultimately, disaster recovery planning is an ongoing process that requires continuous monitoring and refinement.
+

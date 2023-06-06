@@ -3,23 +3,23 @@
 \chapter{2nd Sprint: Continuous integration and delivery }
 \fancyhead[R]{\ungaramond\small\textbf{Chapter III.  2nd Sprint: Continuous integration and delivery }}
 
-\minitoc
-\newpage
+% \minitoc
+% \newpage
 \section*{Introduction}
 
-In this chapter, we focus on setting up a streamlined Continuous Integration and Continuous Delivery (CI/CD) platform on the existing PaaS infrastructure.
+\hspace{7mm}In this chapter, we focus on setting up a streamlined Continuous Integration and Continuous Delivery (CI/CD) platform on the existing PaaS infrastructure.
 
-We explore the essential components, including database storage clusters, private artifact registries, code quality gates, GitOps-based CD controllers, and CI/CD orchestrators.
+\hspace{7mm}We explore the essential components, including database storage clusters, private artifact registries, code quality gates, GitOps-based CD controllers, and CI/CD orchestrators.
 
-Additionally, we delve into the development of CI/CD workflows, outlining the processes and steps involved in software building, testing, and deployment. By implementing these recommendations, we enhance the efficiency, reliability, and speed of software delivery within our internship project.
+\hspace{7mm}Additionally, we delve into the development of CI/CD workflows, outlining the processes and steps involved in software building, testing, and deployment. By implementing these recommendations, we enhance the efficiency, reliability, and speed of software delivery within our internship project.
 
 \section{Sprint backlog :}
 
-\begin{longtable}[H]{|m{1.5cm}|m{3cm}|m{1.5cm}|m{9cm}|}
+\begin{longtable}[H]{|m{1.5cm}|m{4cm}|m{1.5cm}|m{8cm}|}
 \hline
 {\textbf{Epic ID}} & {\textbf{Epic}} & {\textbf{Story ID}} & {\textbf{Story}}\\
 \hline
-1  & Self-hosting the ci/cd platform tools.  &  1.1	 & Setting up the CI/CD orchestrator.\\
+\multirow{4}{1.5cm}{1} & \multirow{4}{4cm}{Self-hosting the ci/cd platform tools.}  &  1.1	 & Setting up the CI/CD orchestrator.\\
 \cline{3-4}
 & & 1.2 & Setting up the container image builder. \\
 \cline{3-4}
@@ -28,7 +28,7 @@ Additionally, we delve into the development of CI/CD workflows, outlining the pr
 & & 1.4	& Setting up the continuous delivery controller. \\
 \cline{3-4}
 \hline
-2  & Setting up a GitOPS compliant CI/CD workflow for the applications in development.  &  2.1	 & Setting up the CI/CD orchestrator.\\
+\multirow{4}{1.5cm}{2} & \multirow{4}{4cm}{Setting up GitOPS compliant CI/CD workflows for the applications in development.}  &  2.1	 & Setting up the CI/CD orchestrator.\\
 \cline{3-4}
 & & 2.2 & SCM restructuring and code adaptation. \\
 \cline{3-4}
@@ -42,9 +42,11 @@ Additionally, we delve into the development of CI/CD workflows, outlining the pr
 
 \section{Components of the CI/CD platform }
 
+\hspace{7mm}This section focuses on the self-hosting approach adopted for the components of the CI/CD platform. We explore the considerations involved in hosting key elements, such as build servers, artifact repositories, and deployment tools, within the organization's infrastructure.
+
 \subsection{The database storage backend }
 
-When deploying databases like PostgreSQL, Redis, and MongoDB on Kubernetes, it is important to consider high availability and scalability as critical factors. 
+\hspace{7mm}When deploying databases like PostgreSQL, Redis, and MongoDB on Kubernetes, it is important to consider high availability and scalability as critical factors. 
 
 \subsubsection{Activity diagram for deploying the database storage backend }
 \begin{figure}[H]\centering
@@ -165,13 +167,22 @@ The resulting Dockefile is as follows :
 
 For building container images for the application under development, a technique that allows running Docker commands within a Docker container is used. To enable DinD, a Docker image is created with Docker installed inside it. Furthermore, authentication to the private registry is streamlined into the container execution.
 
-The following is the resulting Dockerfile: 
+The following is the resulting Dockerfile:
 
 \begin{listing}[H]
     \inputminted{Dockerfile}{codeListing/dind-Dockerfile}
     \caption{Dind Dockerfile}
     \label{lst:Dind Dockerfile}
 \end{listing}
+
+% \annexe{Joli tableau Vert}\ref{annexe1}
+% \label{annexe1}
+% test[1]\index{\begin{listing}
+%     \inputminted{Dockerfile}{codeListing/dind-Dockerfile}
+%     \caption{Dind Dockerfile}
+%     \label{lst:Dind Dockerfile}
+% \end{listing}
+% }
 
 \newpage
 
@@ -292,8 +303,8 @@ The following is a general diagram of the delivery process:
 
 The deployment manifests, configmaps, secrets, ingressroutes and other Kubernetes objects needed for deploying the applications are templated with each delivery using ytt. This makes the container configuration reusable and extensible.
 
-\section{Conclusion}
+\section*{Conclusion}
 
-In conclusion, this chapter successfully covers the setup of a robust CI/CD platform, incorporating essential components aligned with DevOps best practices. These components collectively enable streamlined and automated software development and delivery processes.
+In conclusion, this chapter successfully covers the setup of a robust CI/CD platform, incorporating essential components aligned with DevSecOps best practices. These components collectively enable streamlined and automated software development and delivery processes.
 
 Furthermore, we develop comprehensive CI/CD workflows that outline the steps involved in building, testing, and deploying software applications. By implementing these recommendations, we significantly enhance the efficiency, reliability, and speed of our software delivery pipeline within the internship project, contributing to its overall success.

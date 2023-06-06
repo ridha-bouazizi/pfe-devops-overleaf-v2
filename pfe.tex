@@ -1,4 +1,6 @@
 \documentclass{classes/memoire}
+\usepackage{makeidx}
+
 \usepackage{minted}
 \setminted[]{
     xleftmargin=.75cm,
@@ -55,7 +57,6 @@
 % \renewcommand\lstlistoflistingscaption{List of source codes}
 \renewcommand{\mtctitle}{Table of contents}
 \begin{document}
-
 %\frontmatter
 \include{frontmatter/pagedegarde/pagedegarde}
 
@@ -64,15 +65,25 @@
 \include{frontmatter/resume/resume}
 \include{frontmatter/dedicaces/dedicaces}
 \include{frontmatter/remerciements/remerciements}
-%\ungaramond
+\ungaramond
 %\pagestyle{empty}
-\dominitoc 
-\tableofcontents
-\listoftables 
-\listoffigures
-\hypersetup{bookmarksdepth=-1} % add this line (to disable bookmarks)
-\listoflistings
-\hypersetup{bookmarksdepth} % add this line (to enable bookmarks)
+\pagestyle{empty}
+\dominitoc \thispagestyle{empty}
+\pagestyle{empty}
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\tableofcontents \thispagestyle{empty}
+\newpage
+\pagestyle{empty}
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\listoftables  \thispagestyle{empty}
+\newpage  \thispagestyle{empty}
+\pagestyle{empty}
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\listoffigures \thispagestyle{empty}
+\newpage
+\pagestyle{empty}
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\listoflistings  \thispagestyle{empty}
 \garamond
 \include{frontmatter/glossaire}
 \include{chapitres/introduction}
@@ -81,13 +92,13 @@
 \include{chapitres/NewLayout/Chapter3}
 \include{chapitres/NewLayout/Chapter4}
 \include{chapitres/conclusion}
+ \thispagestyle{empty}
+\include{frontmatter/biblio}
 
-\bibliographystyle{unsrt}
-\nocite{*}
-\bibliography{bibliographie}
-
-
-
-%\include{frontmatter/Referencement}
+% \printindex
+ \thispagestyle{empty}
+\include{frontmatter/Referencement}
 \include{frontmatter/pagedegarde/end}
+
+
 \end{document}
