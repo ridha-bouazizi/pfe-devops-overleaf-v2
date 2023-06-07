@@ -33,7 +33,7 @@
 & & 2.3	& Setting up the load balancer. \\
 \cline{3-4}
 \hline
-\caption{1st sprint Backlog}
+\caption{Backlog of the 1st Sprint}
 \end{longtable}
 \section{Overview and maintenance of the existing resources}
 \subsection{Maintenance operations}
@@ -43,7 +43,7 @@ The following figure is the deployment diagram of the resulting docker-compose s
 
  \begin{figure}[H] 
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f99.png}
-\caption{PaaS infrastructure}
+\caption{Layout of the migrated stacks on docker swarm.}
 \label{fig:f9}
 \end{figure}
 
@@ -61,7 +61,7 @@ The following figure is the deployment diagram of the resulting docker-compose s
 
  \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f10.png}
-\caption{ Deployment Diagram }
+\caption{ Deployment Diagram of SystnapsDM (old strategy)}
 \label{fig:DeploymentDiagram}
 \end{figure}
 
@@ -88,7 +88,7 @@ The following figure is the deployment diagram of the resulting docker-compose s
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.7\textwidth,angle=00]{assets/f11.jpg}
-\caption{Package diagram of cloud resources }
+\caption{Package diagram of the cloud resources to be provisioned.}
 \label{fig:Package diagram of cloud resources }
 \end{figure}
 
@@ -145,17 +145,17 @@ Configuration & Declarative  & Declarative & Imperative \\
 \hspace{7mm}The following diagram showcases the interaction between the infrastructure as code tools and the cloud provider as well as the resulting infrastructure, its components, and the relation between them. 
 \begin{figure}[H]\centering
 \includegraphics[width=0.85\textwidth,angle=00]{assets/f13.png}
-\caption{Class Diagram for cloud infrastructure}
+\caption{Class Diagram for the cloud infrastructure.}
 \label{fig:fig13}
 \end{figure}
 
-\subsection{“HCP config” diagram for cloud provisioning: }
+\subsection{“HCP config” diagram for the resource provisioning: }
 
 \hspace{7mm}The following figure illustrates the main resources declared in our terraform “HCP config”: 
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.8\textwidth]{assets/f14.png}
-\caption{Diagram for cloud provisionning}
+\caption{HCP Diagram for the provisionning of cloud resources.}
 \label{fig:fig14}
 \end{figure}
 \newpage
@@ -176,7 +176,7 @@ Configuration & Declarative  & Declarative & Imperative \\
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f15.png}
-\caption{Component diagram of provisioned resources}
+\caption{Component diagram of the provisioned cloud resources}
 \label{fig:fig15}
 \end{figure}
 
@@ -190,7 +190,7 @@ Configuration & Declarative  & Declarative & Imperative \\
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f16.png}
-\caption{Sequence diagram for infrastructure setup}
+\caption{Sequence diagram for the infrastructure setup}
 \label{fig:Sequence diagram for infrastructure setup}
 \end{figure}
 
@@ -207,7 +207,7 @@ Configuration & Declarative  & Declarative & Imperative \\
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f19.png}
-\caption{Orchestrated cluster setup}
+\caption{Composite diagram for stting up the Orchestrated cluster.}
 \label{fig:Orchestrated cluster setup}
 \end{figure}
 
@@ -244,7 +244,7 @@ Additionally, it includes the distributed storage backend for reliable and scala
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.85\textwidth,angle=00]{assets/f22.png}
-\caption{ Networking services}
+\caption{ Overview on the networking services.}
 \label{fig:Networking services}
 \end{figure}
 
@@ -270,7 +270,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f23.png}
-\caption{LoadBalancer service }
+\caption{Sample "LoadBalancer" service }
 \label{fig:LoadBalancer}
 \end{figure}
 
@@ -301,7 +301,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f25.png}
-\caption{ Dashboard of traefik }
+\caption{ Observability dashboard of the ingress controller. }
 \label{fig:dashboard of traefik}
 \end{figure}
 
@@ -325,7 +325,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.9\textwidth,angle=00]{assets/f51.png}
-\caption{Conceptual overview }
+\caption{Conceptual overview on the authentication service stack. }
 \label{fig:f51}
 \end{figure} 
 
@@ -343,7 +343,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f52.png}
-\caption{Figure 52 }
+\caption{Management web ui of the LDAP registry.}
 \label{fig:f52}
 \end{figure} 
 
@@ -364,7 +364,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.8\textwidth,angle=00]{assets/f53.png}
-\caption{Figure 53 }
+\caption{Deployment diagram of the replicated Redis Cluster.}
 \label{fig:f53}
 \end{figure}
 
@@ -375,7 +375,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 \hspace{7mm}The following is an overview of the deployed resources: 
 \begin{figure}[H]\centering
 \includegraphics[width=0.8\textwidth,angle=00]{assets/f54.png}
-\caption{Deployed resources}
+\caption{Deployed services related to authelia.}
 \label{fig:f54}
 \end{figure}
 
@@ -386,7 +386,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 \hspace{7mm}The following figure shows the authentication portal as seen by an external user: 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f55.png}
-\caption{Authentication portal}
+\caption{The authentication portal as seen by an external user.}
 \label{fig:f55}
 \end{figure}
 
@@ -410,7 +410,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.72\textwidth,angle=00]{assets/f26.png}
-\caption{Architectural overview on storage}
+\caption{Architectural overview on the distributed storage service.}
 \label{fig:Architectural overview on storage}
 \end{figure}
 
@@ -429,7 +429,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 \hspace{7mm}Using the ingress controller, a dashboard for “ceph” is exposed and allows for observability on the storage backend: 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f29.png}
-\caption{Ceph Dashboard }
+\caption{Observability dashboard of the distributed storage sevice. }
 \label{fig:Ceph Dashboard }
 \end{figure}
 
@@ -445,7 +445,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f31.png}
-\caption{Filesystem Storage}
+\caption{Provisioning volumes using the "Filesystem" StorageClass. }
 \label{fig:Filesystem Storage}
 \end{figure}
 
@@ -466,7 +466,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f32.png}
-\caption{Object Storage mode }
+\caption{Leveraging the object storage mode }
 \label{fig:Object Storage mode}
 \end{figure}
 
@@ -478,7 +478,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f33.png}
-\caption{Block Storage Procedure}
+\caption{The Block Storage capability of the distributed storage service.}
 \label{fig:Block Storage Procedure}
 \end{figure}
 
@@ -487,7 +487,7 @@ MetalLB is used to provide network load balancing for services running in the cl
 \hspace{7mm}The following diagram provides an overview on the storage capabilities of ceph : 
 \begin{figure}[H]\centering
 \includegraphics[width=0.8\textwidth,angle=00]{assets/f30.png}
-\caption{Storage capabilities Diagram}
+\caption{Summary on the storage capabilities of our PaaS platform.}
 \label{fig:f30}
 \end{figure}
 \section*{Conclusion}

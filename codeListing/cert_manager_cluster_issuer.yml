@@ -18,6 +18,6 @@ spec:
             endpoint: ovh-eu
             applicationKey: 'f59ceb03dbc77ac3'
             applicationSecretRef:         ###\
-              key: applicationSecret        ###> "application_secret" field pulled from a secret
+              key: applicationSecret        ###> "application_secret"
               name: ovh-credentials       ###/
             consumerKey: '1eab12c9e62abd464a0937748ae896dd'

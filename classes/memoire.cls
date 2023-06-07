@@ -241,9 +241,9 @@
 %   labelsep=colon,
 %   skip = \medskipamount}
 
-\renewcommand{\thefigure}{\Roman{section}.\arabic{figure}\space}
-\renewcommand{\thetable}{\Roman{section}.\arabic{table}\space}
-\renewcommand{\thelisting}{\Roman{section}.\arabic{listing}\space}
+\renewcommand{\thefigure}{\Roman{chapter}.\arabic{figure}\space}
+\renewcommand{\thetable}{\Roman{chapter}.\arabic{table}\space}
+\renewcommand{\thelisting}{\Roman{chapter}.\arabic{listing}\space}
 \usepackage{rotating}
 % \usepackage{multicol}
 % \setlength\columnsep{3ex}

@@ -37,12 +37,12 @@
 & & 2.4	& Developing GitOPS oriented pipelines for the build, scan, and deliver phases in the various environments.  \\
 \cline{3-4}
 \hline
-\caption{2nd Sprint Backlog}
+\caption{Backlog of the 2nd Sprint}
 \end{longtable}
 
 \section{Components of the CI/CD platform }
 
-\hspace{7mm}This section focuses on the self-hosting approach adopted for the components of the CI/CD platform. We explore the considerations involved in hosting key elements, such as build servers, artifact repositories, and deployment tools, within the organization's infrastructure.
+\hspace{7mm}This section focuses on the self-hosting approach adopted for the components of the CI/CD platform. We explore the considerations involved in hosting key elements, such as database storage clusters, build servers, artifact repositories, and deployment tools, within the organization's infrastructure.
 
 \subsection{The database storage backend }
 
@@ -57,55 +57,63 @@
 
 \subsubsection{Replicated MongoDB }
 
-MongoDB is a popular NoSQL database that supports horizontal scaling through sharding and replication.
+\hspace{7mm}Using a Kubernetes StatefulSet, we deployed multiple MongoDB instances in a replicated configuration and configured MongoDB replication for data synchronization.
 
-Using a Kubernetes StatefulSet, we deployed multiple MongoDB instances in a replicated configuration and configured MongoDB replication for data synchronization.
-
-The following figure illustrates the workloads put in place for the replicated mongodb cluster: 
+\hspace{7mm}The following figure illustrates the workloads put in place for the replicated mongodb cluster: 
 
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.7\textwidth,angle=00]{assets/f36.png}
-\caption{MongoDB Workloads }
+\includegraphics[width=1.0\textwidth,angle=00]{assets/f36.png}
+\caption{Deployment diagram for the MongoDB Workloads }
 \label{fig:MongoDB Workloads}
 \end{figure}
 
-With this setup, we obtained a highly available and scalable MongoDB database infrastructure for your containerized applications. 
+\hspace{7mm}By implementing this setup, we have achieved a MongoDB database infrastructure that is both highly available and scalable, ensuring optimal performance for our containerized applications.
+
+\hspace{7mm}The combination of containerization and a highly available architecture for MongoDB enables us to efficiently handle increased workloads and provides seamless access to data, even in the event of failures or during periods of high demand.
+
+\hspace{7mm}This setup enhances the reliability and scalability of our database infrastructure, resulting in improved overall performance and responsiveness for our applications.
+
+\newpage
 
 \subsubsection{HA PostgreSQL }
 
-Highly Available (HA) PostgreSQL on Kubernetes involves deploying multiple PostgreSQL instances that are managed by the replication middleware pgpool and are configured in a primary-standby replication configuration.
+\hspace{7mm}To achieve Highly Available (HA) PostgreSQL on Kubernetes, we employ a deployment strategy that involves setting up multiple PostgreSQL instances. These instances are managed by the replication middleware, pgpool, and are configured in a primary-standby replication configuration.
+
+\hspace{7mm}In this configuration, one PostgreSQL instance always operates as the primary node, responsible for accepting all write and update operations. The other instances serve as standby nodes, continuously replicating data from the primary node to ensure data consistency and availability.
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f37.png}
-\caption{HA PostgreSQL Workloads}
+\caption{Deployment diagram for the HA PostgreSQL Workloads}
 \label{fig:f37}
 \end{figure}
 
-This configuration ensures that one PostgreSQL instance always serves as the primary node that accepts all writes and updates, while the other instances act as standby nodes that replicate data from the primary node.
+\hspace{7mm}By implementing this HA setup, we ensure that our PostgreSQL database remains resilient and highly available. In the event of a failure or outage affecting the primary node, one of the standby nodes can seamlessly take over as the new primary node, ensuring uninterrupted service and data integrity.
+
+\hspace{7mm}This replication configuration enhances the reliability and fault tolerance of our PostgreSQL cluster, providing a robust solution for high availability in a Kubernetes environment.
 
 \newpage
 
 \subsection{The artifact registry }
 
-In a CI/CD platform, having an artifact registry is necessary to allows users to store, sign, and scan container images for vulnerabilities. This has been tackled using harbor. It also provides features such as user management, access control, and replication for distributing images across multiple registry instances. 
+\hspace{7mm}In a CI/CD platform, having an artifact registry is necessary to allows users to store, sign, and scan container images for vulnerabilities. This has been tackled using harbor. It also provides features such as user management, access control, and replication for distributing images across multiple registry instances. 
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.85\textwidth,angle=00]{assets/f39.png}
-\caption{diagram for deploying the artifact registry }
+\caption{Activity diagram for deploying the artifact registry }
 \label{fig:diagram for deploying the artifact registry}
 \end{figure}
 
-The following is an illustration on the deployed services for container image storage: 
+\hspace{7mm}The following is an illustration on the deployed services for container image storage: 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f40.png}
-\caption{deployed services}
+\caption{Deployment diagram for the artifact registry services.}
 \label{fig:Deployed services}
 \end{figure}
 
 \subsection{The code quality gate}
 
-Software development is a complex and iterative process, and it is important to have tools that can help identify and address issues in the codebase as early as possible. 
+\hspace{7mm}Software development is a complex and iterative process, and it is important to have tools that can help identify and address issues in the codebase as early as possible. 
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.6\textwidth,angle=00]{assets/f41.png}
@@ -113,35 +121,35 @@ Software development is a complex and iterative process, and it is important to 
 \label{fig:Activity diagram for deploying the code quality gate}
 \end{figure}
 
-SonarQube is a powerful code quality and security analysis tool that can be integrated with Kubernetes to help ensure that the code running in your Kubernetes environment is of high quality and secure.
+\hspace{7mm}SonarQube is a powerful code quality and security analysis tool that can be integrated with Kubernetes to help ensure that the code running in your Kubernetes environment is of high quality and secure.
 
-Using the “ansible.builtin.uri” module, a POST request is sent to the SonarQube api to change the default admin password and generate a global token to be used by the cicd orchestrator. This token is then stored in a Kubernetes secret.
+\hspace{7mm}Using the “ansible.builtin.uri” module, a POST request is sent to the SonarQube api to change the default admin password and generate a global token to be used by the cicd orchestrator. This token is then stored in a Kubernetes secret.
 
 \subsection{CD/CD controller }
 
-For the continuous deployment and continuous delivery aspect of our pipelines, we chose to use ArgoCD. 
+\hspace{7mm}For the continuous deployment and continuous delivery aspect of our pipelines, we chose to use ArgoCD. 
 
-Our CD/CD controller is characterized by a GitOps-based approach, utilizing GitLab as our preferred source code management system.
+\hspace{7mm}Our CD/CD controller is characterized by a GitOps-based approach, utilizing GitLab as our preferred source code management system.
 
-With automated deployments triggered by changes in respective Git repositories, manual deployments are eliminated, ensuring continuous updates. Employing declarative configuration management, we define the desired state of Kubernetes workloads in a configuration file, which is then enforced by ArgoCD. 
+\hspace{7mm}With automated deployments triggered by changes in respective Git repositories, manual deployments are eliminated, ensuring continuous updates. Employing declarative configuration management, we define the desired state of Kubernetes workloads in a configuration file, which is then enforced by ArgoCD. 
 
-Additionally, ArgoCD offers a web-based interface to monitor deployed workloads and their synchronization status. 
+\hspace{7mm}Additionally, ArgoCD offers a web-based interface to monitor deployed workloads and their synchronization status. 
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f43.png}
-\caption{ AgroCD interface }
+\caption{ Observability and management interface of the "CD Controller" }
 \label{fig:AgroCD interface}
 \end{figure}
 
-With declarative configuration management and ArgoCD's web-based interface, monitoring and maintaining deployed workloads become streamlined and efficient.
+\hspace{7mm}With declarative configuration management and ArgoCD's web-based interface, monitoring and maintaining deployed workloads become streamlined and efficient.
 
 \newpage
 
 \subsection{CI/CD orchestrator }
 
-Jenkins, our CI/CD orchestrator of choice, provides a wide range of features and plugins that can be used to automate various stages of the software development process, including building, testing, and deploying applications.
+\hspace{7mm}Jenkins, our CI/CD orchestrator of choice, provides a wide range of features and plugins that can be used to automate various stages of the software development process, including building, testing, and deploying applications.
 
-The following is the activity diagram for deploying it. 
+\hspace{7mm}The following is the activity diagram for deploying it. 
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.6\textwidth,angle=00]{assets/f44.png}
@@ -151,38 +159,29 @@ The following is the activity diagram for deploying it.
  
 \subsubsection{The personalized jenkins container image: }
 
-As a CI/CD orchestrator, Jenkins acts as a central hub that integrates with various tools and systems involved in the software development pipeline. The container image for this deployment is prepackaged with the initial configuration of the various cloud providers we are using, the server tokens and access credentials. Thus, the container image is ready to go as soon as it is deployed.
+\hspace{7mm}As a CI/CD orchestrator, Jenkins acts as a central hub that integrates with various tools and systems involved in the software development pipeline. The container image for this deployment is prepackaged with the initial configuration of the various cloud providers we are using, the server tokens and access credentials. Thus, the container image is ready to go as soon as it is deployed.
 
 \newpage
 
-The resulting Dockefile is as follows : 
+\hspace{7mm}The resulting Dockefile is as follows : 
 
 \begin{listing}[H]
     \inputminted{Dockerfile}{codeListing/jenkins_Dockerfile}
-    \caption{Jenkins Dockerfile}
+    \caption{Dockerfile for the custom container image of "Jenkins".}
     \label{lst:Jenkins Dockerfile}
 \end{listing}
 
 \subsubsection{The Docker in Docker container image: }
 
-For building container images for the application under development, a technique that allows running Docker commands within a Docker container is used. To enable DinD, a Docker image is created with Docker installed inside it. Furthermore, authentication to the private registry is streamlined into the container execution.
+\hspace{7mm}For building container images for the application under development, a technique that allows running Docker commands within a Docker container is used. To enable DinD, a Docker image is created with Docker installed inside it. Furthermore, authentication to the private registry is streamlined into the container execution.
 
-The following is the resulting Dockerfile:
+\hspace{7mm}The following is the resulting Dockerfile:
 
 \begin{listing}[H]
     \inputminted{Dockerfile}{codeListing/dind-Dockerfile}
-    \caption{Dind Dockerfile}
+    \caption{Dockerfile for the Docker in Docker container image.}
     \label{lst:Dind Dockerfile}
 \end{listing}
-
-% \annexe{Joli tableau Vert}\ref{annexe1}
-% \label{annexe1}
-% test[1]\index{\begin{listing}
-%     \inputminted{Dockerfile}{codeListing/dind-Dockerfile}
-%     \caption{Dind Dockerfile}
-%     \label{lst:Dind Dockerfile}
-% \end{listing}
-% }
 
 \newpage
 
@@ -190,9 +189,9 @@ The following is the resulting Dockerfile:
 
 \subsection{UML Design: Activity diagram for the CI/CD workflows } 
 
-Through this chapter, various CI/CD tools have been self-hosted in a complementary manner. Taking advantage of these services, we are aiming to provide a reliable workflow to funnel the developed workloads through the various steps of code analysis, containerized artifact building, and deployment in different environments.
+\hspace{7mm}Through this chapter, various CI/CD tools have been self-hosted in a complementary manner. Taking advantage of these services, we are aiming to provide a reliable workflow to funnel the developed workloads through the various steps of code analysis, containerized artifact building, and deployment in different environments.
 
-The following is an activity diagram underlining the various interfaces, actors, and actions of these processes: 
+\hspace{7mm}The following is an activity diagram underlining the various interfaces, actors, and actions of these processes: 
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f45.png}
@@ -201,7 +200,8 @@ The following is an activity diagram underlining the various interfaces, actors,
 \end{figure}
 
 \subsection{UML Design: Sequence diagram of the CI/CD workflow }
-Next, let’s look at the sequence diagram for the CI/CD workflow. It provides a visual representation of how code is built, tested, and deployed, highlighting the order and dependencies of each step.
+
+\hspace{7mm}Next, let’s look at the sequence diagram for the CI/CD workflow. It provides a visual representation of how code is built, tested, and deployed, highlighting the order and dependencies of each step.
 \begin{figure}[H]\centering
 \begin{sideways}
 \includegraphics[height=1.0\textwidth,angle=00]{assets/f46.png}
@@ -214,97 +214,100 @@ Next, let’s look at the sequence diagram for the CI/CD workflow. It provides a
 
 \subsubsection{Architecture of the software under development }
 
-Among the proprietary software developed by the company, we have “SYSTNAPS” which is used for data processing by a few well known companies such as “Dassault-Systems” and others. It is mainly composed of three major parts as shown in the diagram below : 
+\hspace{7mm}Among the proprietary software developed by the company, we have “SystnapsDM” which is used for data processing by a few well known companies such as “Dassault-Systems” and others. It is mainly composed of three major parts as shown in the diagram below : 
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f47.png}
-\caption{Architecture of the software under development}
+\caption{Architecture of "SystnapsDM"}
 \label{fig:Architecture of the software under development}
 \end{figure}
 
-The backend api interacts with the frontend by providing the implemented computing functions. It also uses a utility api which uses puppeteer and various other libraries for graph rendering. Both relational and document databases are used for data storage. Some of the data is stored in document format in an S3 compatible storage backend.
+\hspace{7mm}The backend api interacts with the frontend by providing the implemented computing functions. It also uses a utility api which uses puppeteer and various other libraries for graph rendering. Both relational and document databases are used for data storage. Some of the data is stored in document format in an S3 compatible storage backend.
 
 \subsubsection{Containerizing artifacts:}
 
-Container images for the application components are built inside the docker in docker instance we have previously build. It is configured to be able to authenticate with the private registry to pull the base image and push the resulting artifact. 
+\hspace{7mm}Container images for the application components are built inside the docker in docker instance we have previously build. It is configured to be able to authenticate with the private registry to pull the base image and push the resulting artifact. 
 
 \subsubsubsection{The backend API container image }
 
-For building the container image for the backend api, we first build a base image which contains most of the packages and immutable config. 
+\hspace{7mm}For building the container image for the backend api, we first build a base image which contains most of the packages and immutable config. 
 
-Using the base image, we then build the final artifact which is pluggable using secrets and configmaps on one side. On the other side, the artifact is cutomizable on the fly by leveraging templating techniques that rely on both ytt and jinja2. Ytt templating relies on environment variables that are declared with the actual pod. In the absence of such variables, a default schema containing a dictionary of data is bootstrapped.
-The resulting dockerfile for the actual container image has been added for reference in the annex. 
+\hspace{7mm}Using the base image, we then build the final artifact which is pluggable using secrets and configmaps on one side. On the other side, the artifact is cutomizable on the fly by leveraging templating techniques that rely on both ytt and jinja2.
+
+\hspace{7mm}Ytt templating relies on environment variables that are declared with the actual pod. In the absence of such variables, a default schema containing a dictionary of data is bootstrapped.
+
+\hspace{7mm}The resulting dockerfile for the actual container image has been added for reference in the annex. 
 
 \subsubsubsection{The frontend container image }
 
-As with the backend part, this image is built from a base that contains all that is immutable. The final frontend part of the application follows a multi-stage build process. The first stage collects environmet variables and compiles the TypeScript code, bundles the assets, and generates the final production-ready output files.
+\hspace{7mm}As with the backend part, this image is built from a base that contains all that is immutable. The final frontend part of the application follows a multi-stage build process. The first stage collects environmet variables and compiles the TypeScript code, bundles the assets, and generates the final production-ready output files.
 
-In the second stage, it uses the nginx base image. It copies the compiled code from the previous build stage into the runtime environment, exposes the necessary ports and restarts the nginx service.
+\hspace{7mm}In the second stage, it uses the nginx base image. It copies the compiled code from the previous build stage into the runtime environment, exposes the necessary ports and restarts the nginx service.
 
-Configuration files for the nginx server are later templated using jinja2 in an init container.
+\hspace{7mm}Configuration files for the nginx server are later templated using jinja2 in an init container.
 
 \newpage
 
 \subsubsection{CI: Code quality }
 
-To ensure code quality, the first step is to scan the developed code of both the frontend, backend and utility for vulnerabilities and other irregularities.  
+\hspace{7mm}To ensure code quality, the first step is to scan the developed code of both the frontend, backend and utility for vulnerabilities and other irregularities.  
 
-A quality gate is then used to inform the cicd orchestrator of the level of stability. The following diagram showcases the involved processes of this stage: 
+\hspace{7mm}A quality gate is then used to inform the cicd orchestrator of the level of stability. The following diagram showcases the involved processes of this stage: 
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth,angle=00]{assets/f48.png}
-\caption{ Conceptual design of Code quality }
+\caption{ Conceptual design for the "Code quality" pipeline.}
 \label{fig:conceptual design of Code quality }
 \end{figure}
 
-As illustrated in this figure, the code scanning process is initiated by our orchestrator following each accepted merge request in the SCM.
+\hspace{7mm}As illustrated in this figure, the code scanning process is initiated by our orchestrator following each accepted merge request in the SCM.
 
-During this stage, a SonarQube analysis is performed on the code. The pipeline makes a POST request to create a SonarQube project and then executes the SonarQube scanner to analyze the code quality and generate relevant metrics. The SonarQube server URL, authentication credentials, and project details are provided in the POST request.
+\hspace{7mm}During this stage, a SonarQube analysis is performed on the code. The pipeline makes a POST request to create a SonarQube project and then executes the SonarQube scanner to analyze the code quality and generate relevant metrics. The SonarQube server URL, authentication credentials, and project details are provided in the POST request.
 
-The pipeline also includes a post-build step that ensures the workspace is cleaned up after the pipeline execution, removing any residual files and directories.
+\hspace{7mm}The pipeline also includes a post-build step that ensures the workspace is cleaned up after the pipeline execution, removing any residual files and directories.
  
 
 \subsubsection{CI: Building artifacts}
 
-Containerizing the applications contributes to portability, consistency, and resource efficiency of the workloads to be deployed. Following each approved merge request, a build step is processed. 
+\hspace{7mm}Containerizing the applications contributes to portability, consistency, and resource efficiency of the workloads to be deployed. Following each approved merge request, a build step is processed. 
 
-The following diagram illustrates this process and the interaction between the key components: 
+\hspace{7mm}The following diagram illustrates this process and the interaction between the key components: 
 
 \begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f48.png}
-\caption{Conceptual design of building artifact }
+\includegraphics[width=1.0\textwidth,angle=00]{assets/f49.png}
+\caption{Conceptual design on the pipeline for building artifacts.}
 \label{fig:Conceptual design of building artifact }
 \end{figure}
 
-In similar fashion to the code scanning step, building artifacts is initiated following each approved merge request. A webhook is sent by the SCM tool to Jenkins which starts the job using the following pipeline: 
+\hspace{7mm}In similar fashion to the code scanning step, building artifacts is initiated following each approved merge request. A webhook is sent by the SCM tool to Jenkins which starts the job using the following pipeline: 
 
-The build and publish steps are processed in a DinD agent spun inside the Kubernetes cluster. The agent is provided with the necessary credentials to authenticate with the private registry as well as a persistent volume in which it stores the cache data of image layers. 
+\hspace{7mm}The build and publish steps are processed in a DinD agent spun inside the Kubernetes cluster. The agent is provided with the necessary credentials to authenticate with the private registry as well as a persistent volume in which it stores the cache data of image layers. 
 
-For each build process, the name and tag of the image are programmatically extracted both from the respective repository name in the SCM and the release tag. 
+\hspace{7mm}For each build process, the name and tag of the image are programmatically extracted both from the respective repository name in the SCM and the release tag. 
 
 \subsubsection{CD: Delivering artifacts }
 
-For delivering artifacts, the CI/CD orchestrator, Jenkins, is used in conjunction with argocd, our CD/CD controller. ArgoCD uses deployment manifests pushed to the SCM in order to create the workload objects. 
+\hspace{7mm}For delivering artifacts, the CI/CD orchestrator, Jenkins, is used in conjunction with argocd, our CD/CD controller. ArgoCD uses deployment manifests pushed to the SCM in order to create the workload objects. 
 
-The product delivery process is initiated in any of these cases depending on the rollout strategy: 
+\hspace{7mm}The product delivery process is initiated in any of these cases depending on the rollout strategy: 
 
 \begin{itemize}[label={--}]
 \item A release tag is pushed to the SCM. 
 \item A newer container image with the same tag is pushed to \item the private registry. 
 \end{itemize}
 
-The following is a general diagram of the delivery process: 
+\hspace{7mm}The following is a general diagram of the delivery process: 
 
 \begin{figure}[H]\centering
-\includegraphics[width=1.0\textwidth,angle=00]{assets/f49.png}
-\caption{Conceptual design of Delivering artifacts }
+\includegraphics[width=0.9\textwidth,angle=00]{assets/f50.png}
+\caption{Conceptual design for the application delivery pipeline.}
 \label{fig:Conceptual design of Delivering artifacts }
 \end{figure}
 
-The deployment manifests, configmaps, secrets, ingressroutes and other Kubernetes objects needed for deploying the applications are templated with each delivery using ytt. This makes the container configuration reusable and extensible.
+\hspace{7mm}The deployment manifests, configmaps, secrets, ingressroutes and other Kubernetes objects needed for deploying the applications are templated with each delivery using ytt. This makes the container configuration reusable and extensible.
 
 \section*{Conclusion}
 
-In conclusion, this chapter successfully covers the setup of a robust CI/CD platform, incorporating essential components aligned with DevSecOps best practices. These components collectively enable streamlined and automated software development and delivery processes.
+\hspace{7mm}In conclusion, this chapter successfully covers the setup of a robust CI/CD platform, incorporating essential components aligned with DevSecOps best practices. These components collectively enable streamlined and automated software development and delivery processes.
 
-Furthermore, we develop comprehensive CI/CD workflows that outline the steps involved in building, testing, and deploying software applications. By implementing these recommendations, we significantly enhance the efficiency, reliability, and speed of our software delivery pipeline within the internship project, contributing to its overall success.
+\hspace{7mm}Furthermore, we develop comprehensive CI/CD workflows that outline the steps involved in building, testing, and deploying software applications. By implementing these recommendations, we significantly enhance the efficiency, reliability, and speed of our software delivery pipeline within the internship project, contributing to its overall success.
