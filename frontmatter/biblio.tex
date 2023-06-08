@@ -1,12 +1,13 @@
-\thispagestyle{empty}
-\thispagestyle{empty}
+\renewcommand{\thepage}{}
+\pagestyle{empty}
+\renewcommand{\thispagestyle}[1]{}
+\clearpage
+%\addcontentsline{toc}{chapter}{Bibliography}
+%\bibliographystyle{unsrt}
+%
 
-\addcontentsline{toc}{chapter}{Bibliography}
+\cftaddtitleline{toc}{chapter}{Bibliography}{}
 \bibliographystyle{unsrt}
 \nocite{*}
-
-\thispagestyle{empty}
-\thispagestyle{empty}
-
-\bibliography{bibliographie}\thispagestyle{empty}
+\bibliography{bibliographie}
 \newpage

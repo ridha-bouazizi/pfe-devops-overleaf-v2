@@ -37,7 +37,6 @@
      breaklines=true
  }
 \usepackage[most]{tcolorbox}
-  % image landscape
 \usepackage{rotating}
 \usepackage{pdflscape}
 \usepackage{wrapfig}
@@ -46,44 +45,54 @@
 \usepackage{garamond}
 \usepackage{comment}
 \usepackage{geometry}
-% \usepackage[options]{nohyperref}
-% \PassOptionsToPackage{russian}{babel}
+
  \geometry{
  a4paper,
  total={170mm,257mm},
  left=20mm,
  top=20mm,
  }
-% \renewcommand\lstlistoflistingscaption{List of source codes}
 \renewcommand{\mtctitle}{Table of contents}
 \begin{document}
-%\frontmatter
 \include{frontmatter/pagedegarde/pagedegarde}
 
 \include{frontmatter/sign}
-%\garamond
 \include{frontmatter/resume/resume}
 \include{frontmatter/dedicaces/dedicaces}
 \include{frontmatter/remerciements/remerciements}
 \ungaramond
-%\pagestyle{empty}
+
 \pagestyle{empty}
-\dominitoc \thispagestyle{empty}
-\pagestyle{empty}
-\addtocontents{toc}{\protect\thispagestyle{empty}}
-\tableofcontents \thispagestyle{empty}
-\newpage  \thispagestyle{empty}
-\pagestyle{empty}
-\addtocontents{toc}{\protect\thispagestyle{empty}}
-\listoffigures \thispagestyle{empty}
+{
+  \renewcommand{\thispagestyle}[1]{}
+  \tableofcontents
+}
+\clearpage
+
 \newpage
 \pagestyle{empty}
-\addtocontents{toc}{\protect\thispagestyle{empty}}
-\listoftables  \thispagestyle{empty}
+{
+  \renewcommand{\thispagestyle}[1]{}
+  \listoffigures 
+}
+\clearpage
+
 \newpage
 \pagestyle{empty}
-\addtocontents{toc}{\protect\thispagestyle{empty}}
-\listoflistings  \thispagestyle{empty}
+{
+  \renewcommand{\thispagestyle}[1]{}
+  \listoftables
+}
+\clearpage
+\newpage
+\pagestyle{empty}
+{
+  \renewcommand{\thispagestyle}[1]{}
+  \listoflistings
+}
+\clearpage
+
+
 \garamond
 \include{frontmatter/glossaire}
 \include{chapitres/introduction}
@@ -92,12 +101,8 @@
 \include{chapitres/NewLayout/Chapter3}
 \include{chapitres/NewLayout/Chapter4}
 \include{chapitres/conclusion}
- \thispagestyle{empty}
-\include{frontmatter/biblio}
-
-% \printindex
- \thispagestyle{empty}
 \include{frontmatter/Referencement}
+\include{frontmatter/biblio}
 \include{frontmatter/pagedegarde/end}
 
 

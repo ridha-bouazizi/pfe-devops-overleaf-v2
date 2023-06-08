@@ -77,7 +77,7 @@
     \renewcommand{\headrulewidth}{0pt}
     \fancyfoot[L]{\ungaramond\small\textbf{Ridha Bouazizi}}
     \fancyfoot[C]{}
-    \fancyfoot[R]{\ungaramond\small\textbf{Page \thepage\ sur\ \pageref{LastPage}}}
+    \fancyfoot[R]{\ungaramond\small\textbf{Page \thepage\ of\ \pageref{mylastpage}}}
 }
 
 \setcounter{tocdepth}{2} 

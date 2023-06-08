@@ -1,12 +1,16 @@
-\thispagestyle{empty}
-\thispagestyle{empty}
+\renewcommand{\thepage}{}
 \setcounter{listing}{0}
+\pagestyle{empty}
+\renewcommand{\thispagestyle}[1]{}
+\clearpage
 \renewcommand{\thelisting}{}
 \fancyhead[R]{\ungaramond\small\textbf{}}
-\phantomsection\addcontentsline{toc}{chapter}{Annexe}\textcolor{white}{I} 
-\begin{center}
-\ungaramond{\textbf{\LARGE{Annexe}}}
-\end{center}
+
+\addtocontents{toc}{\cftpagenumbersoff{chapter}}
+\addcontentsline{toc}{chapter}{Annex A: ClusterIssuer for TLS certificates.}\textcolor{white}{I} 
+% \begin{center}
+\ungaramond{\textbf{\LARGE{Annex A :\hspace{7mm}ClusterIssuer for TLS certificates.}}}
+% \end{center}
 \label{ann:annexeA}
 
 \begin{listing}[H]
@@ -15,7 +19,16 @@
     \label{lst:annexe1}
 \end{listing}
 
+
 \newpage
+\pagestyle{empty}
+\renewcommand{\thispagestyle}[1]{}
+\clearpage
+\addtocontents{toc}{\cftpagenumbersoff{chapter}}
+\addcontentsline{toc}{chapter}{Annex B: CRD middlewares for authentication.}\textcolor{white}{I} 
+\ungaramond{\textbf{\LARGE{Annex B :\hspace{7mm}CRD middlewares for authentication.}}}
+% \end{center}
+\label{ann:annexeB}
 
 \begin{listing}[H]
     \inputminted{yaml}{codeListing/middleware_forward_auth.yml}
@@ -30,6 +43,14 @@
 \end{listing}
 
 \newpage
+\pagestyle{empty}
+\renewcommand{\thispagestyle}[1]{}
+\clearpage
+\addtocontents{toc}{\cftpagenumbersoff{chapter}}
+\addcontentsline{toc}{chapter}{Annex C: Sample ingressroute declaration.}\textcolor{white}{I}
+\ungaramond{\textbf{\LARGE{Annex C :\hspace{7mm}Sample ingressroute declaration.}}}
+% \end{center}
+\label{ann:annexeC}
 
 \begin{listing}[H]
     \inputminted{yaml}{codeListing/authelia_ingressroute.yml}
@@ -38,6 +59,14 @@
 \end{listing}
 
 \newpage
+\pagestyle{empty}
+\renewcommand{\thispagestyle}[1]{}
+\clearpage
+\addtocontents{toc}{\cftpagenumbersoff{chapter}}
+\addcontentsline{toc}{chapter}{Annex D: CronJob for backing up DB data.}\textcolor{white}{I}
+\ungaramond{\textbf{\LARGE{Annex D :\hspace{7mm}CronJob for backing up DB data.}}}
+% \end{center}
+\label{ann:annexeC}
 
 \newenvironment{code}{\captionsetup{type=listing}}{}
 \begin{code}
