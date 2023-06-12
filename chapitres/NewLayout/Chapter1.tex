@@ -167,7 +167,7 @@
 \begin{tabular}[b]{|m{4cm}|m{5cm}|m{5cm}|}
 \hline
 \rowcolor{white}
- &  Agile SCRUM   & Agile DevSecOps  \\
+ &  Agile SCRUM   & Agile DevOps  \\
 \hline
  Lifecycle  
 & Incremental and iterative sprint cycles. 
@@ -199,7 +199,7 @@ Quality
 & Decreases as project development progresses \\
 \hline
 \end{tabular}
-\caption{comparative study of agile methods.}
+\caption{Comparative study: Agile SCRUM vs Agile DevOps.}
 \textcolor{white}{I} \label{tab:tab-m}
 \end{table}
 
@@ -300,44 +300,44 @@ Quality
 \hline
 2 & Cloud design &	2.1 &	Information gathering phase. & 100\\
 \hline
-3 & Resource provisioning &	3.1 &	Provisioning resources using IaC playbooks. & 100\\
+3 & Resource provisioning &	3.1 &	Provisioning resources via Infrastructure As Code (HCP). & 100\\
 \hline
-4 & Infrastructure setup. &	4.1 &	Infrastructure setup using IaC playbooks. & 100\\
+4 & Infrastructure setup. &	4.1 &	Infrastructure setup via IaC playbooks. & 100\\
 \hline
-\multirow{3}{1cm}{5} & \multirow{3}{3.25cm}{\raggedright Initial PaaS setup.} &	5.1 &	Setting up ingress controller and TLS certificate provisioner.	 & 100\\
+\multirow{3}{1cm}{5} & \multirow{3}{3.25cm}{\raggedright Initial PaaS setup.} &	5.1 &	Setting up the ingress controller and the TLS certificate provisioner.	 & 100\\
 \cline{3-5}
-&   & 5.2 &	Setting distributed storage backend.	 & 100\\
+&   & 5.2 &	Setting up the distributed storage backend.	 & 100\\
 \cline{3-5}
-&   & 5.3 &	Setting up network load balancer.	 & 100\\
+&   & 5.3 &	Setting up the network level load balancer.	 & 100\\
   \hline
-\multirow{3}{1cm}{6} & \multirow{3}{3.25cm}{Deployment of CI/CD platform} &	6.1 &	Setting up personalized CI/CD orchestrator.	 & 100\\
+\multirow{3}{1cm}{6} & \multirow{3}{3.25cm}{Deployment of the CI/CD platform} &	6.1 &	Setting up the personalized CI/CD orchestrator.	 & 100\\
 \cline{3-5}
-&   & 6.2 &	Setting up quality gate (CI).	 & 100\\
+&   & 6.2 &	Setting up the quality gate (CI).	 & 100\\
 \cline{3-5}
-&   & 6.3 & Setting up CD controller.	 & 100\\
+&   & 6.3 & Setting up the CD controller.	 & 100\\
   \hline
-\multirow{2}{1cm}{7} & \multirow{2}{3.25cm}{\raggedright Preparation of automated CICD workflows.} &	7.1 &	Structuring SCM backend	 & 100\\
+\multirow{2}{1cm}{7} & \multirow{2}{3.25cm}{\raggedright Preparation of automated CI/CD workflows.} &	7.1 &	Structuring the SCM backend	 & 100\\
 
 \cline{3-5}
 &   & 7.2 &	 \raggedright Using GitOPS and DevSecOps tools to automate CI/CD pipelines.	 & 100\\
 \hline
 
 
-\multirow{3}{1cm}{8} & \multirow{3}{3.25cm}{\raggedright Deployment of authentication / authorization backend} 	& 8.1 & \raggedright Self-managing distributed database storage backends (redis, mongoDB, postgresql).	 & 100\\
+\multirow{3}{1cm}{8} & \multirow{3}{3.25cm}{\raggedright Deployment of the authn/authz backend} 	& 8.1 & \raggedright Self-managing distributed database storage backends (redis, mongoDB, postgresql).	 & 100\\
 \cline{3-5}
-&   & 8.2 &	\raggedright Deployment and configuration of authentication and authorization services.	 & 100\\
+&   & 8.2 &	\raggedright Deployment and configuration of the authentication and authorization services.	 & 100\\
 \cline{3-5}
-&   & 8.3 &	\raggedright Configuring forward auth middleware for secure access.	 & 100\\
+&   & 8.3 &	\raggedright Configuring the forward-auth middleware for secure access.	 & 100\\
    \hline
    \pagebreak
    \hline
-\multirow{3}{1cm}{9} & \multirow{3}{3.25cm}{\raggedright Implement a resilient disaster recovery strategy.} & 9.1 &\raggedright  Provisioning cloud storage resources.		 & 100\\
+\multirow{3}{1cm}{9} & \multirow{3}{3.25cm}{\raggedright Implementing a resilient disaster recovery strategy.} & 9.1 &\raggedright  Provisioning cloud storage resources.		 & 100\\
 \cline{3-5}
-&   & 9.2 & \raggedright Preparing and applying backup strategy for application-specific data.	 & 100\\
+&   & 9.2 & \raggedright Preparing and applying the backup strategy for application-specific data.	 & 100\\
 \cline{3-5}
-&   & 9.3 &	\raggedright Preparing and applying backup strategy for PaaS specific workloads.	 & 100\\
+&   & 9.3 &	\raggedright Preparing and applying the backup strategy for PaaS specific workloads.	 & 100\\
  \hline
-\caption{ Backlog History Table }
+\caption{ The Backlog History Table }
 \end{longtable}
 % \raggedright for space issue
 
@@ -345,7 +345,6 @@ Quality
 % \paragraph{Development tools }
 \hspace{7mm}This section highlights the strategic decisions made regarding the technological stack and tools to be employed in the development and deployment processes. It encompasses considerations such as programming languages, frameworks, infrastructure, and automation tools, which significantly impact the efficiency and effectiveness of the DevOps practices utilized in the project.
 \subsubsection{Cloud provider choice: } 
-
 \paragraph{OVH\cite{OVHcloud}: }
 
 A decisive factor concerning the cloud provider choice is related to company’s desire to opt mainly for a provider that is based in France.  
